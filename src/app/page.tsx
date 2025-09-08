@@ -4,18 +4,50 @@ import Link from 'next/link';
 import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
 import { mockProducts } from '@/data/products';
+import { getShopifyProducts, isShopifyConfigured } from '@/services/shopifyService';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { Product } from '@/types';
 
 
 export default function Home() {
-  const collectionProducts = mockProducts.slice(4, 7); // Gaming Muis RGB, USB-C Hub, Mechanisch Toetsenbord
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [scrollY, setScrollY] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   
   const words = ['beste', 'comfortabelste', 'luxe', 'ergonomische', 'premium', 'exclusieve'];
+  
+  // Load products from Shopify
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        if (isShopifyConfigured()) {
+          const shopifyProducts = await getShopifyProducts(6);
+          if (shopifyProducts.length > 0) {
+            setProducts(shopifyProducts);
+          } else {
+            // Fallback to mock data
+            setProducts(mockProducts.slice(4, 7));
+          }
+        } else {
+          // Use mock data if Shopify not configured
+          setProducts(mockProducts.slice(4, 7));
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        // Fallback to mock data on error
+        setProducts(mockProducts.slice(4, 7));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
   
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -268,11 +300,24 @@ export default function Home() {
       </section>
 
       {/* Product Collection */}
-      <ProductCollection 
-        title="Onze hardlopers"
-        subtitle="Dit zijn niet voor niets onze hardlopers."
-        products={collectionProducts}
-      />
+      {loading ? (
+        <section className="py-16 bg-gray-50 relative -mt-32 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d6a99e] mx-auto mb-4"></div>
+                <p className="text-gray-600">Producten laden van Shopify...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <ProductCollection 
+          title="Onze hardlopers"
+          subtitle="Dit zijn niet voor niets onze hardlopers."
+          products={products}
+        />
+      )}
 
       {/* Trustpilot Reviews Section */}
       <section className="py-4 overflow-hidden" style={{ backgroundColor: '#fff6f3', height: '500px' }}>
