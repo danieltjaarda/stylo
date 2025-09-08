@@ -115,8 +115,7 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Jouw e-mailadres"
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-opacity-50 text-sm"
-                style={{ focusRingColor: '#d6a99e' }}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d6a99e] focus:ring-opacity-50 text-sm"
               />
               <button
                 className="px-4 py-2 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity text-sm"

@@ -32,20 +32,4 @@ export interface OrderSummary {
   total: number;
 }
 
-// Shopify GraphQL Response Types
-export interface ShopifyProductsResponse {
-  products: {
-    edges: Array<{
-      node: ShopifyProduct;
-    }>;
-  };
-}
-
-export interface ShopifyProductResponse {
-  productByHandle: ShopifyProduct;
-}
-
-export interface ShopifyCollectionResponse {
-  collectionByHandle: ShopifyCollection;
-}
 
