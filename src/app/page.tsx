@@ -25,16 +25,13 @@ export default function Home() {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        if (isShopifyConfigured()) {
-          const shopifyProducts = await getShopifyProducts(6);
-          if (shopifyProducts.length > 0) {
-            setProducts(shopifyProducts);
-          } else {
-            // Fallback to mock data
-            setProducts(mockProducts.slice(4, 7));
-          }
+        // Always try to load from Shopify first
+        const shopifyProducts = await getShopifyProducts(6);
+        if (shopifyProducts.length > 0) {
+          console.log('✅ Shopify products loaded:', shopifyProducts);
+          setProducts(shopifyProducts);
         } else {
-          // Use mock data if Shopify not configured
+          console.log('⚠️ No Shopify products found, using mock data');
           setProducts(mockProducts.slice(4, 7));
         }
       } catch (error) {
