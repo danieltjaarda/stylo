@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Cart from "@/components/Cart";
+import Script from "next/script";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -32,6 +33,10 @@ export default function RootLayout({
         </main>
         <Footer />
         <Cart />
+        <Script 
+          src="https://cdn.lordicon.com/lordicon.js" 
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

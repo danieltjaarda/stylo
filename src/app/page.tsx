@@ -3,51 +3,27 @@
 import Link from 'next/link';
 import { ArrowRight, Quote } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
-import { mockShopifyProducts, isShopifyConfigured } from '@/data/shopifyProducts';
-import { getFeaturedProducts } from '@/services/shopifyService';
+import { mockProducts } from '@/data/products';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { Product } from '@/types';
+
+// Declare lord-icon for TypeScript
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'lord-icon': any;
+    }
+  }
+}
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const collectionProducts = mockProducts.slice(4, 7); // Gaming Muis RGB, USB-C Hub, Mechanisch Toetsenbord
   const [scrollY, setScrollY] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   
   const words = ['beste', 'comfortabelste', 'luxe', 'ergonomische', 'premium', 'exclusieve'];
-  
-  // Load products from Shopify or use mock data
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        if (isShopifyConfigured()) {
-          // Use Shopify API
-          const shopifyProducts = await getFeaturedProducts(6);
-          if (shopifyProducts.length > 0) {
-            setProducts(shopifyProducts);
-          } else {
-            // Fallback to mock data if no Shopify products found
-            setProducts(mockShopifyProducts.slice(0, 3));
-          }
-        } else {
-          // Use mock Shopify-structured data for development
-          setProducts(mockShopifyProducts.slice(0, 3));
-        }
-      } catch (error) {
-        console.error('Error loading products:', error);
-        // Fallback to mock data on error
-        setProducts(mockShopifyProducts.slice(0, 3));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []);
   
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -241,7 +217,12 @@ export default function Home() {
             {/* Bureau */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">🖥️</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/tenmouoi.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureau</span>
             </div>
@@ -249,7 +230,12 @@ export default function Home() {
             {/* Bureaustoelen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">💺</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/hziyvwwn.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureaustoelen</span>
             </div>
@@ -257,7 +243,12 @@ export default function Home() {
             {/* Geluidsabsorbers */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">🔊</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/gkubkjgd.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Speakers</span>
             </div>
@@ -265,7 +256,12 @@ export default function Home() {
             {/* Opslag */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">📦</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/hkcpqqil.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Opslag</span>
             </div>
@@ -273,7 +269,12 @@ export default function Home() {
             {/* Whiteboards */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">📝</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/nejoxqhx.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Whiteboards</span>
             </div>
@@ -281,7 +282,12 @@ export default function Home() {
             {/* Verlichting */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">💡</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/ftkqrswy.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Verlichting</span>
             </div>
@@ -289,7 +295,12 @@ export default function Home() {
             {/* Groepen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <div className="text-3xl">🎤</div>
+                <lord-icon
+                  src="https://cdn.lordicon.com/vycwlttg.json"
+                  trigger="hover"
+                  colors="primary:#4a5565,secondary:#4a5565"
+                  style={{width: '64px', height: '64px'}}
+                />
               </div>
               <span className="text-sm text-gray-700 font-medium">Microfoons</span>
             </div>
@@ -300,24 +311,11 @@ export default function Home() {
       </section>
 
       {/* Product Collection */}
-      {loading ? (
-        <section className="py-16 bg-white relative -mt-32 z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d6a99e] mx-auto mb-4"></div>
-                <p className="text-gray-600">Producten laden...</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <ProductCollection 
-          title="Onze hardlopers"
-          subtitle="Dit zijn niet voor niets onze hardlopers."
-          products={products}
-        />
-      )}
+      <ProductCollection 
+        title="Onze hardlopers"
+        subtitle="Dit zijn niet voor niets onze hardlopers."
+        products={collectionProducts}
+      />
 
       {/* Trustpilot Reviews Section */}
       <section className="py-4 overflow-hidden" style={{ backgroundColor: '#fff6f3', height: '500px' }}>
