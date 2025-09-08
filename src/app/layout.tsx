@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Cart from "@/components/Cart";
+import Script from "next/script";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -23,9 +24,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl">
-      <head>
-        <script src="https://cdn.lordicon.com/lordicon.js"></script>
-      </head>
       <body
         className={`${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
@@ -35,6 +33,10 @@ export default function RootLayout({
         </main>
         <Footer />
         <Cart />
+        <Script 
+          src="https://cdn.lordicon.com/lordicon.js" 
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );

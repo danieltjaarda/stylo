@@ -3,9 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight, Quote } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
-import { mockProducts } from '@/data/products';
 import { mockShopifyProducts, isShopifyConfigured } from '@/data/shopifyProducts';
-import { getAllProducts, getFeaturedProducts } from '@/services/shopifyService';
+import { getFeaturedProducts } from '@/services/shopifyService';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Product } from '@/types';

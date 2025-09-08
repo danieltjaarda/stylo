@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Star, ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame } from 'lucide-react';
+import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame } from 'lucide-react';
 import { mockProducts } from '@/data/products';
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
