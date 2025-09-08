@@ -1,4 +1,4 @@
-import { shopifyFetch, GET_PRODUCTS_QUERY } from '@/lib/shopify';
+import client from '@/lib/shopify';
 import { Product } from '@/types';
 
 interface ShopifyProduct {
@@ -56,26 +56,33 @@ function transformShopifyProduct(shopifyProduct: ShopifyProduct): Product {
   };
 }
 
-// Haal alle producten op van Shopify
+// Haal alle producten op van Shopify via Buy SDK
 export async function getShopifyProducts(limit: number = 10): Promise<Product[]> {
   try {
-    console.log('🔍 Attempting to fetch products from Shopify...');
+    console.log('🔍 Attempting to fetch products from Shopify Buy SDK...');
     console.log('🔑 Store domain:', process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
     console.log('🔑 Token available:', !!process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN);
     
-    const response = await shopifyFetch<ShopifyProductsResponse>({
-      query: GET_PRODUCTS_QUERY,
-      variables: { first: limit }
-    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const products = await (client as any).product.fetchAll();
+    
+    console.log('📦 Shopify Buy SDK response:', products);
 
-    console.log('📦 Shopify API response:', response);
-
-    if (response.data?.products?.edges) {
-      const products = response.data.products.edges.map(edge => 
-        transformShopifyProduct(edge.node)
-      );
-      console.log('✅ Transformed products:', products);
-      return products;
+    if (products && products.length > 0) {
+      const transformedProducts = products.slice(0, limit).map((product: any) => ({
+        id: product.id,
+        name: product.title,
+        description: product.description,
+        image: product.images[0]?.src || '/placeholder.jpg',
+        price: parseFloat(product.variants[0]?.price || '0'),
+        category: product.productType || 'Shopify Product',
+        stock: product.variants[0]?.available ? 10 : 0,
+        rating: 4.5,
+        reviews: 150
+      }));
+      
+      console.log('✅ Transformed products:', transformedProducts);
+      return transformedProducts;
     }
     
     console.log('⚠️ No products in response');
