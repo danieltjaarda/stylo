@@ -241,13 +241,7 @@ export default function Home() {
             {/* Bureau */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/tenmouoi.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">🖥️</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureau</span>
             </div>
@@ -255,13 +249,7 @@ export default function Home() {
             {/* Bureaustoelen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/hziyvwwn.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">💺</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureaustoelen</span>
             </div>
@@ -269,13 +257,7 @@ export default function Home() {
             {/* Geluidsabsorbers */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/gkubkjgd.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">🔊</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Speakers</span>
             </div>
@@ -283,13 +265,7 @@ export default function Home() {
             {/* Opslag */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/hkcpqqil.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">📦</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Opslag</span>
             </div>
@@ -297,13 +273,7 @@ export default function Home() {
             {/* Whiteboards */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/nejoxqhx.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">📝</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Whiteboards</span>
             </div>
@@ -311,13 +281,7 @@ export default function Home() {
             {/* Verlichting */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/ftkqrswy.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '180px', height: '180px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">💡</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Verlichting</span>
             </div>
@@ -325,13 +289,7 @@ export default function Home() {
             {/* Groepen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/vycwlttg.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '250px', height: '250px'}}
-                  class="group-hover:animate"
-                />
+                <div className="text-3xl">🎤</div>
               </div>
               <span className="text-sm text-gray-700 font-medium">Microfoons</span>
             </div>

@@ -36,7 +36,7 @@ export interface ShopifyCheckout {
 export async function createCheckout(): Promise<ShopifyCheckout | null> {
   try {
     const checkout = await client.checkout.create();
-    return checkout as any; // Type casting vanwege Shopify SDK types
+    return checkout as ShopifyCheckout; // Type casting vanwege Shopify SDK types
   } catch (error) {
     console.error('Error creating checkout:', error);
     return null;
@@ -50,7 +50,7 @@ export async function addToCheckout(
 ): Promise<ShopifyCheckout | null> {
   try {
     const checkout = await client.checkout.addLineItems(checkoutId, lineItems);
-    return checkout as any;
+    return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error adding items to checkout:', error);
     return null;
@@ -64,7 +64,7 @@ export async function updateCheckout(
 ): Promise<ShopifyCheckout | null> {
   try {
     const checkout = await client.checkout.updateLineItems(checkoutId, lineItems);
-    return checkout as any;
+    return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error updating checkout:', error);
     return null;
@@ -78,7 +78,7 @@ export async function removeFromCheckout(
 ): Promise<ShopifyCheckout | null> {
   try {
     const checkout = await client.checkout.removeLineItems(checkoutId, lineItemIds);
-    return checkout as any;
+    return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error removing items from checkout:', error);
     return null;
@@ -89,7 +89,7 @@ export async function removeFromCheckout(
 export async function getCheckout(checkoutId: string): Promise<ShopifyCheckout | null> {
   try {
     const checkout = await client.checkout.fetch(checkoutId);
-    return checkout as any;
+    return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error fetching checkout:', error);
     return null;
