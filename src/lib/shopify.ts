@@ -1,10 +1,14 @@
 import Client from 'shopify-buy';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const clientAny = Client as any;
+
 // Shopify client configuratie
-const client = Client.buildClient({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const client = clientAny.buildClient({
   domain: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'your-store-name.myshopify.com',
   storefrontAccessToken: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || 'your_storefront_access_token_here'
-});
+}) as any;
 
 export default client;
 

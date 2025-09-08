@@ -35,7 +35,8 @@ export interface ShopifyCheckout {
 // Maak een nieuwe checkout aan
 export async function createCheckout(): Promise<ShopifyCheckout | null> {
   try {
-    const checkout = await client.checkout.create();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checkout = await (client as any).checkout.create();
     return checkout as ShopifyCheckout; // Type casting vanwege Shopify SDK types
   } catch (error) {
     console.error('Error creating checkout:', error);
@@ -49,7 +50,8 @@ export async function addToCheckout(
   lineItems: CheckoutLineItem[]
 ): Promise<ShopifyCheckout | null> {
   try {
-    const checkout = await client.checkout.addLineItems(checkoutId, lineItems);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checkout = await (client as any).checkout.addLineItems(checkoutId, lineItems);
     return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error adding items to checkout:', error);
@@ -63,7 +65,8 @@ export async function updateCheckout(
   lineItems: Array<{ id: string; quantity: number; variantId: string }>
 ): Promise<ShopifyCheckout | null> {
   try {
-    const checkout = await client.checkout.updateLineItems(checkoutId, lineItems);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checkout = await (client as any).checkout.updateLineItems(checkoutId, lineItems);
     return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error updating checkout:', error);
@@ -77,7 +80,8 @@ export async function removeFromCheckout(
   lineItemIds: string[]
 ): Promise<ShopifyCheckout | null> {
   try {
-    const checkout = await client.checkout.removeLineItems(checkoutId, lineItemIds);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checkout = await (client as any).checkout.removeLineItems(checkoutId, lineItemIds);
     return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error removing items from checkout:', error);
@@ -88,7 +92,8 @@ export async function removeFromCheckout(
 // Haal checkout op via ID
 export async function getCheckout(checkoutId: string): Promise<ShopifyCheckout | null> {
   try {
-    const checkout = await client.checkout.fetch(checkoutId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const checkout = await (client as any).checkout.fetch(checkoutId);
     return checkout as ShopifyCheckout;
   } catch (error) {
     console.error('Error fetching checkout:', error);
