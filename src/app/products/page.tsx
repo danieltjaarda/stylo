@@ -60,8 +60,7 @@ export default function ProductsPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
-                style={{ '--tw-ring-color': '#d6a99e' }}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#d6a99e]"
               >
                 <option value="all">Alle Categorieën</option>
                 {categories.slice(1).map(category => (
@@ -77,8 +76,7 @@ export default function ProductsPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2"
-                style={{ '--tw-ring-color': '#d6a99e' }}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#d6a99e]"
               >
                 <option value="name">Sorteer op Naam</option>
                 <option value="price-low">Prijs: Laag naar Hoog</option>
