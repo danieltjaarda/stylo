@@ -1,20 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Quote } from 'lucide-react';
+import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
 import { mockProducts } from '@/data/products';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-// Declare lord-icon for TypeScript
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'lord-icon': any;
-    }
-  }
-}
 
 export default function Home() {
   const collectionProducts = mockProducts.slice(4, 7); // Gaming Muis RGB, USB-C Hub, Mechanisch Toetsenbord
@@ -217,12 +209,7 @@ export default function Home() {
             {/* Bureau */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/tenmouoi.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Monitor className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureau</span>
             </div>
@@ -230,12 +217,7 @@ export default function Home() {
             {/* Bureaustoelen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/hziyvwwn.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Armchair className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Bureaustoelen</span>
             </div>
@@ -243,12 +225,7 @@ export default function Home() {
             {/* Geluidsabsorbers */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/gkubkjgd.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Volume2 className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Speakers</span>
             </div>
@@ -256,12 +233,7 @@ export default function Home() {
             {/* Opslag */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/hkcpqqil.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Package className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Opslag</span>
             </div>
@@ -269,12 +241,7 @@ export default function Home() {
             {/* Whiteboards */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/nejoxqhx.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <FileText className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Whiteboards</span>
             </div>
@@ -282,12 +249,7 @@ export default function Home() {
             {/* Verlichting */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/ftkqrswy.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Lightbulb className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Verlichting</span>
             </div>
@@ -295,12 +257,7 @@ export default function Home() {
             {/* Groepen */}
             <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
               <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <lord-icon
-                  src="https://cdn.lordicon.com/vycwlttg.json"
-                  trigger="hover"
-                  colors="primary:#4a5565,secondary:#4a5565"
-                  style={{width: '64px', height: '64px'}}
-                />
+                <Mic className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
               </div>
               <span className="text-sm text-gray-700 font-medium">Microfoons</span>
             </div>
