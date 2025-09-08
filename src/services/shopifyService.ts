@@ -59,16 +59,29 @@ function transformShopifyProduct(shopifyProduct: ShopifyProduct): Product {
 // Haal alle producten op van Shopify
 export async function getShopifyProducts(limit: number = 10): Promise<Product[]> {
   try {
+    console.log('🔍 Attempting to fetch products from Shopify...');
+    console.log('🔑 Store domain:', process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
+    console.log('🔑 Token available:', !!process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN);
+    
     const response = await shopifyFetch<ShopifyProductsResponse>({
       query: GET_PRODUCTS_QUERY,
       variables: { first: limit }
     });
 
-    return response.data.products.edges.map(edge => 
-      transformShopifyProduct(edge.node)
-    );
+    console.log('📦 Shopify API response:', response);
+
+    if (response.data?.products?.edges) {
+      const products = response.data.products.edges.map(edge => 
+        transformShopifyProduct(edge.node)
+      );
+      console.log('✅ Transformed products:', products);
+      return products;
+    }
+    
+    console.log('⚠️ No products in response');
+    return [];
   } catch (error) {
-    console.error('Error fetching Shopify products:', error);
+    console.error('❌ Error fetching Shopify products:', error);
     return [];
   }
 }
