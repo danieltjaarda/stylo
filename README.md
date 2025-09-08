@@ -1,5 +1,8 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Shopify Integration
+This webshop is integrated with Shopify for product management and checkout.
+
 ## Getting Started
 
 First, run the development server:
