@@ -59,34 +59,31 @@ function transformShopifyProduct(shopifyProduct: ShopifyProduct): Product {
 // Haal alle producten op van Shopify via Buy SDK
 export async function getShopifyProducts(limit: number = 10): Promise<Product[]> {
   try {
-    console.log('🔍 Attempting to fetch products from Shopify Buy SDK...');
+    console.log('🔍 Attempting to fetch products from Shopify...');
     console.log('🔑 Store domain:', process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
     console.log('🔑 Token available:', !!process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const products = await (client as any).product.fetchAll();
+    // Voor nu gebruiken we mock data terwijl we Shopify configuratie debuggen
+    console.log('⚠️ Using mock data while debugging Shopify connection');
     
-    console.log('📦 Shopify Buy SDK response:', products);
-
-    if (products && products.length > 0) {
-      const transformedProducts = products.slice(0, limit).map((product: any) => ({
-        id: product.id,
-        name: product.title,
-        description: product.description,
-        image: product.images[0]?.src || '/placeholder.jpg',
-        price: parseFloat(product.variants[0]?.price || '0'),
-        category: product.productType || 'Shopify Product',
-        stock: product.variants[0]?.available ? 10 : 0,
-        rating: 4.5,
-        reviews: 150
-      }));
-      
-      console.log('✅ Transformed products:', transformedProducts);
-      return transformedProducts;
-    }
+    // Mock Shopify-style product
+    const mockShopifyProducts: Product[] = [
+      {
+        id: 'shopify-test-1',
+        name: 'Shopify Test Bureaustoel',
+        description: 'Dit product komt van Shopify API (test)',
+        image: '/stoel-wit.png',
+        price: 299.99,
+        category: 'Shopify Product',
+        stock: 10,
+        rating: 4.8,
+        reviews: 89
+      }
+    ];
     
-    console.log('⚠️ No products in response');
-    return [];
+    console.log('✅ Mock Shopify products loaded:', mockShopifyProducts);
+    return mockShopifyProducts;
+    
   } catch (error) {
     console.error('❌ Error fetching Shopify products:', error);
     return [];
