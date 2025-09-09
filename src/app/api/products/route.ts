@@ -43,7 +43,7 @@ export async function GET() {
       return NextResponse.json({ products: [], error: 'Missing credentials' });
     }
 
-    const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2024-10/graphql.json`, {
+    const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2023-10/graphql.json`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
