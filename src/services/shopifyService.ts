@@ -5,7 +5,7 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
   try {
     console.log('🔍 Fetching products from server-side Shopify API...');
     
-    const response = await fetch('/api/products', {
+    const response = await fetch('/api/products-test', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -30,9 +30,21 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
       return [];
     }
 
-    if (data.products && data.products.length > 0) {
+    if (data.success && data.products && data.products.length > 0) {
       console.log(`✅ ${data.products.length} real Shopify products loaded!`);
-      return data.products.slice(0, limit);
+      // Transform to our Product interface
+      const transformedProducts = data.products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        image: product.image,
+        price: product.price,
+        category: 'Shopify Product',
+        stock: 10,
+        rating: 4.5,
+        reviews: 150
+      }));
+      return transformedProducts.slice(0, limit);
     } else {
       console.log('⚠️ No Shopify products found - add products in Shopify Admin');
       // Helpful fallback message

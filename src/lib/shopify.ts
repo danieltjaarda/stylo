@@ -3,7 +3,7 @@ import Client from 'shopify-buy';
 // Shopify client configuratie
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const client = (Client as any).buildClient({
-  domain: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shaafs-2r.myshopify.com',
+  domain: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shaa16-zi.myshopify.com',
   storefrontAccessToken: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || 'b1f59b8d8c3532330b6de85a4c728d59'
 });
 
