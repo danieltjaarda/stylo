@@ -56,36 +56,46 @@ function transformShopifyProduct(shopifyProduct: ShopifyProduct): Product {
   };
 }
 
-// Haal alle producten op van Shopify via Buy SDK
+// Haal alle producten op van Shopify via server-side API
 export async function getShopifyProducts(limit: number = 10): Promise<Product[]> {
   try {
-    console.log('🔍 Attempting to fetch products from Shopify...');
-    console.log('🔑 Store domain:', process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
-    console.log('🔑 Token available:', !!process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN);
+    console.log('🔍 Fetching products from server-side Shopify API...');
     
-    // Voor nu gebruiken we mock data terwijl we Shopify configuratie debuggen
-    console.log('⚠️ Using mock data while debugging Shopify connection');
-    
-    // Mock Shopify-style product
-    const mockShopifyProducts: Product[] = [
-      {
-        id: 'shopify-test-1',
-        name: 'Shopify Test Bureaustoel',
-        description: 'Dit product komt van Shopify API (test)',
+    const response = await fetch('/api/products', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.log('❌ API route error:', response.status);
+      return [];
+    }
+
+    const data = await response.json();
+    console.log('📦 Server API response:', data);
+
+    if (data.products && data.products.length > 0) {
+      console.log('✅ Real Shopify products loaded:', data.products);
+      return data.products.slice(0, limit);
+    } else {
+      console.log('⚠️ No Shopify products found, using fallback');
+      // Fallback to mock data if no Shopify products
+      return [{
+        id: 'fallback-1',
+        name: 'Voeg producten toe in Shopify',
+        description: 'Ga naar je Shopify Admin → Products → Add product',
         image: '/stoel-wit.png',
-        price: 299.99,
-        category: 'Shopify Product',
-        stock: 10,
-        rating: 4.8,
-        reviews: 89
-      }
-    ];
-    
-    console.log('✅ Mock Shopify products loaded:', mockShopifyProducts);
-    return mockShopifyProducts;
-    
+        price: 0,
+        category: 'Info',
+        stock: 0,
+        rating: 0,
+        reviews: 0
+      }];
+    }
   } catch (error) {
-    console.error('❌ Error fetching Shopify products:', error);
+    console.error('❌ Error fetching products:', error);
     return [];
   }
 }
