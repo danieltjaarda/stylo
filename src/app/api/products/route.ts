@@ -52,7 +52,7 @@ export async function GET() {
 
     if (!SHOPIFY_DOMAIN || !SHOPIFY_TOKEN) {
       console.log('❌ Missing Shopify credentials');
-      return NextResponse.json({ products: [] });
+      return NextResponse.json({ products: [], error: 'Missing credentials' });
     }
 
     const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`, {
@@ -63,27 +63,30 @@ export async function GET() {
       },
       body: JSON.stringify({
         query: PRODUCTS_QUERY,
-        variables: { first: 10 }
+        variables: { first: 20 }
       }),
     });
 
+    console.log('📡 Shopify API status:', response.status);
+
     if (!response.ok) {
-      console.log('❌ Shopify API error:', response.status, response.statusText);
-      return NextResponse.json({ products: [] });
+      const errorText = await response.text();
+      console.log('❌ Shopify API error:', response.status, errorText);
+      return NextResponse.json({ products: [], error: `API Error: ${response.status}` });
     }
 
     const data = await response.json();
-    console.log('📦 Shopify API response:', data);
+    console.log('📦 Raw Shopify response:', JSON.stringify(data, null, 2));
 
     if (data.errors) {
       console.log('❌ GraphQL errors:', data.errors);
-      return NextResponse.json({ products: [] });
+      return NextResponse.json({ products: [], error: 'GraphQL errors', details: data.errors });
     }
 
     const products = data.data?.products?.edges?.map((edge: any) => ({
       id: edge.node.id,
       name: edge.node.title,
-      description: edge.node.description,
+      description: edge.node.description || 'Geen beschrijving',
       image: edge.node.images.edges[0]?.node.url || '/stoel-wit.png',
       price: parseFloat(edge.node.priceRange.minVariantPrice.amount),
       category: 'Shopify Product',
@@ -93,11 +96,11 @@ export async function GET() {
       handle: edge.node.handle
     })) || [];
 
-    console.log('✅ Transformed products:', products);
-    return NextResponse.json({ products });
+    console.log(`✅ Found ${products.length} products:`, products);
+    return NextResponse.json({ products, count: products.length });
 
   } catch (error) {
     console.error('❌ Server error:', error);
-    return NextResponse.json({ products: [] });
+    return NextResponse.json({ products: [], error: error instanceof Error ? error.message : 'Unknown error' });
   }
 }
