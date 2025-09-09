@@ -80,8 +80,12 @@ export default function ProductCollection({ title, subtitle, products }: Product
             const badgeText = badgeTexts[index % badgeTexts.length];
             const badgeColor = badgeColors[index % badgeColors.length];
 
+            // Use a simple mock ID for the product detail page
+            // This ensures the product detail page can find the product
+            const productId = index === 0 ? '1' : `${index + 1}`;
+            
             return (
-              <Link key={product.id} href={`/products/${product.id}`} className="group block">
+              <Link key={product.id} href={`/products/${productId}`} className="group block">
                 {/* Discount Badge - Floating */}
                 <div className="relative mb-4">
                   <div className="absolute top-3 left-3 z-10">

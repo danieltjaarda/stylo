@@ -10,11 +10,26 @@ export default function Header() {
   const { getTotalItems, toggleCart } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [cartAnimation, setCartAnimation] = useState('');
   const totalItems = getTotalItems();
+  const [previousTotalItems, setPreviousTotalItems] = useState(totalItems);
   const pathname = usePathname();
   
   // Only enable scroll effect on homepage
   const isHomepage = pathname === '/';
+
+  // Trigger cart animation when items are added
+  useEffect(() => {
+    if (totalItems > previousTotalItems) {
+      // Item was added, trigger shake animation
+      setCartAnimation('animate-cart-shake');
+      const timer = setTimeout(() => {
+        setCartAnimation('');
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+    setPreviousTotalItems(totalItems);
+  }, [totalItems, previousTotalItems]);
 
   useEffect(() => {
     if (!isHomepage) return;
@@ -29,7 +44,7 @@ export default function Header() {
   }, [isHomepage]);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+    <header className={`sticky top-0 z-40 transition-all duration-300 ${
       isHomepage 
         ? (isScrolled ? 'bg-white shadow-md' : 'bg-transparent')
         : 'bg-white shadow-md'
@@ -87,15 +102,15 @@ export default function Header() {
             {/* Cart Button */}
             <button
               onClick={toggleCart}
-              className={`relative p-2 transition-colors ${
+              className={`relative p-2 transition-all duration-200 hover:scale-110 active:scale-95 active:rotate-12 ${cartAnimation} ${
                 isHomepage && !isScrolled
                   ? 'text-white hover:text-gray-200'
                   : 'text-gray-700 hover-brown'
               }`}
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="h-6 w-6 transition-transform duration-200" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style={{ backgroundColor: '#d6a99e' }}>
+                <span className="absolute -top-1 -right-1 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#d6a99e' }}>
                   {totalItems}
                 </span>
               )}

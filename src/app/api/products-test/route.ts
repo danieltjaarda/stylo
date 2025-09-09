@@ -18,6 +18,18 @@ const PRODUCTS_QUERY = `
               currencyCode
             }
           }
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
           images(first: 1) {
             edges {
               node {
@@ -80,6 +92,7 @@ export async function GET() {
       success: true,
       products: products.map((edge: any) => ({
         id: edge.node.id,
+        variantId: edge.node.variants.edges[0]?.node.id || edge.node.id, // Get first variant ID
         name: edge.node.title,
         description: edge.node.description || 'Geen beschrijving',
         image: edge.node.images.edges[0]?.node.url || '/stoel-wit.png',

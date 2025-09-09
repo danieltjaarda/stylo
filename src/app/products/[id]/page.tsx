@@ -7,6 +7,8 @@ import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, W
 import { mockProducts } from '@/data/products';
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
+import { getShopifyProducts } from '@/services/shopifyService';
+import { Product } from '@/types';
 
 interface ProductPageProps {
   params: {
@@ -22,22 +24,193 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedFeatures, setSelectedFeatures] = useState({ massage: false, verwarming: false });
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
+  const [shopifyProducts, setShopifyProducts] = useState<Product[]>([]);
+  const [isLoadingShopify, setIsLoadingShopify] = useState(true);
   const productInfoRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCartStore();
 
+  // Always call useEffect - never conditionally
   useEffect(() => {
     Promise.resolve(params).then(setResolvedParams);
   }, [params]);
 
-  const product = resolvedParams ? mockProducts.find(p => p.id === resolvedParams.id) : null;
+  // Load Shopify products
+  useEffect(() => {
+    const loadShopifyProducts = async () => {
+      setIsLoadingShopify(true);
+      try {
+        const products = await getShopifyProducts(10);
+        setShopifyProducts(products);
+      } catch (error) {
+        console.error('Error loading Shopify products:', error);
+      } finally {
+        setIsLoadingShopify(false);
+      }
+    };
+    loadShopifyProducts();
+  }, []);
+
+  // Always call the second useEffect hook - never conditionally  
+  useEffect(() => {
+    const productInfo = productInfoRef.current;
+    const container = containerRef.current;
+    
+    if (!productInfo || !container) return;
+
+    let ticking = false;
+
+    const handleScroll = (e: WheelEvent) => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const rect = container.getBoundingClientRect();
+          const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+          
+          if (isInView && window.innerWidth >= 1024) {
+            const scrollTop = productInfo.scrollTop;
+            const scrollHeight = productInfo.scrollHeight;
+            const clientHeight = productInfo.clientHeight;
+            const maxScroll = scrollHeight - clientHeight;
+            
+            const isAtTop = scrollTop <= 1;
+            const isAtBottom = scrollTop >= maxScroll - 1;
+            
+            if (e.deltaY > 0 && !isAtBottom) {
+              // Scrolling down, product info not at bottom
+              e.preventDefault();
+              productInfo.scrollBy({
+                top: e.deltaY * 0.5,
+                behavior: 'smooth'
+              });
+            } else if (e.deltaY < 0 && !isAtTop) {
+              // Scrolling up, product info not at top
+              e.preventDefault();
+              productInfo.scrollBy({
+                top: e.deltaY * 0.5,
+                behavior: 'smooth'
+              });
+            }
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    document.addEventListener('wheel', handleScroll, { passive: false });
+    
+    return () => {
+      document.removeEventListener('wheel', handleScroll);
+    };
+  }, []);
+
+  // Map simple IDs to products: for ID "1", use first Shopify product if available
+  const product = resolvedParams ? (() => {
+    if (resolvedParams.id === '1' && shopifyProducts.length > 0) {
+      // For ID "1", use the first Shopify product
+      return shopifyProducts[0];
+    }
+    // Fallback to mock products for other IDs
+    return mockProducts.find(p => p.id === resolvedParams.id);
+  })() : null;
   
-  if (!resolvedParams) {
-    return <div>Loading...</div>;
-  }
-  
-  if (!product) {
-    notFound();
+  // Show skeleton loader while loading or if no product found yet
+  if (!resolvedParams || isLoadingShopify || !product) {
+    return (
+      <div className="min-h-screen bg-white">
+        {/* Breadcrumb Skeleton */}
+        <div className="bg-gray-50 border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <nav className="text-sm">
+              <ol className="flex items-center space-x-2">
+                <li><div className="h-4 w-12 rounded animate-shimmer"></div></li>
+                <li className="text-gray-400">/</li>
+                <li><div className="h-4 w-24 rounded animate-shimmer"></div></li>
+                <li className="text-gray-400">/</li>
+                <li><div className="h-4 w-32 rounded animate-shimmer"></div></li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Left Side - Image Skeleton */}
+            <div className="space-y-4">
+              {/* Main Image Skeleton */}
+              <div className="aspect-square rounded-2xl animate-shimmer"></div>
+              
+              {/* Thumbnail Skeletons */}
+              <div className="flex space-x-3">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-20 h-20 rounded-lg animate-shimmer"></div>
+                ))}
+              </div>
+              
+              {/* Trust Badge Skeleton */}
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                <div className="w-12 h-12 rounded-full animate-shimmer"></div>
+                <div className="space-y-2">
+                  <div className="h-4 w-32 rounded animate-shimmer"></div>
+                  <div className="h-3 w-48 rounded animate-shimmer"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Product Info Skeleton */}
+            <div className="space-y-6">
+              {/* Title Skeleton */}
+              <div className="space-y-2">
+                <div className="h-4 w-24 rounded animate-shimmer"></div>
+                <div className="h-10 w-80 rounded animate-shimmer"></div>
+              </div>
+
+              {/* Rating Skeleton */}
+              <div className="flex items-center space-x-2">
+                <div className="h-4 w-20 rounded animate-shimmer"></div>
+                <div className="h-4 w-16 rounded animate-shimmer"></div>
+                <div className="h-4 w-24 rounded animate-shimmer"></div>
+              </div>
+
+              {/* Price Skeleton */}
+              <div className="flex items-baseline space-x-4">
+                <div className="h-6 w-24 rounded animate-shimmer"></div>
+                <div className="h-8 w-32 rounded animate-shimmer"></div>
+              </div>
+
+              {/* Color Skeleton */}
+              <div className="space-y-3">
+                <div className="h-4 w-20 rounded animate-shimmer"></div>
+                <div className="flex space-x-3">
+                  <div className="w-10 h-10 rounded-full animate-shimmer"></div>
+                  <div className="w-10 h-10 rounded-full animate-shimmer"></div>
+                </div>
+              </div>
+
+              {/* Features Skeleton */}
+              <div className="space-y-3">
+                <div className="h-4 w-32 rounded animate-shimmer"></div>
+                <div className="grid grid-cols-3 gap-3">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="h-24 rounded-lg animate-shimmer"></div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Add to Cart Skeleton */}
+              <div className="space-y-4">
+                <div className="h-12 w-full rounded-lg animate-shimmer"></div>
+                <div className="flex items-center justify-between">
+                  <div className="h-10 w-24 rounded-lg animate-shimmer"></div>
+                  <div className="h-4 w-40 rounded animate-shimmer"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Get related products (same category, excluding current product)
@@ -100,59 +273,6 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   const originalPrice = product.price * 1.4;
   const discountPercentage = Math.round(((originalPrice - product.price) / originalPrice) * 100);
-
-  useEffect(() => {
-    const productInfo = productInfoRef.current;
-    const container = containerRef.current;
-    
-    if (!productInfo || !container) return;
-
-    let ticking = false;
-
-    const handleScroll = (e: WheelEvent) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const rect = container.getBoundingClientRect();
-          const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
-          
-          if (isInView && window.innerWidth >= 1024) {
-            const scrollTop = productInfo.scrollTop;
-            const scrollHeight = productInfo.scrollHeight;
-            const clientHeight = productInfo.clientHeight;
-            const maxScroll = scrollHeight - clientHeight;
-            
-            const isAtTop = scrollTop <= 1;
-            const isAtBottom = scrollTop >= maxScroll - 1;
-            
-            if (e.deltaY > 0 && !isAtBottom) {
-              // Scrolling down, product info not at bottom
-              e.preventDefault();
-              productInfo.scrollBy({
-                top: e.deltaY * 0.5,
-                behavior: 'smooth'
-              });
-            } else if (e.deltaY < 0 && !isAtTop) {
-              // Scrolling up, product info not at top
-              e.preventDefault();
-              productInfo.scrollBy({
-                top: e.deltaY * 0.5,
-                behavior: 'smooth'
-              });
-            }
-          }
-          
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    document.addEventListener('wheel', handleScroll, { passive: false });
-    
-    return () => {
-      document.removeEventListener('wheel', handleScroll);
-    };
-  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -241,7 +361,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <div>
               <div className="text-sm text-gray-500 mb-2">Bureau Stoelen</div>
               <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Premium Ergonomische Bureau Stoel
+                {product.name}
               </h1>
             </div>
 

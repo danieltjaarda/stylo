@@ -298,13 +298,57 @@ export default function Home() {
 
       {/* Product Collection */}
       {loading ? (
-        <section className="py-16 bg-gray-50 relative -mt-32 z-10">
+        <section className="py-16 bg-white relative -mt-32 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d6a99e] mx-auto mb-4"></div>
-                <p className="text-gray-600">Producten laden van Shopify...</p>
+            {/* Header */}
+            <div className="flex items-start justify-between mb-12">
+              <div className="flex-1">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                  Onze hardlopers
+                </h2>
+                <p className="text-lg text-gray-600">
+                  Dit zijn niet voor niets onze hardlopers.
+                </p>
               </div>
+              <div className="flex items-center text-blue-600 font-medium text-sm mt-2">
+                <span className="mr-2">Bekijk de hele collectie</span>
+              </div>
+            </div>
+
+            {/* Skeleton Grid (4 cards) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="group block">
+                  {/* Image skeleton */}
+                  <div className="relative mb-4">
+                    <div className="absolute top-3 left-3 z-10 h-6 w-28 rounded animate-shimmer"></div>
+                    <div className="relative rounded-lg overflow-hidden animate-shimmer" style={{ height: '280px' }}></div>
+                  </div>
+
+                  {/* Text skeletons */}
+                  <div className="space-y-3">
+                    {/* rating pill */}
+                    <div className="h-6 w-32 rounded-full animate-shimmer"></div>
+                    {/* title */}
+                    <div className="h-5 w-3/4 rounded animate-shimmer"></div>
+                    {/* description */}
+                    <div className="h-4 w-full rounded animate-shimmer"></div>
+                    <div className="h-4 w-5/6 rounded animate-shimmer"></div>
+                    {/* price row */}
+                    <div className="flex items-center space-x-3">
+                      <div className="h-6 w-24 rounded animate-shimmer"></div>
+                      <div className="h-4 w-16 rounded animate-shimmer"></div>
+                    </div>
+                    {/* color dots */}
+                    <div className="flex items-center space-x-2 pt-1">
+                      {Array.from({ length: 5 }).map((__, j) => (
+                        <div key={j} className="w-5 h-5 rounded-full animate-shimmer"></div>
+                      ))}
+                      <div className="h-4 w-8 rounded animate-shimmer"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

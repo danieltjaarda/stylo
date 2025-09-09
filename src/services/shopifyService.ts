@@ -35,6 +35,7 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
       // Transform to our Product interface
       const transformedProducts = data.products.map((product: any) => ({
         id: product.id,
+        variantId: product.variantId, // Include variant ID for checkout
         name: product.name,
         description: product.description,
         image: product.image,

@@ -24,7 +24,7 @@ export default function Cart() {
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={toggleCart}>
+      <Dialog as="div" className="relative z-60" onClose={toggleCart}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -34,7 +34,7 @@ export default function Cart() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
