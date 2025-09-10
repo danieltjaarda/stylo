@@ -7,13 +7,17 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
-  const { getTotalItems, toggleCart } = useCartStore();
+  const { toggleCart } = useCartStore();
+  const items = useCartStore(s => s.items);
+  const totalItems = items.reduce((sum, it) => sum + it.quantity, 0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [cartAnimation, setCartAnimation] = useState('');
-  const totalItems = getTotalItems();
   const [previousTotalItems, setPreviousTotalItems] = useState(totalItems);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  
+  useEffect(() => { setMounted(true); }, []);
   
   // Only enable scroll effect on homepage
   const isHomepage = pathname === '/';
@@ -21,7 +25,6 @@ export default function Header() {
   // Trigger cart animation when items are added
   useEffect(() => {
     if (totalItems > previousTotalItems) {
-      // Item was added, trigger shake animation
       setCartAnimation('animate-cart-shake');
       const timer = setTimeout(() => {
         setCartAnimation('');
@@ -35,7 +38,6 @@ export default function Header() {
     if (!isHomepage) return;
     
     const handleScroll = () => {
-      // Wanneer scrollY > 70vh (banner hoogte), verander header
       setIsScrolled(window.scrollY > window.innerHeight * 0.7);
     };
     
@@ -44,7 +46,7 @@ export default function Header() {
   }, [isHomepage]);
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-300 ${
+    <header suppressHydrationWarning className={`sticky top-0 z-40 transition-all duration-300 ${
       isHomepage 
         ? (isScrolled ? 'bg-white shadow-md' : 'bg-transparent')
         : 'bg-white shadow-md'
@@ -52,7 +54,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 items-center h-16">
           {/* Left Menu */}
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className={`transition-colors ${
               isHomepage && !isScrolled
                 ? 'text-white hover:text-gray-200'
@@ -67,6 +69,49 @@ export default function Header() {
             }`}>
               Producten
             </Link>
+            {/* Mega menu trigger */}
+            <div className="relative group">
+              <Link href="/categories" className={`transition-colors ${
+                isHomepage && !isScrolled
+                  ? 'text-white hover:text-gray-200'
+                  : 'text-gray-700 hover-brown'
+              }`}>
+                Categorieën
+              </Link>
+              {/* Mega panel */}
+              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-200 absolute left-0 top-full mt-2 w-[720px] bg-white shadow-2xl rounded-2xl p-6 border border-gray-100">
+                <div className="grid grid-cols-3 gap-6">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase">Populair</p>
+                    <ul className="space-y-2 text-sm">
+                      <li><Link href="/products?filter=bureaus" className="text-gray-800 hover:text-gray-900">Bureaus</Link></li>
+                      <li><Link href="/products?filter=bureaustoelen" className="text-gray-800 hover:text-gray-900">Bureaustoelen</Link></li>
+                      <li><Link href="/products?filter=verlichting" className="text-gray-800 hover:text-gray-900">Verlichting</Link></li>
+                      <li><Link href="/products?filter=accessoires" className="text-gray-800 hover:text-gray-900">Accessoires</Link></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 mb-2 uppercase">Collecties</p>
+                    <ul className="space-y-2 text-sm">
+                      <li><Link href="/products?filter=limited" className="text-gray-800 hover:text-gray-900">Limited Edition</Link></li>
+                      <li><Link href="/products?filter=massief-hout" className="text-gray-800 hover:text-gray-900">Massief Hout</Link></li>
+                      <li><Link href="/products?filter=compact" className="text-gray-800 hover:text-gray-900">Compact</Link></li>
+                      <li><Link href="/products?filter=thuiswerk" className="text-gray-800 hover:text-gray-900">Thuiswerk</Link></li>
+                    </ul>
+                  </div>
+                  <div className="rounded-xl overflow-hidden border border-gray-100">
+                    <div className="p-4 bg-gray-50">
+                      <p className="text-xs font-semibold text-gray-500 mb-1 uppercase">Uitgelicht</p>
+                      <p className="text-sm font-bold text-gray-900 mb-2">Stabiele bureau frames</p>
+                      <Link href="/products?filter=frames" className="inline-flex items-center text-sm font-medium" style={{ color: '#d6a99e' }}>
+                        Bekijk collectie
+                      </Link>
+                    </div>
+                    <img src="/svg icons/bureau poten.jpg" alt="Uitgelicht" className="w-full h-28 object-cover" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </nav>
 
           {/* Center Logo */}
@@ -83,13 +128,6 @@ export default function Header() {
           {/* Right Menu */}
           <div className="flex items-center justify-end space-x-6">
             <nav className="hidden md:flex space-x-6">
-              <Link href="/categories" className={`transition-colors ${
-                isHomepage && !isScrolled
-                  ? 'text-white hover:text-gray-200'
-                  : 'text-gray-700 hover-brown'
-              }`}>
-                Categorieën
-              </Link>
               <Link href="/about" className={`transition-colors ${
                 isHomepage && !isScrolled
                   ? 'text-white hover:text-gray-200'
@@ -109,8 +147,8 @@ export default function Header() {
               }`}
             >
               <ShoppingCart className="h-6 w-6 transition-transform duration-200" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#d6a99e' }}>
+              {mounted && totalItems > 0 && (
+                <span suppressHydrationWarning className="absolute -top-1 -right-1 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#d6a99e' }}>
                   {totalItems}
                 </span>
               )}

@@ -1,11 +1,12 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
+import { createCheckout, addToCheckout, cartItemsToLineItems, getCheckoutUrl } from '@/services/checkoutService';
 
 export default function Cart() {
   const { 
@@ -18,9 +19,32 @@ export default function Cart() {
     clearCart 
   } = useCartStore();
 
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
   const total = getTotalPrice();
   const shipping = total > 50 ? 0 : 5.99;
   const finalTotal = total + shipping;
+
+  const handleShopifyCheckout = async () => {
+    if (items.length === 0) return;
+    setIsRedirecting(true);
+    try {
+      const checkout = await createCheckout();
+      const lineItems = cartItemsToLineItems(items);
+      const updatedCheckout = await addToCheckout(checkout.id, lineItems);
+      const checkoutUrl = getCheckoutUrl(updatedCheckout);
+      if (checkoutUrl) {
+        toggleCart();
+        window.location.href = checkoutUrl;
+        return;
+      }
+      console.error('No checkout URL returned from Shopify');
+    } catch (error) {
+      console.error('Checkout redirect failed:', error);
+    } finally {
+      setIsRedirecting(false);
+    }
+  };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -155,14 +179,14 @@ export default function Cart() {
                         </div>
 
                         <div className="mt-4 space-y-2">
-                          <Link
-                            href="/checkout"
-                            onClick={toggleCart}
+                          <button
+                            onClick={handleShopifyCheckout}
+                            disabled={isRedirecting}
                             className="w-full text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-center block"
                             style={{ backgroundColor: '#d6a99e' }}
                           >
-                            Naar Checkout
-                          </Link>
+                            {isRedirecting ? 'Bezig met doorsturen...' : 'Naar Shopify Checkout'}
+                          </button>
                           <button
                             onClick={clearCart}
                             className="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"

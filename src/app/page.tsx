@@ -17,6 +17,7 @@ export default function Home() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   
   const words = ['beste', 'comfortabelste', 'luxe', 'ergonomische', 'premium', 'exclusieve'];
   
@@ -467,6 +468,144 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Carousel Section - Limited Edition & Massief Houten */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            {/* Carousel Container */}
+            <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+              {/* Slide 1 - Limited Edition Kleuren */}
+              <div className="min-w-full lg:min-w-[calc(50%-12px)] snap-center">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/svg icons/houten bladen.jpg"
+                      alt="Houten bladen achtergrond"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  
+                  <div className="relative p-8 lg:p-12 h-[400px] lg:h-[500px] flex flex-col">
+                    {/* Top Content */}
+                    <div className="flex flex-col space-y-4 max-w-sm">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-gray-800 w-fit">
+                        Nieuw
+                      </span>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                        Limited edition kleuren
+                      </h3>
+                      <Link
+                        href="/products?filter=limited-edition"
+                        className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-4"
+                        style={{ backgroundColor: '#9CAFAA' }}
+                      >
+                        Meer info
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slide 2 - Massief Houten Bureaus */}
+              <div className="min-w-full lg:min-w-[calc(50%-12px)] snap-center">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/svg icons/bureau poten.jpg"
+                      alt="Bureau poten achtergrond"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  
+                  <div className="relative h-[400px] lg:h-[500px] flex flex-col justify-end">
+                    {/* Bottom Content on dark area */}
+                    <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent p-8 lg:p-12">
+                      <div className="flex flex-col space-y-4 max-w-md">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur text-white w-fit">
+                          Nieuw
+                        </span>
+                        <h3 className="text-3xl lg:text-4xl font-bold text-white">
+                          Stabiele bureau frames
+                        </h3>
+                        <Link
+                          href="/products?filter=massief-hout"
+                          className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-2"
+                          style={{ backgroundColor: '#9CAFAA' }}
+                        >
+                          Meer info
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Dots */}
+            <div className="flex justify-center mt-6 space-x-2">
+              <button 
+                onClick={() => {
+                  const container = document.querySelector('.snap-x');
+                  if (container) {
+                    container.scrollTo({ left: 0, behavior: 'smooth' });
+                    setCurrentSlide(0);
+                  }
+                }}
+                className={`${currentSlide === 0 ? 'w-8' : 'w-2'} h-2 rounded-full ${currentSlide === 0 ? 'bg-gray-900' : 'bg-gray-300 hover:bg-gray-400'} transition-all`}
+              ></button>
+              <button 
+                onClick={() => {
+                  const container = document.querySelector('.snap-x');
+                  if (container) {
+                    container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+                    setCurrentSlide(1);
+                  }
+                }}
+                className={`${currentSlide === 1 ? 'w-8' : 'w-2'} h-2 rounded-full ${currentSlide === 1 ? 'bg-gray-900' : 'bg-gray-300 hover:bg-gray-400'} transition-all`}
+              ></button>
+            </div>
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={() => {
+                const container = document.querySelector('.snap-x');
+                if (container) {
+                  if (currentSlide === 1) {
+                    container.scrollTo({ left: 0, behavior: 'smooth' });
+                    setCurrentSlide(0);
+                  }
+                }
+              }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
+            >
+              <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => {
+                const container = document.querySelector('.snap-x');
+                if (container) {
+                  if (currentSlide === 0) {
+                    container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+                    setCurrentSlide(1);
+                  }
+                }
+              }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
+            >
+              <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Bureaus Video Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -480,6 +619,7 @@ export default function Home() {
                   loop
                   muted
                   playsInline
+                  preload="metadata"
                 >
                   <source src="/svg icons/company-video-2-se.mp4" type="video/mp4" />
                   {/* Fallback image */}

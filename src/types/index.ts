@@ -1,13 +1,47 @@
+export interface ProductVariantOptionValue {
+  name: string;
+  value: string;
+}
+
+export interface ProductImage {
+  url: string;
+  altText?: string;
+}
+
+export interface ProductVariant {
+  id: string; // Shopify variant ID (gid)
+  title: string;
+  price: number;
+  compareAtPrice?: number | null;
+  available: boolean;
+  selectedOptions?: ProductVariantOptionValue[];
+  imageUrl?: string;
+}
+
+export interface ProductOption {
+  name: string;
+  values: string[];
+}
+
 export interface Product {
   id: string;
+  handle?: string; // SEO-friendly slug from Shopify
   name: string;
   price: number;
+  compareAtPrice?: number;
   description: string;
   image: string;
+  images?: ProductImage[];
+  videoUrl?: string;
+  videoPoster?: string;
   category: string;
   stock: number;
   rating: number;
   reviews: number;
+  // Optional Shopify specifics for variants
+  variantId?: string;
+  options?: ProductOption[];
+  variants?: ProductVariant[];
 }
 
 export interface CartItem {

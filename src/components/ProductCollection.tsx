@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { CheckCircle, Truck, Shield, ArrowRight } from 'lucide-react';
 import { Product } from '@/types';
+import { videoOverridesByHandle, videoOverridesById, videoOverridesByIndex } from '@/data/videoOverrides';
 import { useCartStore } from '@/store/useCartStore';
 
 interface ProductCollectionProps {
@@ -51,7 +52,7 @@ export default function ProductCollection({ title, subtitle, products }: Product
           
           <Link 
             href="/products" 
-            className="flex items-center text-blue-600 hover:text-blue-700 transition-colors font-medium text-sm mt-2"
+            className="flex items-center text-gray-900 font-medium text-sm mt-2"
           >
             <span className="mr-2">Bekijk de hele collectie</span>
             <ArrowRight className="h-4 w-4" />
@@ -63,44 +64,56 @@ export default function ProductCollection({ title, subtitle, products }: Product
           {products.map((product, index) => {
             const discountPercentage = getDiscountPercentage(product.price);
             const originalPrice = product.price * 1.2;
+            // Per-product hover video overrides (handle > id > index)
+            const overrideVideo =
+              (product.handle && videoOverridesByHandle[product.handle]) ||
+              videoOverridesById[product.id] ||
+              videoOverridesByIndex[index];
 
             // Korting badge kleuren zoals Desktronic
             const badgeTexts = [
-              'Bespaar tot wel 29%',
+              '29% korting',
               '21% korting', 
-              'Bespaar tot wel 27%',
+              '27% korting',
               '16% korting'
             ];
-            const badgeColors = [
-              'bg-red-500',
-              'bg-orange-500', 
-              'bg-red-600',
-              'bg-blue-600'
-            ];
             const badgeText = badgeTexts[index % badgeTexts.length];
-            const badgeColor = badgeColors[index % badgeColors.length];
 
-            // Use a simple mock ID for the product detail page
-            // This ensures the product detail page can find the product
-            const productId = index === 0 ? '1' : `${index + 1}`;
+            // Use real product id so PDP resolves the correct item
+            const productPath = product.handle ? product.handle : encodeURIComponent(product.id);
             
             return (
-              <Link key={product.id} href={`/products/${productId}`} className="group block">
+              <Link key={product.id} href={`/products/${productPath}`} className="group block">
                 {/* Discount Badge - Floating */}
                 <div className="relative mb-4">
                   <div className="absolute top-3 left-3 z-10">
-                    <span className={`${badgeColor} text-white px-3 py-1 rounded text-xs font-medium shadow-sm`}>
+                    <span className={`text-white px-3 py-1 rounded text-xs font-bold shadow-sm`}
+                      style={{ backgroundColor: '#FD8B51' }}>
                       {badgeText}
                     </span>
                   </div>
 
-                  {/* Product Image - Standalone */}
+                  {/* Product Media - Image default; video on hover if available */}
                   <div className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ height: '280px' }}>
+                    {/* Image (default state) */}
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className={`w-full h-full object-cover transition-transform duration-500 ${overrideVideo || product.videoUrl ? 'group-hover:opacity-0' : 'group-hover:scale-105'}`}
                     />
+                    {/* Video (only if available) */}
+                    { (overrideVideo || product.videoUrl) && (
+                      <video
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        src={overrideVideo || product.videoUrl!}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        poster={product.videoPoster || undefined}
+                        onMouseEnter={(e) => (e.currentTarget as HTMLVideoElement).play()}
+                      />
+                    )}
                   </div>
                 </div>
                 
@@ -130,12 +143,20 @@ export default function ProductCollection({ title, subtitle, products }: Product
                     </div>
 
                   {/* Product Name */}
-                  <h3 className="text-lg font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 leading-tight">
                     {product.name}
                   </h3>
                   
-                  {/* Product Description */}
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  {/* Product Description (clamp to 2 lines) */}
+                  <p
+                    className="text-gray-600 text-sm leading-relaxed"
+                    style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {product.description}
                   </p>
 

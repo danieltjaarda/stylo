@@ -32,23 +32,38 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
 
     if (data.success && data.products && data.products.length > 0) {
       console.log(`✅ ${data.products.length} real Shopify products loaded!`);
-      // Transform to our Product interface
-      const transformedProducts = data.products.map((product: any) => ({
-        id: product.id,
-        variantId: product.variantId, // Include variant ID for checkout
-        name: product.name,
-        description: product.description,
-        image: product.image,
-        price: product.price,
-        category: 'Shopify Product',
-        stock: 10,
-        rating: 4.5,
-        reviews: 150
-      }));
+      const transformedProducts = data.products.map((product: any) => {
+        const variants = (product.variants || []).map((v: any) => ({
+          id: v.id,
+          title: v.title,
+          price: v.price,
+          compareAtPrice: v.compareAtPrice,
+          available: v.available,
+          selectedOptions: v.selectedOptions,
+          imageUrl: v.imageUrl,
+        }));
+        const options = (product.options || []).map((o: any) => ({ name: o.name, values: o.values }));
+        const firstVariantId = variants[0]?.id;
+        return {
+          id: product.id,
+          handle: product.handle,
+          variantId: firstVariantId,
+          name: product.name,
+          description: product.description,
+          image: product.image,
+          images: (product.images || []).map((img: any) => ({ url: img.url, altText: img.altText })),
+          price: product.price,
+          category: 'Shopify Product',
+          stock: 10,
+          rating: 4.5,
+          reviews: 150,
+          variants,
+          options,
+        } as Product;
+      });
       return transformedProducts.slice(0, limit);
     } else {
       console.log('⚠️ No Shopify products found - add products in Shopify Admin');
-      // Helpful fallback message
       return [{
         id: 'no-products',
         name: 'Geen producten gevonden',

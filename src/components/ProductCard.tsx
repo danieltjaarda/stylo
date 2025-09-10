@@ -30,8 +30,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     return features.slice(0, 3);
   };
 
-  const discountPercentage = getDiscountPercentage(product.price);
-  const originalPrice = product.price * 1.2;
+  const originalPrice = product.compareAtPrice || product.price * 1.2;
+  const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
+  const discountPercentage = hasDiscount 
+    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+    : getDiscountPercentage(product.price);
   const features = getProductFeatures(product);
   
   // Different hover colors based on product ID - Custom palette
@@ -52,11 +55,13 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 relative group">
         
         {/* Discount Badge */}
-        <div className="absolute top-3 left-3 z-20">
-          <span className="bg-[#D6A99D] text-black px-2 py-1 rounded-full text-xs font-semibold shadow-sm">
-            {discountPercentage}% korting
-          </span>
-        </div>
+        {hasDiscount && (
+          <div className="absolute top-3 left-3 z-20">
+            <span className="bg-[#D6A99D] text-black px-2 py-1 rounded-full text-xs font-semibold shadow-sm">
+              {discountPercentage}% korting
+            </span>
+          </div>
+        )}
 
 
         
@@ -99,14 +104,24 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span className="text-base font-bold text-gray-900">
                 {formatPrice(product.price)}
               </span>
-              <span className="text-xs text-gray-500 line-through">
-                {formatPrice(originalPrice)}
-              </span>
+              {hasDiscount && (
+                <span className="text-xs text-gray-500 line-through">
+                  {formatPrice(originalPrice)}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Product Description */}
-          <p className="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-2">
+          {/* Product Description (force clamp to 2 lines even without plugin) */}
+          <p
+            className="text-gray-600 text-sm mb-4 leading-relaxed"
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
             {product.description}
           </p>
 

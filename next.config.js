@@ -4,7 +4,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true,
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'cdn.shopify.com' },
+      { protocol: 'https', hostname: '*.cdn.shopify.com' },
+      { protocol: 'https', hostname: 'shaa16-zi.myshopify.com' },
+    ],
+    deviceSizes: [360, 640, 828, 1080, 1200, 1920],
+    imageSizes: [64, 80, 96, 128, 256, 384],
   },
 }
 
