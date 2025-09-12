@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic } from 'lucide-react';
+import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic, ChevronDown, Plus, Minus } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
 import { mockProducts } from '@/data/products';
 import { getShopifyProducts, isShopifyConfigured } from '@/services/shopifyService';
@@ -18,6 +18,7 @@ export default function Home() {
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   
   const words = ['beste', 'comfortabelste', 'luxe', 'ergonomische', 'premium', 'exclusieve'];
   
@@ -232,74 +233,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="pt-12 pb-48 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-1">
-            {/* Bureau */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Monitor className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Bureau</span>
-            </div>
-
-            {/* Bureaustoelen */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Armchair className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Bureaustoelen</span>
-            </div>
-
-            {/* Geluidsabsorbers */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Volume2 className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Speakers</span>
-            </div>
-
-            {/* Opslag */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Package className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Opslag</span>
-            </div>
-
-            {/* Whiteboards */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <FileText className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Whiteboards</span>
-            </div>
-
-            {/* Verlichting */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Lightbulb className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Verlichting</span>
-            </div>
-
-            {/* Groepen */}
-            <div className="bg-gray-50 rounded-2xl p-6 text-center hover:bg-gray-100 transition-colors cursor-pointer group">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Mic className="w-10 h-10 text-gray-600 group-hover:text-[#d6a99e] group-hover:scale-110 transition-all duration-300" />
-              </div>
-              <span className="text-sm text-gray-700 font-medium">Microfoons</span>
-            </div>
-
-
-          </div>
-        </div>
-      </section>
 
       {/* Product Collection */}
       {loading ? (
-        <section className="py-16 bg-white relative -mt-32 z-10">
+        <section className="py-16 bg-white relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
             <div className="flex items-start justify-between mb-12">
@@ -362,7 +299,7 @@ export default function Home() {
       )}
 
       {/* Trustpilot Reviews Section */}
-      <section className="py-4 overflow-hidden" style={{ backgroundColor: '#fff6f3', height: '500px' }}>
+      <section className="py-4 overflow-hidden" style={{ backgroundColor: '#f9fafb', height: '500px' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Left side - Title and Trustpilot info */}
@@ -469,7 +406,7 @@ export default function Home() {
       </section>
 
       {/* Carousel Section - Limited Edition & Massief Houten */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
             {/* Carousel Container */}
@@ -870,6 +807,95 @@ export default function Home() {
               <p className="text-sm text-gray-600 leading-relaxed">
                 Krijg vandaag wat je wilt. Betaal later of in meerdere rentevrije termijnen.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Veelgestelde vragen
+            </h2>
+            <p className="text-lg text-gray-600">
+              Hier vind je antwoorden op de meest gestelde vragen over onze producten en service.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                question: "Hoe lang duurt de levering van mijn bestelling?",
+                answer: "Alle bestellingen worden binnen 1-3 werkdagen verzonden. De levertijd is afhankelijk van je locatie: Nederland 1-2 werkdagen, België 2-3 werkdagen. Je ontvangt altijd een track & trace code om je bestelling te volgen."
+              },
+              {
+                question: "Kan ik mijn bestelling retourneren als ik niet tevreden ben?",
+                answer: "Ja, je kunt je bestelling binnen 30 dagen na ontvangst gratis retourneren. De producten moeten wel in originele staat zijn. Neem contact met ons op voor een retourlabel en verdere instructies."
+              },
+              {
+                question: "Welke garantie krijg ik op mijn bureau of stoel?",
+                answer: "Op onze bureaus geven we 5 jaar garantie op het mechanisme en 2 jaar op het tafelblad. Op bureaustoelen hebben we 5 jaar garantie op het mechanisme en 2 jaar op de bekleding. Deze garantie dekt productiefouten en normale slijtage."
+              },
+              {
+                question: "Hoe weet ik welke maat bureau het beste bij mij past?",
+                answer: "Meet eerst je werkruimte op. Voor een comfortabele werkplek adviseren we minimaal 120x60 cm. Heb je twee monitoren? Dan is 160x80 cm of groter ideaal. In onze productbeschrijvingen vind je gedetailleerde afmetingen en tips."
+              },
+              {
+                question: "Zijn jullie bureaustoelen geschikt voor lange werkdagen?",
+                answer: "Absoluut! Onze stoelen zijn speciaal ontworpen voor 8+ uur dagelijks gebruik. Ze hebben ergonomische ondersteuning, verstelbare armleuningen en ademende materialen. Veel modellen zijn gecertificeerd voor intensief kantoorgebruik."
+              },
+              {
+                question: "Kan ik de montage laten uitvoeren?",
+                answer: "Ja, we bieden een montageservice aan voor €49. Onze monteurs komen bij je thuis en zorgen voor een professionele installatie. Je kunt deze service toevoegen tijdens het bestellen of achteraf via de klantenservice."
+              },
+              {
+                question: "Welke betaalmogelijkheden hebben jullie?",
+                answer: "Je kunt betalen met iDEAL, creditcard (Visa/Mastercard), PayPal, Klarna (achteraf betalen), en bankoverschrijving. Voor bedrijven bieden we ook betaling op factuur aan na goedkeuring."
+              },
+              {
+                question: "Hebben jullie een fysieke showroom?",
+                answer: "Ja, je bent welkom in onze showroom in Amsterdam om producten uit te proberen. We adviseren je graag persoonlijk. Maak een afspraak via onze website of bel ons voor de openingstijden en adresgegevens."
+              }
+            ].map((faq, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg">
+                <button
+                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                >
+                  <span className="font-medium text-gray-900 pr-4">{faq.question}</span>
+                  <div className="flex-shrink-0">
+                    {openFaqIndex === index ? (
+                      <Minus className="w-5 h-5 text-gray-500" />
+                    ) : (
+                      <Plus className="w-5 h-5 text-gray-500" />
+                    )}
+                  </div>
+                </button>
+                {openFaqIndex === index && (
+                  <div className="px-6 pb-4">
+                    <div className="border-t border-gray-200 pt-4">
+                      <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Contact CTA */}
+          <div className="mt-12 text-center">
+            <p className="text-gray-600 mb-6">
+              Staat je vraag er niet bij? We helpen je graag verder!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                Neem contact op
+              </button>
+              <button className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 hover:bg-gray-50 transition-colors">
+                Live chat starten
+              </button>
             </div>
           </div>
         </div>

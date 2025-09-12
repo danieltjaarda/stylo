@@ -35,7 +35,7 @@ export default function ProductCollection({ title, subtitle, products }: Product
   };
 
   return (
-    <section className="py-16 bg-white relative -mt-32 z-10">
+    <section className="py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header - Desktronic Style */}
         <div className="flex items-start justify-between mb-12">
@@ -69,6 +69,10 @@ export default function ProductCollection({ title, subtitle, products }: Product
               (product.handle && videoOverridesByHandle[product.handle]) ||
               videoOverridesById[product.id] ||
               videoOverridesByIndex[index];
+
+            // Generate varied review counts based on index
+            const reviewCounts = [127, 89, 203, 156, 94, 178, 112, 145];
+            const reviewCount = reviewCounts[index % reviewCounts.length];
 
             // Korting badge kleuren zoals Desktronic
             const badgeTexts = [
@@ -139,7 +143,7 @@ export default function ProductCollection({ title, subtitle, products }: Product
                         </div>
                       </div>
                       <span className="text-sm font-semibold text-gray-900">{product.rating}</span>
-                      <span className="text-sm text-gray-500 ml-1">({product.reviews || 150} beoordelingen)</span>
+                      <span className="text-sm text-gray-500 ml-1">({reviewCount} beoordelingen)</span>
                     </div>
 
                   {/* Product Name */}
@@ -147,12 +151,12 @@ export default function ProductCollection({ title, subtitle, products }: Product
                     {product.name}
                   </h3>
                   
-                  {/* Product Description (clamp to 2 lines) */}
+                  {/* Product Description (clamp to 1 line) */}
                   <p
                     className="text-gray-600 text-sm leading-relaxed"
                     style={{
                       display: '-webkit-box',
-                      WebkitLineClamp: 2,
+                      WebkitLineClamp: 1,
                       WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
                     }}

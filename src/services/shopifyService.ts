@@ -59,6 +59,9 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
           reviews: 150,
           variants,
           options,
+          isDeskOne: product.isDeskOne,
+          isSeatPro: product.isSeatPro,
+          addOns: product.addOns || null,
         } as Product;
       });
       return transformedProducts.slice(0, limit);

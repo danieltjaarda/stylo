@@ -23,6 +23,18 @@ export interface ProductOption {
   values: string[];
 }
 
+export interface AddOnProduct {
+  id: string;
+  name: string;
+  price: number;
+  compareAtPrice?: number | null;
+  image: string;
+  rating: number;
+  discount?: number | null;
+  handle?: string;
+  description?: string;
+}
+
 export interface Product {
   id: string;
   handle?: string; // SEO-friendly slug from Shopify
@@ -42,6 +54,9 @@ export interface Product {
   variantId?: string;
   options?: ProductOption[];
   variants?: ProductVariant[];
+  isDeskOne?: boolean; // For showing extended product sections
+  isSeatPro?: boolean; // For showing SeatPro extended sections
+  addOns?: AddOnProduct[]; // Add-ons metafield data
 }
 
 export interface CartItem {

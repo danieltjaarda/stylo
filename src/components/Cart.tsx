@@ -2,7 +2,7 @@
 
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Truck } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
@@ -24,6 +24,14 @@ export default function Cart() {
   const total = getTotalPrice();
   const shipping = total > 50 ? 0 : 5.99;
   const finalTotal = total + shipping;
+
+  // Get tomorrow's date
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowDate = tomorrow.toLocaleDateString('nl-NL', { 
+    day: 'numeric', 
+    month: 'long' 
+  });
 
   const handleShopifyCheckout = async () => {
     if (items.length === 0) return;
@@ -164,13 +172,24 @@ export default function Cart() {
                           </div>
                           <div className="flex justify-between">
                             <span>Verzending:</span>
-                            <span>
+                            <div className="text-right">
                               {shipping === 0 ? (
-                                <span className="text-green-600">Gratis</span>
+                                <div className="flex items-center gap-1 text-xs" style={{ color: '#265125' }}>
+                                  <Truck className="w-3 h-3 flex-shrink-0" />
+                                  <div>
+                                    <strong>Gratis verzending!</strong> Morgen {tomorrowDate} in huis!
+                                  </div>
+                                </div>
                               ) : (
-                                `€${shipping.toFixed(2)}`
+                                <div>
+                                  <span>€{shipping.toFixed(2)}</span>
+                                  <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
+                                    <Truck className="w-3 h-3 flex-shrink-0" />
+                                    <span>Morgen {tomorrowDate} in huis!</span>
+                                  </div>
+                                </div>
                               )}
-                            </span>
+                            </div>
                           </div>
                           <div className="flex justify-between font-semibold text-base border-t pt-2">
                             <span>Totaal:</span>
@@ -183,9 +202,9 @@ export default function Cart() {
                             onClick={handleShopifyCheckout}
                             disabled={isRedirecting}
                             className="w-full text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-center block"
-                            style={{ backgroundColor: '#d6a99e' }}
+                            style={{ backgroundColor: '#9dafaa' }}
                           >
-                            {isRedirecting ? 'Bezig met doorsturen...' : 'Naar Shopify Checkout'}
+                            {isRedirecting ? 'Bezig met doorsturen...' : 'Afrekenen'}
                           </button>
                           <button
                             onClick={clearCart}
@@ -193,6 +212,25 @@ export default function Cart() {
                           >
                             Winkelwagen Legen
                           </button>
+                        </div>
+
+                        {/* Trustpilot Section */}
+                        <div className="mt-4 flex items-center justify-center">
+                          <Image
+                            src="/Trustpilot-logo.png"
+                            alt="Trustpilot logo"
+                            width={20}
+                            height={20}
+                            className="mr-1"
+                          />
+                          <span className="text-sm font-medium text-gray-700 mr-2">Trustpilot</span>
+                          <Image
+                            src="/trustpilot stars.png"
+                            alt="Trustpilot 5 sterren"
+                            width={120}
+                            height={20}
+                            className="-mt-0.5"
+                          />
                         </div>
 
                         {shipping > 0 && (

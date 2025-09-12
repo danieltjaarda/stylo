@@ -62,13 +62,74 @@ export default function Header() {
             }`}>
               Shop alles
             </Link>
-            <Link href="/products" className={`transition-colors ${
-              isHomepage && !isScrolled
-                ? 'text-white hover:text-gray-200'
-                : 'text-gray-700 hover-brown'
-            }`}>
-              Producten
-            </Link>
+            {/* Products mega menu */}
+            <div className="relative group">
+              <Link href="/products" className={`transition-colors ${
+                isHomepage && !isScrolled
+                  ? 'text-white hover:text-gray-200'
+                  : 'text-gray-700 hover-brown'
+              }`}>
+                Producten
+              </Link>
+              {/* Mega panel */}
+              <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-200 absolute left-0 top-full pt-2 w-[600px]">
+                <div className="bg-white shadow-2xl rounded-2xl p-6 border border-gray-100">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 mb-4 uppercase">Productcategorieën</p>
+                    <ul className="space-y-3 text-sm">
+                      <li>
+                        <Link href="/products?category=zit-sta-bureaus" className="flex items-center text-gray-800 hover:text-gray-900 group/item">
+                          <div className="w-2 h-2 rounded-full mr-3 transition-colors" style={{ backgroundColor: '#2e572d' }}></div>
+                          <div>
+                            <div className="font-medium">Zit-sta bureaus</div>
+                            <div className="text-xs text-gray-500">Elektrisch verstelbare bureaus</div>
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/products?category=ergonomische-bureaustoelen" className="flex items-center text-gray-800 hover:text-gray-900 group/item">
+                          <div className="w-2 h-2 rounded-full mr-3 transition-colors" style={{ backgroundColor: '#2e572d' }}></div>
+                          <div>
+                            <div className="font-medium">Bureau stoelen</div>
+                            <div className="text-xs text-gray-500">Ergonomische werkplekstoelen</div>
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/products?category=verstelbare-bureauframes" className="flex items-center text-gray-800 hover:text-gray-900 group/item">
+                          <div className="w-2 h-2 rounded-full mr-3 transition-colors" style={{ backgroundColor: '#2e572d' }}></div>
+                          <div>
+                            <div className="font-medium">Bureau frames</div>
+                            <div className="text-xs text-gray-500">Stabiele bureau onderstellen</div>
+                          </div>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/products?category=accessoires" className="flex items-center text-gray-800 hover:text-gray-900 group/item">
+                          <div className="w-2 h-2 rounded-full mr-3 transition-colors" style={{ backgroundColor: '#2e572d' }}></div>
+                          <div>
+                            <div className="font-medium">Bureau accessoires</div>
+                            <div className="text-xs text-gray-500">Monitorarmen, lades en meer</div>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="rounded-xl overflow-hidden border border-gray-100">
+                    <div className="p-4 bg-gray-50">
+                      <p className="text-xs font-semibold text-gray-500 mb-1 uppercase">Bestseller</p>
+                      <p className="text-sm font-bold text-gray-900 mb-2">DeskOne Bureau</p>
+                      <Link href="/products/777-test-product" className="inline-flex items-center text-sm font-medium" style={{ color: '#2e572d' }}>
+                        Bekijk product →
+                      </Link>
+                    </div>
+                    <img src="/stoel-wit.png" alt="DeskOne Bureau" className="w-full h-32 object-cover" />
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
             {/* Mega menu trigger */}
             <div className="relative group">
               <Link href="/categories" className={`transition-colors ${

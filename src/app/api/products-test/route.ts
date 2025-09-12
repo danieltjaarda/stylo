@@ -63,6 +63,47 @@ const PRODUCTS_QUERY = `
               }
             }
           }
+          metafield(namespace: "custom", key: "desk_one") {
+            value
+          }
+          seatproMetafield: metafield(namespace: "custom", key: "seatpro") {
+            value
+          }
+          addOnsMetafield: metafield(namespace: "custom", key: "add_ons") {
+            value
+            references(first: 20) {
+              edges {
+                node {
+                  ... on Product {
+                    id
+                    title
+                    handle
+                    description
+                    priceRange {
+                      minVariantPrice {
+                        amount
+                        currencyCode
+                      }
+                    }
+                    compareAtPriceRange {
+                      minVariantPrice {
+                        amount
+                        currencyCode
+                      }
+                    }
+                    images(first: 1) {
+                      edges {
+                        node {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -151,6 +192,36 @@ export async function GET() {
           handle: edge.node.handle,
           options: edge.node.options?.map((o: any) => ({ name: o.name, values: o.values })) || [],
           variants,
+          isDeskOne: edge.node.metafield?.value === 'true',
+          isSeatPro: edge.node.seatproMetafield?.value === 'true',
+          addOns: edge.node.addOnsMetafield?.references?.edges ? 
+            (() => {
+              const addOnCount = edge.node.addOnsMetafield.references.edges.length;
+              console.log(`📦 Product ${edge.node.title} has ${addOnCount} add-ons`);
+              return edge.node.addOnsMetafield.references.edges.map((refEdge: any, index: number) => {
+              const product = refEdge.node;
+              const price = parseFloat(product.priceRange?.minVariantPrice?.amount || 0);
+              const compareAtPrice = product.compareAtPriceRange?.minVariantPrice?.amount ? 
+                parseFloat(product.compareAtPriceRange.minVariantPrice.amount) : null;
+              
+              // Verschillende ratings voor verschillende add-ons
+              const ratings = [4.7, 4.8, 4.6, 4.5, 4.9]; // Voor de eerste 5 add-ons
+              const rating = ratings[index] || 4.5;
+              
+              return {
+                id: product.id,
+                name: product.title,
+                price: price,
+                compareAtPrice: compareAtPrice,
+                image: product.images?.edges?.[0]?.node?.url || '/stoel-wit.png',
+                rating: rating,
+                discount: compareAtPrice && compareAtPrice > price ? 
+                  Math.round(((compareAtPrice - price) / compareAtPrice) * 100) : null,
+                handle: product.handle,
+                description: product.description
+              };
+            });
+            })() : null,
         };
       }),
       count: products.length,
