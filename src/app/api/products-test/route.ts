@@ -154,9 +154,15 @@ export async function GET() {
     const products = data.data?.products?.edges || [];
     console.log(`✅ Found ${products.length} products`);
 
-    return NextResponse.json({ 
-      success: true,
-      products: products.map((edge: any) => {
+    // Custom sorting for homepage top products - SeatPro should be 2nd
+    const customProductOrder = [
+      'DeskOne Bureau',           // 1st position
+      'SeatPro ergonomische bureau stoel', // 2nd position (moved from 4th)
+      'DeskPro',                  // 3rd position (moved from 2nd)
+      'Monitorarm - Enkel'        // 4th position (moved from 3rd)
+    ];
+
+    const transformedProducts = products.map((edge: any) => {
         const productImages = edge.node.images.edges.map((e: any) => ({ url: e.node.url, altText: e.node.altText || undefined }));
         const mediaEdges = edge.node.media?.edges || [];
         const videoEdge = mediaEdges.find((m: any) => m.node.__typename === 'Video');
@@ -223,7 +229,29 @@ export async function GET() {
             });
             })() : null,
         };
-      }),
+      });
+
+    // Apply custom sorting based on product names
+    const sortedProducts = transformedProducts.sort((a: any, b: any) => {
+      const indexA = customProductOrder.indexOf(a.name);
+      const indexB = customProductOrder.indexOf(b.name);
+      
+      // If both products are in the custom order, sort by their position
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+      
+      // If only one product is in the custom order, prioritize it
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+      
+      // If neither product is in the custom order, keep original order
+      return 0;
+    });
+
+    return NextResponse.json({ 
+      success: true,
+      products: sortedProducts,
       count: products.length,
       message: products.length > 0 ? 'Products loaded successfully!' : 'No products found - add products in Shopify Admin'
     });
