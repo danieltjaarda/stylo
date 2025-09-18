@@ -5,6 +5,7 @@ import { CartItem } from '@/types';
 const client = Client.buildClient({
   domain: 'shaa16-zi.myshopify.com', // Use the correct domain directly
   storefrontAccessToken: 'b1f59b8d8c3532330b6de85a4c728d59', // Use the correct token directly
+  apiVersion: '2024-01',
 });
 
 // Create a new checkout

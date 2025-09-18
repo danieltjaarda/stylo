@@ -119,7 +119,16 @@ export default function ProductPage({ params }: ProductPageProps) {
     Promise.all(preloadPromises).then(() => {
       console.log('✅ All images preloaded');
     });
-  }, [product?.id]);
+  }, [resolvedParams?.id]);
+
+  if (!resolvedParams) {
+    return <ProductPageSkeleton />;
+  }
+
+  // Find product in mock products or Shopify products
+  const mockProduct = mockProducts.find(p => p.id === resolvedParams.id);
+  const shopifyProduct = shopifyProducts.find(p => p.id === resolvedParams.id || p.id.includes(resolvedParams.id));
+  const product = shopifyProduct || mockProduct;
 
   // Handle variant changes with instant switching
   useEffect(() => {
@@ -148,15 +157,6 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }, [selectedOptions, product?.variants, images, selectedImage]);
 
-  if (!resolvedParams) {
-    return <ProductPageSkeleton />;
-  }
-
-  // Find product in mock products or Shopify products
-  const mockProduct = mockProducts.find(p => p.id === resolvedParams.id);
-  const shopifyProduct = shopifyProducts.find(p => p.id === resolvedParams.id || p.id.includes(resolvedParams.id));
-  const product = shopifyProduct || mockProduct;
-
   if (!product) {
     notFound();
   }
@@ -172,14 +172,18 @@ export default function ProductPage({ params }: ProductPageProps) {
   ) || product.variants?.[0];
 
   const handleAddToCart = () => {
-    addToCart({
+    const productToAdd = {
+      ...product,
       id: selectedVariant?.id || product.id,
-      name: product.name,
       price: selectedVariant?.price || product.price,
       image: images[selectedImage] || product.image,
-      quantity: quantity,
       variantTitle: selectedVariant?.title || '',
-    });
+    };
+    
+    // Add the product multiple times based on quantity
+    for (let i = 0; i < quantity; i++) {
+      addToCart(productToAdd);
+    }
   };
 
   const relatedProducts = shopifyProducts.length > 0 
@@ -335,7 +339,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               {selectedVariant && (
                 <div className="text-sm text-gray-600">
                   <p>Variant: {selectedVariant.title}</p>
-                  <p>Beschikbaar: {selectedVariant.availableForSale ? 'Ja' : 'Nee'}</p>
+                  <p>Beschikbaar: {selectedVariant.available ? 'Ja' : 'Nee'}</p>
                 </div>
               )}
             </div>

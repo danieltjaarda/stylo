@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { Filter, Grid, List, ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import { mockProducts } from '@/data/products';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function ProductsPage() {
+function ProductsContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -245,6 +245,14 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }
 

@@ -189,6 +189,13 @@ export default function Header() {
           {/* Right Menu */}
           <div className="flex items-center justify-end space-x-6">
             <nav className="hidden md:flex space-x-6">
+              <Link href="/vergelijking" className={`transition-colors ${
+                isHomepage && !isScrolled
+                  ? 'text-white hover:text-gray-200'
+                  : 'text-gray-700 hover-brown'
+              }`}>
+                Vergelijk
+              </Link>
               <Link href="/about" className={`transition-colors ${
                 isHomepage && !isScrolled
                   ? 'text-white hover:text-gray-200'

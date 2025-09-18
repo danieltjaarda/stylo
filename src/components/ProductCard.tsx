@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const originalPrice = product.compareAtPrice || product.price * 1.2;
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercentage = hasDiscount 
-    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+    ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
     : getDiscountPercentage(product.price);
   const features = getProductFeatures(product);
   

@@ -467,7 +467,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               <div className="border border-gray-200 rounded-lg p-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Handige toevoegingen:</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {product.addOns.map((addOn, index) => (
+                  {product.addOns.map((addOn: any, index: number) => (
                     <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                       {/* Add-on Image */}
                       <div className="relative mb-3">

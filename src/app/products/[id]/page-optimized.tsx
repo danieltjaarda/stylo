@@ -8,7 +8,6 @@ import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
 import { getShopifyProducts } from '@/services/shopifyService';
 import { Product } from '@/types';
-import { imagePreloader } from '@/lib/imageLoader';
 
 interface ProductPageProps {
   params: {
@@ -136,7 +135,17 @@ export default function ProductPage({ params }: ProductPageProps) {
     
     // Preload ALL variant images in parallel for instant switching
     console.log('🚀 Preloading all', initial.length, 'variant images...');
-    imagePreloader.preloadImages(initial).then(() => {
+    // Preload images
+    const preloadPromises = initial.map(src => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = src;
+      });
+    });
+    
+    Promise.all(preloadPromises).then(() => {
       console.log('✅ All variant images preloaded');
       setAllImagesPreloaded(true);
     });
@@ -155,9 +164,8 @@ export default function ProductPage({ params }: ProductPageProps) {
       const existingIdx = images.findIndex(url => url === variant.imageUrl);
       if (existingIdx >= 0 && existingIdx !== selectedImage) {
         // Only show loading if image isn't preloaded
-        if (!imagePreloader.isLoaded(variant.imageUrl)) {
-          setIsPreviewLoading(true);
-        }
+        // Always switch immediately (assuming images are preloaded)
+        setIsPreviewLoading(true);
         setSelectedImage(existingIdx);
       }
     }
@@ -245,13 +253,18 @@ export default function ProductPage({ params }: ProductPageProps) {
       ?.map(opt => opt.value)
       .join(' / ') || '';
     
-    addItem({
+    const productToAdd = {
+      ...product,
       id: selectedVariant.id,
       name: `${product.name} - ${variantTitle}`,
       price: getTotalPrice(),
-      quantity: quantity,
       image: images[selectedImage] || product.image
-    });
+    };
+    
+    // Add the product multiple times based on quantity
+    for (let i = 0; i < quantity; i++) {
+      addItem(productToAdd);
+    }
     
     setShowPaymentModal(true);
     
@@ -261,9 +274,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   };
 
   const handleImageClick = (index: number) => {
-    if (!imagePreloader.isLoaded(images[index])) {
-      setIsPreviewLoading(true);
-    }
+    // Always show loading briefly for smooth transition
+    setIsPreviewLoading(true);
     setSelectedImage(index);
   };
 
@@ -310,14 +322,14 @@ export default function ProductPage({ params }: ProductPageProps) {
               
               {/* Feature Badges */}
               <div className="absolute top-4 left-4 space-y-2">
-                {product.isNew && (
+                {false && (
                   <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
                     Nieuw
                   </span>
                 )}
-                {product.discount && (
+                {product.compareAtPrice && product.compareAtPrice > product.price && (
                   <span className="bg-red-600 text-white px-3 py-1 rounded-full text-sm block">
-                    -{product.discount}%
+                    -{Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
                   </span>
                 )}
               </div>
@@ -374,12 +386,12 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Price */}
             <div className="flex items-baseline gap-3">
               <span className="text-3xl font-bold text-gray-900">€{getTotalPrice()}</span>
-              {product.discount && (
+              {product.compareAtPrice && product.compareAtPrice > getTotalPrice() && (
                 <>
                   <span className="text-xl text-gray-500 line-through">
-                    €{Math.round(getVariantPrice() * (100 / (100 - product.discount)))}
+                    €{product.compareAtPrice.toFixed(2)}
                   </span>
-                  <span className="text-green-600 font-semibold">Bespaar {product.discount}%</span>
+                  <span className="text-green-600 font-semibold">Bespaar {Math.round(((product.compareAtPrice - getTotalPrice()) / product.compareAtPrice) * 100)}%</span>
                 </>
               )}
             </div>
@@ -407,7 +419,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                         onMouseEnter={() => {
                           // Preload on hover
                           if (variantForOption?.imageUrl) {
-                            imagePreloader.preloadImage(variantForOption.imageUrl);
+                            // Preload image
+                            const img = new Image();
+                            img.src = variantForOption.imageUrl;
                           }
                         }}
                         className={`px-4 py-2 rounded-lg border-2 transition-all ${
@@ -488,11 +502,11 @@ export default function ProductPage({ params }: ProductPageProps) {
               
               <button
                 onClick={handleAddToCart}
-                disabled={!selectedVariant?.availableForSale}
+                disabled={!selectedVariant?.available}
                 className="flex-1 bg-gray-900 text-white py-3 px-8 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {selectedVariant?.availableForSale ? 'Toevoegen aan winkelwagen' : 'Uitverkocht'}
+                {selectedVariant?.available ? 'Toevoegen aan winkelwagen' : 'Uitverkocht'}
               </button>
             </div>
             
