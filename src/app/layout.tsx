@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CookieConsentProvider } from "@/contexts/CookieConsentContext";
 import PerformanceOptimizer from "@/components/PerformanceOptimizer";
-import PerformanceMonitor from "@/components/PerformanceMonitor";
+// import PerformanceMonitor from "@/components/PerformanceMonitor"; // Temporarily disabled
 // Import dynamically loaded client components
 import {
   Cart,
@@ -84,7 +84,7 @@ export default function RootLayout({
       >
         <CookieConsentProvider>
           <PerformanceOptimizer />
-          <PerformanceMonitor />
+          {/* <PerformanceMonitor /> */}
           <Header />
           <main className="flex-1">
             {children}
