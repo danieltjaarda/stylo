@@ -256,9 +256,9 @@ const blogPosts: BlogPost[] = [
 ];
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -268,7 +268,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = blogPosts.find((p) => p.id.toString() === params.id);
+  const { id } = await params;
+  const post = blogPosts.find((p) => p.id.toString() === id);
   
   if (!post) {
     return {
@@ -287,8 +288,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function BlogPost({ params }: PageProps) {
-  const post = blogPosts.find((p) => p.id.toString() === params.id);
+export default async function BlogPost({ params }: PageProps) {
+  const { id } = await params;
+  const post = blogPosts.find((p) => p.id.toString() === id);
 
   if (!post) {
     notFound();
