@@ -258,7 +258,7 @@ function generateSEODescription(product: ShopifyProduct, variant: any): string {
 
 // Functie om producten om te zetten naar Google Merchant XML
 function generateGoogleMerchantXML(products: ShopifyProduct[]): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://deskna.nl';
+  const baseUrl = (process.env.NEXT_PUBLIC_BASE_URL || 'https://deskna.nl').trim();
   const brandName = 'DESKNA'; // Correcte merknaam
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
