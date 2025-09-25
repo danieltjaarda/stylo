@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CookieConsentProvider } from "@/contexts/CookieConsentContext";
-import PerformanceOptimizer from "@/components/PerformanceOptimizer";
+// import PerformanceOptimizer from "@/components/PerformanceOptimizer"; // Temporarily disabled
 // import PerformanceMonitor from "@/components/PerformanceMonitor"; // Temporarily disabled
 // Import dynamically loaded client components
 import {
@@ -83,7 +83,7 @@ export default function RootLayout({
         className={`${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         <CookieConsentProvider>
-          <PerformanceOptimizer />
+          {/* <PerformanceOptimizer /> */}
           {/* <PerformanceMonitor /> */}
           <Header />
           <main className="flex-1">
