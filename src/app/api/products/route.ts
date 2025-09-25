@@ -12,6 +12,7 @@ const PRODUCTS_QUERY = `
           title
           handle
           description
+          tags
           priceRange {
             minVariantPrice {
               amount
@@ -78,10 +79,11 @@ export async function GET() {
       image: edge.node.images.edges[0]?.node.url || '/stoel-wit.png',
       price: parseFloat(edge.node.priceRange.minVariantPrice.amount),
       category: 'Shopify Product',
-      stock: edge.node.variants.edges[0]?.node.availableForSale ? 10 : 0,
+      stock: edge.node.variants?.edges?.[0]?.node?.availableForSale ? 10 : 0,
       rating: 4.5,
       reviews: 150,
-      handle: edge.node.handle
+      handle: edge.node.handle,
+      tags: edge.node.tags || []
     })) || [];
 
     console.log(`✅ Found ${products.length} products:`, products);

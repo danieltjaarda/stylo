@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
 import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame } from 'lucide-react';
-import { mockProducts } from '@/data/products';
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
 import { getShopifyProducts } from '@/services/shopifyService';
@@ -126,9 +125,9 @@ export default function ProductPage({ params }: ProductPageProps) {
   }
 
   // Find product in mock products or Shopify products
-  const mockProduct = mockProducts.find(p => p.id === resolvedParams.id);
+  // No mock products - only use Shopify products
   const shopifyProduct = shopifyProducts.find(p => p.id === resolvedParams.id || p.id.includes(resolvedParams.id));
-  const product = shopifyProduct || mockProduct;
+  const product = shopifyProduct;
 
   // Handle variant changes with instant switching
   useEffect(() => {
@@ -162,7 +161,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   }
 
   // Show skeleton while Shopify data or images are loading
-  if ((isLoadingShopify && !mockProduct) || !isImagesReady) {
+  if (isLoadingShopify || !isImagesReady) {
     return <ProductPageSkeleton />;
   }
 
@@ -186,9 +185,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   };
 
-  const relatedProducts = shopifyProducts.length > 0 
-    ? shopifyProducts.filter(p => p.id !== product.id).slice(0, 4)
-    : mockProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const relatedProducts = shopifyProducts.filter(p => p.id !== product.id).slice(0, 4);
 
   return (
     <div className="min-h-screen bg-white">

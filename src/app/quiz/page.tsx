@@ -1,12 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, RotateCcw } from 'lucide-react';
+import { getShopifyCollection } from '@/services/shopifyService';
+import ProductCard from '@/components/ProductCard';
+import { Product } from '@/types';
 
 export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [bureauStoelen, setBureauStoelen] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load bureau-stoelen collection from Shopify
+  useEffect(() => {
+    const loadBureauStoelen = async () => {
+      try {
+        console.log('🔍 Loading bureau-stoelen collection for quiz...');
+        const products = await getShopifyCollection('bureau-stoelen');
+        setBureauStoelen(products);
+        console.log(`✅ Loaded ${products.length} bureau stoelen for quiz`);
+      } catch (error) {
+        console.error('❌ Failed to load bureau-stoelen collection:', error);
+        setBureauStoelen([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBureauStoelen();
+  }, []);
 
   const questions = [
     {
@@ -67,29 +91,25 @@ export default function Quiz() {
     }
   };
 
-  const getRecommendation = () => {
+  const getRecommendedProduct = () => {
+    // If no products loaded, return null
+    if (bureauStoelen.length === 0) return null;
+
     // Simple recommendation logic based on answers
     const totalScore = answers.reduce((sum, answer) => sum + answer, 0);
     
-    if (totalScore <= 5) {
-      return {
-        title: "SitOne Ergonomische Bureustoel",
-        description: "Perfect voor basis comfort en kortere werkdagen. Goede prijs-kwaliteit verhouding.",
-        price: "€299"
-      };
-    } else if (totalScore <= 10) {
-      return {
-        title: "SitPro Ergonomische Bureustoel", 
-        description: "Ideaal voor lange werkdagen met uitgebreide ergonomische ondersteuning.",
-        price: "€499"
-      };
-    } else {
-      return {
-        title: "SitPro Premium met Ligfunctie",
-        description: "De ultieme bureustoel voor professionals die het beste willen. Met ligfunctie en voetensteun.",
-        price: "€699"
-      };
+    // Try to find SeatPro product first (most common recommendation)
+    const seatProProduct = bureauStoelen.find(product => 
+      product.name.toLowerCase().includes('seatpro')
+    );
+
+    // If SeatPro found, return it for most cases
+    if (seatProProduct && totalScore >= 3) {
+      return seatProProduct;
     }
+
+    // Otherwise return the first available product or SeatPro as fallback
+    return seatProProduct || bureauStoelen[0];
   };
 
   const resetQuiz = () => {
@@ -99,7 +119,7 @@ export default function Quiz() {
   };
 
   if (showResult) {
-    const recommendation = getRecommendation();
+    const recommendedProduct = getRecommendedProduct();
     
     return (
       <div className="min-h-screen bg-white">
@@ -111,29 +131,45 @@ export default function Quiz() {
             </p>
           </div>
 
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 text-center mb-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">{recommendation.title}</h2>
-              <p className="text-lg text-gray-600 mb-6">{recommendation.description}</p>
-              <div className="text-4xl font-bold text-gray-900 mb-6">{recommendation.price}</div>
+          {loading ? (
+            <div className="bg-gray-50 rounded-2xl p-8 text-center mb-8">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded mb-6 max-w-md mx-auto"></div>
+                <div className="h-6 bg-gray-200 rounded mb-6 max-w-xs mx-auto"></div>
+              </div>
+            </div>
+          ) : recommendedProduct ? (
+            <div className="mb-8">
+              <div className="max-w-sm mx-auto">
+                <ProductCard product={recommendedProduct} />
+              </div>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                  href="/products"
-                  className="px-8 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
-                >
-                  Bekijk product
-                </a>
+              <div className="text-center mt-8">
                 <button
                   onClick={resetQuiz}
-                  className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors flex items-center justify-center"
+                  className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center"
                 >
                   <RotateCcw className="w-5 h-5 mr-2" />
                   Quiz opnieuw doen
                 </button>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="bg-gray-50 rounded-2xl p-8 text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Geen producten beschikbaar</h2>
+              <p className="text-gray-600 mb-6">
+                Er konden geen producten worden geladen. Probeer het later opnieuw.
+              </p>
+              <button
+                onClick={resetQuiz}
+                className="px-8 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center"
+              >
+                <RotateCcw className="w-5 h-5 mr-2" />
+                Quiz opnieuw doen
+              </button>
+            </div>
+          )}
 
           <div className="text-center">
             <p className="text-gray-600 mb-4">
@@ -141,7 +177,7 @@ export default function Quiz() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="/products" 
+                href="/shop-alles" 
                 className="px-6 py-3 bg-gray-100 text-gray-900 rounded-lg font-medium hover:bg-gray-200 transition-colors"
               >
                 Alle producten
@@ -223,4 +259,7 @@ export default function Quiz() {
     </div>
   );
 }
+
+
+
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Check, X, Heart, ShoppingCart, ChevronDown } from 'lucide-react';
-import { mockProducts } from '@/data/products';
+import { getShopifyProducts } from '@/services/shopifyService';
 import { useCartStore } from '@/store/useCartStore';
 import Link from 'next/link';
 
@@ -12,18 +12,33 @@ export default function ProductComparison() {
   const addToCart = useCartStore(state => state.addItem);
 
   // Pre-select eerste twee producten voor demo
+  const [products, setProducts] = useState<any[]>([]);
+
   useEffect(() => {
-    const firstTwoProducts = mockProducts.slice(0, 2).map(p => p.id);
-    setSelectedProducts(firstTwoProducts);
+    const loadProducts = async () => {
+      try {
+        const shopifyProducts = await getShopifyProducts();
+        setProducts(shopifyProducts);
+        if (shopifyProducts.length >= 2) {
+          const firstTwoProducts = shopifyProducts.slice(0, 2).map(p => p.id);
+          setSelectedProducts(firstTwoProducts);
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        setProducts([]);
+      }
+    };
+    
+    loadProducts();
   }, []);
 
   // Update vergelijkingsproducten wanneer selectie verandert
   useEffect(() => {
-    const products = selectedProducts.map(id => 
-      id ? mockProducts.find(p => p.id === id) || null : null
+    const compareProds = selectedProducts.map(id => 
+      id ? products.find(p => p.id === id) || null : null
     );
-    setCompareProducts(products);
-  }, [selectedProducts]);
+    setCompareProducts(compareProds);
+  }, [selectedProducts, products]);
 
   const handleProductSelect = (productId: string, index: number) => {
     const newSelected = [...selectedProducts];
@@ -110,7 +125,7 @@ export default function ProductComparison() {
                         className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white text-sm"
                       >
                         <option value="">Selecteer een product</option>
-                        {mockProducts.map(product => (
+                        {products.map(product => (
                           <option key={product.id} value={product.id}>
                             {product.name}
                           </option>

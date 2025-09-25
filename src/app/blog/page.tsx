@@ -1,3 +1,12 @@
+import { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Blog | DESKNA - Ergonomie Tips & Productadvies',
+  description: 'Lees onze blog voor tips over ergonomische werkplekken, productadvies en het optimaliseren van je thuiskantoor voor betere gezondheid en productiviteit.',
+};
+
 export default function Blog() {
   const blogPosts = [
     {
@@ -6,7 +15,8 @@ export default function Blog() {
       excerpt: "Ontdek hoe je jouw werkplek kunt optimaliseren voor betere gezondheid en productiviteit.",
       date: "15 januari 2025",
       readTime: "5 min",
-      category: "Ergonomie"
+      category: "Ergonomie",
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=800&auto=format&fit=crop"
     },
     {
       id: 2,
@@ -14,7 +24,8 @@ export default function Blog() {
       excerpt: "De voordelen van een zit-sta bureau en hoe het je werkdag kan transformeren.",
       date: "10 januari 2025",
       readTime: "7 min",
-      category: "Productadvies"
+      category: "Productadvies",
+      image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=800&auto=format&fit=crop"
     },
     {
       id: 3,
@@ -22,7 +33,8 @@ export default function Blog() {
       excerpt: "Alles wat je moet weten over het kiezen van de juiste bureustoel voor jouw behoeften.",
       date: "5 januari 2025",
       readTime: "10 min",
-      category: "Koopadvies"
+      category: "Koopadvies",
+      image: "https://images.unsplash.com/photo-1541558869434-2840d308329a?q=80&w=800&auto=format&fit=crop"
     }
   ];
 
@@ -38,27 +50,33 @@ export default function Blog() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
-            <article key={post.id} className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="aspect-video bg-gray-100"></div>
-              <div className="p-6">
-                <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                  <span className="bg-gray-100 px-3 py-1 rounded-full">{post.category}</span>
-                  <span>{post.date}</span>
-                  <span>{post.readTime}</span>
+            <Link key={post.id} href={`/blog/${post.id}`} className="group">
+              <article className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="aspect-video relative bg-gray-100 overflow-hidden">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">{post.title}</h2>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                <a 
-                  href={`/blog/${post.id}`}
-                  className="inline-flex items-center text-gray-900 font-medium hover:text-gray-700"
-                >
-                  Lees meer
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
-            </article>
+                <div className="p-6">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                    <span className="bg-gray-100 px-3 py-1 rounded-full">{post.category}</span>
+                    <span>{post.date}</span>
+                    <span>{post.readTime}</span>
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-gray-700 transition-colors">{post.title}</h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                  <div className="inline-flex items-center text-gray-900 font-medium group-hover:text-gray-700 transition-colors">
+                    Lees meer
+                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </article>
+            </Link>
           ))}
         </div>
 
@@ -68,15 +86,22 @@ export default function Blog() {
           <p className="text-gray-600 mb-6">
             We werken hard aan meer nuttige content over ergonomie en werkplekoptimalisatie.
           </p>
-          <a 
+          <Link 
             href="/contact" 
             className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors"
           >
             Stel een vraag
-          </a>
+            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
 

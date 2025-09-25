@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'B2B Oplossingen | DESKNA - Zakelijke Ergonomische Werkplekken',
+  description: 'Professionele ergonomische werkplek oplossingen voor bedrijven. Bulk kortingen op zit-sta bureaus en bureaustoelen, maatwerk service, verlengde garantie en dedicated accountmanagement voor zakelijke klanten en grote organisaties.',
+};
+
 export default function B2B() {
   return (
     <div className="min-h-screen bg-white">
@@ -121,4 +128,8 @@ export default function B2B() {
     </div>
   );
 }
+
+
+
+
 

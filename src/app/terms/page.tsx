@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Algemene Voorwaarden | DESKNA',
+  description: 'Lees de algemene voorwaarden van DESKNA voor aankopen van ergonomische bureaustoelen en zit-sta bureaus.',
+};
+
 export default function Terms() {
   return (
     <div className="min-h-screen bg-white">
@@ -57,7 +64,7 @@ export default function Terms() {
               <p>
                 <strong>Stylo</strong><br />
                 Amsterdam, Nederland<br />
-                <strong>T:</strong> +31 620 176 727<br />
+                <strong>T:</strong> 085 060 2482<br />
                 <strong>E:</strong> info@stylo.nl<br />
                 <strong>Website:</strong> www.stylo.nl
               </p>

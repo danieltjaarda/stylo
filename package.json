@@ -3,19 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev --turbopack --hostname 0.0.0.0",
+    "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.7",
+    "@headlessui/react": "^2.2.8",
+    "@types/js-cookie": "^3.0.6",
     "@types/shopify-buy": "^3.0.0",
     "@types/uuid": "^10.0.0",
+    "fast-xml-parser": "^5.2.5",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.542.0",
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-lottie-player": "^2.1.0",
     "shopify-buy": "^3.0.7",
     "uuid": "^11.1.0",
     "zustand": "^5.0.8"
@@ -29,6 +34,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "web-vitals": "^5.1.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

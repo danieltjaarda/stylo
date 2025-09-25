@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Herroepingsrecht | DESKNA',
+  description: 'Informatie over je herroepingsrecht bij DESKNA. Binnen 14 dagen na ontvangst kun je je aankoop herroepen.',
+};
+
 export default function Herroepingsrecht() {
   return (
     <div className="min-h-screen bg-white">
@@ -81,7 +88,7 @@ export default function Herroepingsrecht() {
             <h3 className="text-lg font-semibold text-blue-900 mb-3">Vragen?</h3>
             <p className="text-blue-800">
               Heeft u vragen over uw herroepingsrecht of het retourproces? 
-              Neem gerust contact met ons op via info@stylo.nl of +31 620 176 727.
+              Neem gerust contact met ons op via info@stylo.nl of 085 060 2482.
             </p>
           </div>
         </div>
@@ -89,4 +96,6 @@ export default function Herroepingsrecht() {
     </div>
   );
 }
+
+
 

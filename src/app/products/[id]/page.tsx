@@ -3,13 +3,18 @@
 import { useState, useEffect, useRef, Fragment, use } from 'react';
 import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame, Sprout, ChevronDown } from 'lucide-react';
-import { mockProducts } from '@/data/products';
+import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame, Sprout, ChevronDown, Info } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
 import ProductCollection from '@/components/ProductCollection';
+import WidgetsSection from '@/components/WidgetsSection';
+import KlarnaWidget from '@/components/KlarnaWidget';
+import ProductInfoModal from '@/components/ProductInfoModal';
+import AddOnModal from '@/components/AddOnModal';
 import { getShopifyProducts } from '@/services/shopifyService';
 import { Product } from '@/types';
+import { useMarketingConsent } from '@/contexts/CookieConsentContext';
+import { useMetaPixelTracking } from '@/lib/metaPixel';
 
 interface ProductPageProps {
   params: Promise<{
@@ -24,6 +29,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [userSelectedImage, setUserSelectedImage] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showTreeNationModal, setShowTreeNationModal] = useState(false);
   const [expandedSpecs, setExpandedSpecs] = useState<{[key: string]: boolean}>({});
@@ -33,11 +39,23 @@ export default function ProductPage({ params }: ProductPageProps) {
   const lastInitializedProductIdRef = useRef<string | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [isImagesReady, setIsImagesReady] = useState(false);
+  const viewContentTrackedRef = useRef<string | null>(null);
   const addToCart = useCartStore(state => state.addItem);
+  const addToCartSilent = useCartStore(state => state.addItemSilent);
   const updateQuantity = useCartStore(state => state.updateQuantity);
-    const [showTreeInfo, setShowTreeInfo] = useState(false);
-    const [seatProErgonomicsOpen, setSeatProErgonomicsOpen] = useState(false);
-    const [seatProMaterialsOpen, setSeatProMaterialsOpen] = useState(false);
+  
+  // Meta Pixel tracking
+  const hasMarketingConsent = useMarketingConsent();
+  const { trackViewContent, trackAddToCart } = useMetaPixelTracking(hasMarketingConsent);
+  const [showTreeInfo, setShowTreeInfo] = useState(false);
+  const [seatProErgonomicsOpen, setSeatProErgonomicsOpen] = useState(false);
+  const [seatProMaterialsOpen, setSeatProMaterialsOpen] = useState(false);
+  const [selectedAddOns, setSelectedAddOns] = useState<Record<string, number>>({});
+  const [showProductInfoModal, setShowProductInfoModal] = useState(false);
+  const [showAddOnModal, setShowAddOnModal] = useState(false);
+  const [selectedAddOnId, setSelectedAddOnId] = useState<string>('');
+  const [selectedAddOnHandle, setSelectedAddOnHandle] = useState<string>('');
+  const [addedAddOns, setAddedAddOns] = useState<Record<string, boolean>>({});
     const imageCache = useRef(new Map());
   const mainImageRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +98,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   // Product lookup with decoding for URL-encoded IDs
   const routeId = resolvedParams?.id || '';
   const decodedRouteId = routeId ? decodeURIComponent(routeId) : '';
-  const mockProduct = resolvedParams ? mockProducts.find((p: Product & { handle?: string }) => p.id === decodedRouteId || p.id === routeId || p.handle === decodedRouteId) : undefined as any;
+  
+  // No more mock products - only use Shopify products
   const shopifyProduct = resolvedParams
     ? shopifyProducts.find(p =>
         p.handle === decodedRouteId ||
@@ -89,25 +108,79 @@ export default function ProductPage({ params }: ProductPageProps) {
         p.id.includes(decodedRouteId)
       )
     : undefined;
-  const product = shopifyProduct || mockProduct;
+  const product = shopifyProduct;
+
+  // Track ViewContent when product loads AND when variant changes (standard e-commerce behavior)
+  useEffect(() => {
+    if (product && hasMarketingConsent) {
+      const selectedVariant = product.variants?.find((v: any) => 
+        v.selectedOptions?.every((so: any) => selectedOptions[so.name] === so.value)
+      ) || product.variants?.[0];
+
+      // Create unique key including variant to allow tracking variant changes
+      const variantKey = selectedVariant?.id || 'default';
+      const productVariantKey = `${product.id || product.handle}_${variantKey}`;
+      
+      // Track ViewContent for each product + variant combination
+      if (viewContentTrackedRef.current !== productVariantKey) {
+        console.log(`👁️ ViewContent - Tracking product: ${product.handle || product.id}, variant: ${variantKey}`);
+        
+        trackViewContent({
+          content_type: 'product',
+          content_ids: [product.id?.toString() || product.handle || ''],
+          content_name: (product as any).title || product.handle || 'Product',
+          content_category: (product as any).productType || 'Product',
+          value: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+          currency: (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        });
+        
+        // Mark this product + variant combination as tracked
+        viewContentTrackedRef.current = productVariantKey;
+      } else {
+        console.log(`👁️ ViewContent - Already tracked for product: ${product.handle}, variant: ${variantKey}`);
+      }
+    }
+  }, [product, hasMarketingConsent, selectedOptions, trackViewContent]);
 
   // Initialize and preload all images, and initialize selectedOptions once per product
   useEffect(() => {
     if (!product) return;
     
+    // Collect all unique images from product and variants
+    const productImages = (product.images && product.images.length > 0)
+      ? product.images.map((img: any) => (typeof img === 'string' ? img : img.url))
+      : [];
+    
+    // Get variant images with proper structure handling
     const variantImageUrls = (product.variants || [])
-      .map((v: { imageUrl?: string }) => v.imageUrl)
-      .filter((u: string | undefined): u is string => Boolean(u));
+      .map((v: any) => {
+        // Handle both new structure (v.image.url) and legacy (v.imageUrl)
+        if (v.image && v.image.url) return v.image.url;
+        if (v.imageUrl) return v.imageUrl;
+        if (typeof v.image === 'string') return v.image;
+        return null;
+      })
+      .filter((u: string | null): u is string => Boolean(u));
+    
     const uniqueVariantImages = Array.from(new Set(variantImageUrls));
-
-    const initial = uniqueVariantImages.length > 0
-      ? uniqueVariantImages
-      : (product.images && product.images.length > 0)
-        ? product.images.map((img: any) => (typeof img === 'string' ? img : img.url))
-        : [product.image];
+    
+    // Combine product images with variant images, prioritizing product images
+    const allImages = [...productImages];
+    uniqueVariantImages.forEach(variantImg => {
+      if (!allImages.includes(variantImg)) {
+        allImages.push(variantImg);
+      }
+    });
+    
+    // Fallback to product.image if no images found
+    const initial = allImages.length > 0 ? allImages : [product.image].filter(Boolean);
+    
+    console.log(`🖼️ Initialized ${initial.length} images for product:`, initial);
+    console.log(`📦 Product images: ${productImages.length}, Variant images: ${uniqueVariantImages.length}`);
 
     setImages(initial);
     setSelectedImage(0);
+    setUserSelectedImage(false); // Reset when product changes
 
     // Initialize selected options ONCE per product id.
     if (product.options && product.options.length > 0 && lastInitializedProductIdRef.current !== product.id) {
@@ -115,7 +188,10 @@ export default function ProductPage({ params }: ProductPageProps) {
       const initialOptions: Record<string, string> = {};
 
       if (variantIdFromUrl && product.variants) {
-        const variantFromUrl = product.variants.find((v: any) => v.id === variantIdFromUrl);
+        // Support both short ID (55607043916100) and full GID (gid://shopify/ProductVariant/55607043916100)
+        const variantFromUrl = product.variants.find((v: any) => 
+          v.id === variantIdFromUrl || v.id.split('/').pop() === variantIdFromUrl
+        );
         if (variantFromUrl && Array.isArray(variantFromUrl.selectedOptions)) {
           variantFromUrl.selectedOptions.forEach((so: any) => {
             initialOptions[so.name] = so.value;
@@ -157,7 +233,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     });
   }, [product?.id]);
 
-  // Handle variant changes with instant switching and URL update
+  // Handle variant changes with proper image switching
   useEffect(() => {
     if (!product || !product.variants || product.variants.length === 0) return;
     
@@ -166,26 +242,72 @@ export default function ProductPage({ params }: ProductPageProps) {
       return v.selectedOptions.every((so: any) => selectedOptions[so.name] === so.value);
     }) || product.variants[0];
     
-    if (variant && variant.imageUrl) {
-      const imageIndex = images.findIndex(img => img === variant.imageUrl);
-      if (imageIndex !== -1 && imageIndex !== selectedImage) {
-        setSelectedImage(imageIndex);
+    // Only auto-switch image if user hasn't manually selected one
+    if (!userSelectedImage) {
+      let targetImageIndex = -1;
+      
+      // PRIORITY 1: Use variant's specific image if available
+      if (variant && (variant as any).image && (variant as any).image.url) {
+        targetImageIndex = images.findIndex(img => img === (variant as any).image.url);
+        console.log(`🎯 Found variant-specific image: ${(variant as any).image.url} at index ${targetImageIndex}`);
+      }
+      
+      // PRIORITY 2: Use legacy imageUrl property if available
+      if (targetImageIndex === -1 && variant && variant.imageUrl) {
+        targetImageIndex = images.findIndex(img => img === variant.imageUrl);
+        console.log(`🎯 Found variant imageUrl: ${variant.imageUrl} at index ${targetImageIndex}`);
+      }
+      
+      // PRIORITY 3: Smart mapping based on variant options (only if no specific variant image)
+      if (targetImageIndex === -1 && images.length > 1) {
+        const frameColor = selectedOptions['Frame kleur'] || selectedOptions['Frame color'] || '';
+        const tableTopColor = selectedOptions['Tafelblad kleur'] || selectedOptions['Tafelblad color'] || '';
+        
+        console.log(`🎨 Mapping based on options - Frame: "${frameColor}", Tabletop: "${tableTopColor}"`);
+        
+        // Simple and reliable mapping based on most common patterns
+        if (frameColor.toLowerCase().includes('wit') || frameColor.toLowerCase().includes('white')) {
+          targetImageIndex = 1; // White frame variants typically second image
+        } else if (frameColor.toLowerCase().includes('grijs') || frameColor.toLowerCase().includes('gray')) {
+          targetImageIndex = Math.min(2, images.length - 1); // Gray frame variants
+        } else if (tableTopColor.toLowerCase().includes('walnoot') || tableTopColor.toLowerCase().includes('walnut')) {
+          targetImageIndex = Math.min(3, images.length - 1); // Walnoot tabletop variants
+        } else if (tableTopColor.toLowerCase().includes('wit') || tableTopColor.toLowerCase().includes('white')) {
+          targetImageIndex = Math.min(4, images.length - 1); // White tabletop variants
+        }
+        
+        // Ensure we don't exceed available images
+        targetImageIndex = Math.min(targetImageIndex, images.length - 1);
+        
+        console.log(`🎨 Smart mapping result: index ${targetImageIndex} for Frame: "${frameColor}", Tabletop: "${tableTopColor}"`);
+      }
+      
+      // Switch to the target image if found and different from current
+      if (targetImageIndex !== -1 && targetImageIndex !== selectedImage && targetImageIndex < images.length) {
+        console.log(`🖼️ Auto-switching to variant image: ${targetImageIndex} (variant: ${variant.title})`);
+        setSelectedImage(targetImageIndex);
+      } else if (targetImageIndex === -1) {
+        console.log(`⚠️ No specific image found for variant: ${variant.title}, keeping current image`);
       }
     }
 
-    // Update URL with variant ID only if it actually changes
+    // Update URL when variant changes (like Shopify does)
     const currentVariantId = searchParams.get('variant');
-    if (variant && currentVariantId !== variant.id) {
+    // Extract just the numeric ID from the full GID (like Shopify)
+    const shortVariantId = variant?.id?.split('/').pop() || '';
+    
+    if (variant && currentVariantId !== shortVariantId && currentVariantId !== variant.id) {
       const newUrl = new URL(window.location.href);
-      newUrl.searchParams.set('variant', variant.id);
-      router.push(newUrl.toString(), { scroll: false });
+      newUrl.searchParams.set('variant', shortVariantId);
+      router.replace(newUrl.toString(), { scroll: false });
+      console.log(`🔄 Variant URL updated to: ${shortVariantId} (Shopify-style behavior)`);
     }
-  }, [selectedOptions, product?.variants, searchParams, images, selectedImage, router]);
+  }, [selectedOptions, product?.variants, searchParams, images, selectedImage, router, userSelectedImage]);
 
   // resolvedParams is now always available since use(params) handles the Promise
 
   // Show skeleton while Shopify data or images are loading
-  if ((isLoadingShopify && !mockProduct) || !isImagesReady) {
+  if (isLoadingShopify || !isImagesReady) {
     return <ProductPageSkeleton />;
   }
 
@@ -212,15 +334,92 @@ export default function ProductPage({ params }: ProductPageProps) {
       price: selectedVariant?.price || product.price,
       image: images[selectedImage] || product.image,
     };
+    
+    // Track AddToCart before adding to cart
+    if (hasMarketingConsent) {
+      console.log('🛒 AddToCart - Marketing consent:', hasMarketingConsent);
+      console.log('🛒 AddToCart - Product:', product);
+      
+      const selectedVariant = product.variants?.find((v: any) => 
+        v.selectedOptions?.every((so: any) => selectedOptions[so.name] === so.value)
+      ) || product.variants?.[0];
+
+      const trackingData = {
+        content_type: 'product' as const,
+        content_ids: [product.id?.toString() || product.handle || ''],
+        content_name: (product as any).title || product.handle || 'Product',
+        content_category: (product as any).productType || 'Product',
+        value: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        currency: (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        quantity: quantity,
+      };
+      
+      console.log('🛒 AddToCart - Tracking data:', trackingData);
+      trackAddToCart(trackingData);
+    } else {
+      console.log('❌ AddToCart - Not tracking, no marketing consent');
+    }
+    
     addToCart(productForCart);
     if (quantity > 1) {
       updateQuantity(productForCart.id, quantity);
     }
   };
 
-  const relatedProducts = shopifyProducts.length > 0 
-    ? shopifyProducts.filter(p => p.id !== product.id).slice(0, 4)
-    : mockProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const handleAddOnQuantityChange = (addOnIndex: number, change: number) => {
+    setSelectedAddOns(prev => {
+      const current = prev[addOnIndex] || 1;
+      const newQuantity = Math.max(1, current + change);
+      return { ...prev, [addOnIndex]: newQuantity };
+    });
+  };
+
+  const handleAddOnToCart = (addOn: any, addOnIndex: number) => {
+    const addOnProduct: Product = {
+      id: `addon-${addOnIndex}-${addOn.name?.replace(/\s+/g, '-').toLowerCase()}`,
+      name: addOn.name,
+      price: addOn.price || 0,
+      image: addOn.image,
+      description: `Add-on: ${addOn.name}`,
+      category: 'add-on',
+      stock: 999,
+      rating: 0,
+      reviews: 0
+    };
+    
+    const quantity = selectedAddOns[addOnIndex] || 1;
+    addToCartSilent(addOnProduct);
+    if (quantity > 1) {
+      updateQuantity(addOnProduct.id, quantity);
+    }
+
+    // Mark as added permanently
+    setAddedAddOns(prev => ({ ...prev, [addOnIndex]: true }));
+  };
+
+  const handleOpenAddOnModal = (addOn: any) => {
+    console.log('🔍 Opening add-on modal for:', addOn);
+    setSelectedAddOnId(addOn.id || '');
+    setSelectedAddOnHandle(addOn.handle || '');
+    setShowAddOnModal(true);
+  };
+
+  const handleAddOnProductAdded = (addOnId: string, addOnHandle?: string) => {
+    console.log('✅ Add-on product added via modal:', { addOnId, addOnHandle });
+    
+    // Find the index of the add-on in the current product's add-ons
+    if (product?.addOns) {
+      const addOnIndex = product.addOns.findIndex((addOn: any) => 
+        addOn.id === addOnId || addOn.handle === addOnHandle
+      );
+      
+      if (addOnIndex !== -1) {
+        setAddedAddOns(prev => ({ ...prev, [addOnIndex]: true }));
+      }
+    }
+  };
+
+  const relatedProducts = shopifyProducts.filter(p => p.id !== product.id).slice(0, 4);
 
   // Generate review count based on product ID (consistent with ProductCollection)
   const reviewCounts = [127, 89, 203, 156, 94, 178, 112, 145];
@@ -240,30 +439,36 @@ export default function ProductPage({ params }: ProductPageProps) {
       <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
-        <div className="mb-4 text-sm text-gray-600">
+        <div className="mb-6 bg-white border border-gray-200 rounded-lg px-4 py-3">
           <nav aria-label="Breadcrumb">
-            <ol className="flex items-center gap-2">
+            <ol className="flex items-center gap-2 text-sm">
               <li>
-                <Link href="/" className="hover:text-gray-900">Home</Link>
+                <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">
+                  Home
+                </Link>
               </li>
-                <li className="text-gray-400">/</li>
+              <li className="text-gray-400">/</li>
               <li>
-                <Link href="/products" className="hover:text-gray-900">Producten</Link>
+                <Link href="/products" className="text-gray-500 hover:text-gray-900 transition-colors">
+                  Producten
+                </Link>
               </li>
-                <li className="text-gray-400">/</li>
-              <li className="text-gray-900 line-clamp-1">{product?.name}</li>
+              <li className="text-gray-400">/</li>
+              <li className="text-gray-900 font-medium truncate max-w-xs" title={(product as any)?.title || product?.name || 'Product'}>
+                {(product as any)?.title || product?.name || 'Product'}
+              </li>
               </ol>
             </nav>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Images */}
-            <div className="space-y-4">
+            <div className="lg:sticky lg:top-24 lg:self-start space-y-4 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto scrollbar-hide">
             {/* Main Image */}
             <div ref={mainImageRef} className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
               <img
                 src={images[selectedImage]}
-                alt={product.name}
+                alt={(product as any)?.title || product?.name || 'Product'}
                 className="absolute inset-0 w-full h-full object-cover"
               />
               {/* Herfst deals badge */}
@@ -280,14 +485,18 @@ export default function ProductPage({ params }: ProductPageProps) {
               {images.map((image, index) => (
                 <button
                   key={index}
-                  onClick={() => setSelectedImage(index)}
+                  onClick={() => {
+                    console.log(`👆 User manually selected image: ${index}`);
+                    setSelectedImage(index);
+                    setUserSelectedImage(true);
+                  }}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
                     selectedImage === index ? 'border-gray-900' : 'border-gray-200 hover:border-gray-400'
                   }`}
                 >
                   <img
                     src={image}
-                    alt={`${product.name} ${index + 1}`}
+                    alt={`${(product as any)?.title || product?.name || 'Product'} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -300,16 +509,26 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Trustpilot Rating */}
             <div className="flex items-center gap-2">
               <img 
-                src="/trustpilot stars.png" 
+                src="/trustpilot-stars-new.png" 
                 alt="Trustpilot 5 sterren" 
                 width={100} 
                 height={20}
+                className="h-5 w-auto"
               />
               <span className="text-sm text-gray-600">({reviewCount} reviews)</span>
                 </div>
 
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+              <div className="flex items-center gap-3 mb-4">
+                <h1 className="text-3xl font-bold text-gray-900">{(product as any)?.title || product?.name || 'Product'}</h1>
+                <button
+                  onClick={() => setShowProductInfoModal(true)}
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors group"
+                  title="Bekijk gedetailleerde product informatie"
+                >
+                  <Info className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
+                </button>
+              </div>
               
               {/* Price Section */}
               <div className="mt-4 flex items-center justify-between">
@@ -367,7 +586,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
             {/* Tree-Nation Modal */}
             {showTreeNationModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                 <div className="bg-white rounded-lg p-6 max-w-md w-full relative">
                   <button onClick={() => setShowTreeNationModal(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
                     <X className="w-5 h-5" />
@@ -388,8 +607,11 @@ export default function ProductPage({ params }: ProductPageProps) {
               </div>
             )}
 
-            {/* Dynamic Options */}
-            {product.options && product.options.map((option: any) => {
+            {/* Dynamic Options - Only show if there are meaningful options */}
+            {product.options && product.options.some((option: any) => !(option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title')) && 
+              product.options
+              .filter((option: any) => !(option.name === 'Title' && option.values.length === 1 && option.values[0] === 'Default Title'))
+              .map((option: any) => {
               const lowerName = option.name.toLowerCase();
               const isColorOption = lowerName.includes('kleur') || lowerName.includes('color');
               const isSizeOption = lowerName.includes('grootte') || lowerName.includes('size') || lowerName.includes('maat');
@@ -423,7 +645,11 @@ export default function ProductPage({ params }: ProductPageProps) {
                         return (
                           <button
                             key={value}
-                            onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
+                            onClick={() => {
+                              console.log(`🎨 User selected color variant: ${option.name} = ${value}`);
+                              setSelectedOptions(prev => ({ ...prev, [option.name]: value }));
+                              setUserSelectedImage(false); // Allow auto-switching to variant image
+                            }}
                             className={`relative w-10 h-10 rounded-full border-2 transition-all ${selectedOptions[option.name] === value ? 'border-gray-900 scale-110' : 'border-gray-300 hover:border-gray-400'}`}
                             style={{ backgroundColor: bgColor }}
                             title={value}
@@ -449,7 +675,11 @@ export default function ProductPage({ params }: ProductPageProps) {
                             </span>
                           )}
                           <button
-                            onClick={() => setSelectedOptions(prev => ({ ...prev, [option.name]: value }))}
+                            onClick={() => {
+                              console.log(`📐 User selected variant option: ${option.name} = ${value}`);
+                              setSelectedOptions(prev => ({ ...prev, [option.name]: value }));
+                              setUserSelectedImage(false); // Allow auto-switching to variant image
+                            }}
                             className={`mt-2 px-3 py-2 text-sm rounded-lg border transition-all ${selectedOptions[option.name] === value ? (isSizeOption ? 'border-gray-900' : 'border-gray-900 bg-gray-900 text-white') : 'border-gray-300 hover:border-gray-400'}`}
                           >
                             {value}
@@ -466,9 +696,11 @@ export default function ProductPage({ params }: ProductPageProps) {
             {product.addOns && product.addOns.length > 0 && (
               <div className="border border-gray-200 rounded-lg p-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Handige toevoegingen:</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                
+                {/* Mobile: Horizontal scroll */}
+                <div className="flex gap-4 overflow-x-auto pb-4 md:hidden -mx-4 px-4">
                   {product.addOns.map((addOn: any, index: number) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                    <div key={`mobile-${index}`} className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors flex-shrink-0 w-64">
                       {/* Add-on Image */}
                       <div className="relative mb-3">
                         <img
@@ -503,7 +735,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                       </div>
 
                       {/* Add-on Name */}
-                      <h4 className="font-medium text-gray-900 mb-2 text-sm">{addOn.name}</h4>
+                      <h4 className="font-medium text-gray-900 mb-2 text-sm line-clamp-1" title={addOn.name}>{addOn.name}</h4>
 
                       {/* Price */}
                       <div className="flex items-center gap-2 mb-3">
@@ -517,22 +749,152 @@ export default function ProductPage({ params }: ProductPageProps) {
                         </span>
                       </div>
 
-                      {/* Details Button */}
-                      {addOn.handle ? (
-                        <Link 
-                          href={`/products/${addOn.handle}`}
-                          className="text-sm text-gray-600 hover:text-gray-900 underline"
+                      {/* Quantity Controls and Add to Cart */}
+                      <div className="space-y-3">
+                        {/* Info Text */}
+                        <div className="text-center">
+                          <span className="text-xs text-gray-600">Klik 'Toevoegen' om opties te kiezen</span>
+                        </div>
+
+                        {/* Add to Cart Button - Opens Modal */}
+                        <button
+                          onClick={() => handleOpenAddOnModal(addOn)}
+                          disabled={addedAddOns[index]}
+                          className={`w-full py-2 px-3 rounded-lg text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
+                            addedAddOns[index] 
+                              ? 'bg-green-50 text-green-700 border-2 border-green-200 cursor-default' 
+                              : 'bg-gray-900 text-white hover:bg-gray-800 border-2 border-gray-900'
+                          }`}
+                        >
+                          {addedAddOns[index] ? (
+                            <>
+                              <Check className="w-3 h-3" />
+                              <span>Toegevoegd</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingCart className="w-3 h-3" />
+                              <span>Toevoegen</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* Details Button */}
+                        <button 
+                          onClick={() => handleOpenAddOnModal(addOn)}
+                          className="w-full text-xs text-gray-600 hover:text-gray-900 underline"
                         >
                           Details
-                        </Link>
-                      ) : (
-                        <button className="text-sm text-gray-600 hover:text-gray-900 underline">
-                          Details
                         </button>
-                      )}
+                      </div>
                     </div>
                   ))}
                 </div>
+                
+                {/* Desktop: Grid layout */}
+                <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {product.addOns.map((addOn: any, index: number) => (
+                    <div key={`desktop-${index}`} className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                      {/* Add-on Image */}
+                      <div className="relative mb-3">
+                        <img
+                          src={addOn.image}
+                          alt={addOn.name}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        {addOn.discount && (
+                          <span
+                            className="absolute top-2 right-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-bold"
+                            style={{ backgroundColor: '#FD8B51', color: '#ffffff' }}
+                          >
+                            -{addOn.discount}%
+                          </span>
+                        )}
+                      </div>
+                      
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <svg
+                            key={i}
+                            className={`w-3 h-3 ${i < Math.floor(addOn.rating || 0) ? 'text-gray-300' : 'text-gray-300'}`}
+                            style={{ color: i < Math.floor(addOn.rating || 0) ? '#2e572d' : undefined }}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                        <span className="text-xs text-gray-600 ml-1">{addOn.rating || 0}</span>
+                      </div>
+
+                      {/* Add-on Name */}
+                      <h4 className="font-medium text-gray-900 mb-2 text-sm line-clamp-1" title={addOn.name}>{addOn.name}</h4>
+
+                      {/* Price */}
+                      <div className="flex items-center gap-2 mb-3">
+                        {addOn.compareAtPrice && addOn.price && addOn.compareAtPrice > addOn.price && (
+                          <span className="text-sm text-gray-500 line-through">
+                            €{addOn.compareAtPrice.toFixed(2)}
+                          </span>
+                        )}
+                        <span className="text-lg font-bold text-gray-900">
+                          €{(addOn.price || 0).toFixed(2)}
+                        </span>
+                      </div>
+
+                      {/* Quantity Controls and Add to Cart */}
+                      <div className="space-y-3">
+                        {/* Info Text */}
+                        <div className="text-center">
+                          <span className="text-xs text-gray-600">Klik 'Toevoegen' om opties te kiezen</span>
+                        </div>
+
+                        {/* Add to Cart Button - Opens Modal */}
+                        <button
+                          onClick={() => handleOpenAddOnModal(addOn)}
+                          disabled={addedAddOns[index]}
+                          className={`w-full py-2 px-3 rounded-lg text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
+                            addedAddOns[index] 
+                              ? 'bg-green-50 text-green-700 border-2 border-green-200 cursor-default' 
+                              : 'bg-gray-900 text-white hover:bg-gray-800 border-2 border-gray-900'
+                          }`}
+                        >
+                          {addedAddOns[index] ? (
+                            <>
+                              <Check className="w-3 h-3" />
+                              <span>Toegevoegd</span>
+                            </>
+                          ) : (
+                            <>
+                              <ShoppingCart className="w-3 h-3" />
+                              <span>Toevoegen</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* Details Button */}
+                        <button 
+                          onClick={() => handleOpenAddOnModal(addOn)}
+                          className="w-full text-xs text-gray-600 hover:text-gray-900 underline"
+                        >
+                          Details
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Hide scrollbar on mobile */}
+                <style jsx>{`
+                  .overflow-x-auto::-webkit-scrollbar {
+                    display: none;
+                  }
+                  .overflow-x-auto {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                  }
+                `}</style>
               </div>
             )}
 
@@ -593,6 +955,11 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <strong>Gratis verzending!</strong> {deliveryMessage}
               </p>
             </div>
+
+            {/* Klarna Payment Widget */}
+            <div className="mt-4">
+              <KlarnaWidget price={selectedVariant?.price || product.price} />
+            </div>
           </div>
         </div>
 
@@ -621,7 +988,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                     preload="metadata"
                     poster="/svg icons/videoframe_21189.png"
                   >
-                    <source src="/svg icons/eenvoudige bediening.mp4" type="video/mp4" />
+                    <source src="/svg icons/Bureau omhoog 2.0.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>
@@ -742,15 +1109,59 @@ export default function ProductPage({ params }: ProductPageProps) {
           </section>
 
           {/* Comparison Table Section */}
-          <section className="bg-white rounded-3xl p-8 lg:p-12 border">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
+          <section className="bg-white rounded-3xl p-4 md:p-8 lg:p-12 border">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 md:mb-8 text-center">
               Hoe vergelijken wij?
             </h2>
-            <p className="text-center text-gray-600 mb-12">
+            <p className="text-center text-gray-600 mb-6 md:mb-12 text-sm md:text-base">
               Welke keuzes heb je? Kijk hiervoor naar dit handige overzicht.
             </p>
             
-            <div className="max-w-5xl mx-auto">
+            {/* Mobile Layout - Cards */}
+            <div className="md:hidden space-y-4">
+              {[
+                { feature: 'Prijs', desktronic: '✓ De prijs houdt je niet aan je stoel gekluisterd', amazon: '✗ Goedkoop, maar je moet het volgend jaar vervangen', others: '✗ Tweede baan nodig om er één te betalen' },
+                { feature: 'Stabiliteit', desktronic: '✓ Zo stabiel dat je er zelfs op kunt staan', amazon: '✗ Laat er geen vlieg op landen', others: '✓ Stabiel genoeg' },
+                { feature: 'Geluidsniveau', desktronic: '✓ Fluisterstil - goedgekeurd door ninja\'s!', amazon: '✗ Daar gaat over vergaderd worden', others: '✗ Matig' },
+                { feature: 'Tafelblad uit één stuk', desktronic: '✓ Naadloos, waterdicht en duurzaam', amazon: '✗ Puzzelstukjes met vuil verzamelende gaten', others: '✗ Duurzaam, maar verwacht niet te veel' },
+                { feature: 'Twee-motorensysteem', desktronic: '✓ Standaard op alle modellen', amazon: '✗ Één motor - als een fiets met één pedaal', others: '✗ Alleen bij de premium modellen' }
+              ].map((row, i) => (
+                <div key={i} className="bg-gray-50 rounded-xl p-4">
+                  <h3 className="font-bold text-gray-900 mb-3 text-center">{row.feature}</h3>
+                  
+                  {/* DESKNA */}
+                  <div className="bg-white rounded-lg p-3 mb-3 border-2 border-gray-900">
+                    <div className="flex items-center mb-2">
+                      <img src="/DESKNA LOGO BLACK.png" alt="DESKNA" className="h-4 mr-2" />
+                      <span className="font-semibold text-sm">DESKNA</span>
+                      <div className="ml-auto flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-700">{row.desktronic}</p>
+                  </div>
+                  
+                  {/* Competitors */}
+                  <div className="space-y-2">
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <div className="font-medium text-xs text-gray-600 mb-1">Amazon merken</div>
+                      <p className="text-xs text-gray-700">{row.amazon}</p>
+                    </div>
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
+                      <div className="font-medium text-xs text-gray-600 mb-1">Andere merken</div>
+                      <p className="text-xs text-gray-700">{row.others}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Layout - Table */}
+            <div className="hidden md:block max-w-5xl mx-auto">
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 {/* Header Row */}
                 <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-200">
@@ -758,8 +1169,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                   <div className="p-4 border-l border-gray-200">
                     <div className="text-center border-2 border-gray-900 rounded-lg p-3 bg-white">
                       <img 
-                        src="/black logo 1.png" 
-                        alt="STYLO Logo" 
+                        src="/DESKNA LOGO BLACK.png" 
+                        alt="DESKNA Logo" 
                         className="h-6 mx-auto mb-2"
                       />
                       <div className="text-xs text-gray-600 mb-2">De prijs houdt je niet aan je stoel gekluisterd</div>
@@ -769,19 +1180,19 @@ export default function ProductPage({ params }: ProductPageProps) {
                             <svg key={i} className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
-              ))}
-            </div>
+                          ))}
+                        </div>
                         <span className="text-xs font-bold ml-1">4.8</span>
-              </div>
-                </div>
-              </div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="p-4 border-l border-gray-200 text-center text-gray-600 font-medium">
                     <div>Merken op <strong>Amazon</strong></div>
                   </div>
                   <div className="p-4 border-l border-gray-200 text-center text-gray-600 font-medium">
                     <div><strong>Andere</strong> merken</div>
-            </div>
-          </div>
+                  </div>
+                </div>
 
                 {/* Data Rows */}
                 {[
@@ -798,7 +1209,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   <div key={i} className="grid grid-cols-4 border-b border-gray-200 last:border-b-0">
                     <div className="p-4 font-medium text-gray-900 text-sm bg-white">
                       {row.feature}
-            </div>
+                    </div>
                     <div className="p-4 border-l border-gray-200 text-left text-gray-900 text-sm bg-white">
                       {row.desktronic}
                     </div>
@@ -1196,6 +1607,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             </section>
+
+            {/* Waarom kiezen voor DESKNA? Widgets */}
+            <WidgetsSection />
 
             {/* SeatPro Sectie 2 - Ligfunctie met Voetensteun */}
             <section className="bg-white rounded-3xl p-8 lg:p-12 border">
@@ -1616,12 +2030,12 @@ export default function ProductPage({ params }: ProductPageProps) {
                       <img 
                         src="/trustpilot stars.png" 
                         alt="5 sterren" 
-                        className="h-4 mb-3"
+                        className="h-3 mb-3"
                       />
                       <p className="text-sm text-gray-700 leading-relaxed">
                         {review.text}
                       </p>
-                      <p className="text-xs text-gray-500 mt-2">Verzameld door STYLO</p>
+                      <p className="text-xs text-gray-500 mt-2">Verzameld door DESKNA</p>
             </div>
               ))}
             </div>
@@ -1635,6 +2049,22 @@ export default function ProductPage({ params }: ProductPageProps) {
           title="Vergelijkbare producten"
           subtitle="Andere producten die je misschien interessant vindt."
           products={relatedProducts}
+        />
+
+        {/* Add-On Modal */}
+        <AddOnModal
+          isOpen={showAddOnModal}
+          onClose={() => setShowAddOnModal(false)}
+          addOnId={selectedAddOnId}
+          addOnHandle={selectedAddOnHandle}
+          onProductAdded={handleAddOnProductAdded}
+        />
+
+        {/* Product Info Modal */}
+        <ProductInfoModal
+          isOpen={showProductInfoModal}
+          onClose={() => setShowProductInfoModal(false)}
+          productHandle={product?.handle || resolvedParams.id}
         />
             </div>
     </div>

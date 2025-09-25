@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Colofon | DESKNA',
+  description: 'Colofon en bedrijfsgegevens van DESKNA, specialist in ergonomische bureaustoelen en zit-sta bureaus.',
+};
+
 export default function Colofon() {
   return (
     <div className="min-h-screen bg-white">
@@ -14,8 +21,7 @@ export default function Colofon() {
           <div className="bg-gray-50 rounded-xl p-6">
             <p><strong>Bedrijfsnaam:</strong> Stylo</p>
             <p><strong>Adres:</strong> Amsterdam, Nederland</p>
-            <p><strong>Telefoon:</strong> +31 620 176 727 (Nederland)</p>
-            <p><strong>Telefoon:</strong> +32 620 176 727 (België)</p>
+            <p><strong>Telefoon:</strong> 085 060 2482</p>
             <p><strong>E-mail:</strong> info@stylo.nl</p>
             <p><strong>Website:</strong> www.stylo.nl</p>
           </div>
@@ -50,7 +56,7 @@ export default function Colofon() {
           <p>
             Voor klachten over onze producten of diensten kun je contact opnemen via 
             <a href="mailto:info@stylo.nl" className="text-blue-600 hover:text-blue-800">info@stylo.nl</a> 
-            of telefonisch via +31 620 176 727.
+            of telefonisch via 085 060 2482.
           </p>
 
           <p className="text-sm text-gray-500 mt-8">
@@ -61,4 +67,6 @@ export default function Colofon() {
     </div>
   );
 }
+
+
 

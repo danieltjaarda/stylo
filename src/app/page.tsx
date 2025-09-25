@@ -5,7 +5,7 @@ import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Light
 import ProductCollection from '@/components/ProductCollection';
 import { getShopifyProducts, isShopifyConfigured } from '@/services/shopifyService';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import Lottie to avoid SSR issues
@@ -36,8 +36,10 @@ export default function Home() {
   const [headsetAnimationKey, setHeadsetAnimationKey] = useState(0);
   const [animationsLoaded, setAnimationsLoaded] = useState(false);
 
-  // Load Lottie animations
-  useEffect(() => {
+  // Load Lottie animations lazily when they're needed
+  const loadAnimations = useCallback(() => {
+    if (animationsLoaded) return;
+    
     Promise.all([
       fetch('/wired-outline-267-like-thumb-up-hover-up (1).json').then(r => r.json()),
       fetch('/wired-outline-237-star-rating-hover-pinch (1).json').then(r => r.json()),
@@ -59,7 +61,27 @@ export default function Home() {
       console.error('Error loading animations:', error);
       setAnimationsLoaded(true); // Show fallbacks if loading fails
     });
-  }, []);
+  }, [animationsLoaded]);
+
+  // Load animations when component becomes visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadAnimations();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const trustSection = document.querySelector('[data-trust-indicators]');
+    if (trustSection) {
+      observer.observe(trustSection);
+    }
+
+    return () => observer.disconnect();
+  }, [loadAnimations]);
 
   // Add structured data for SEO
   useEffect(() => {
@@ -292,10 +314,10 @@ export default function Home() {
             fill 
             className="object-cover md:hidden" 
             priority 
-            quality={100}
+            quality={85}
             sizes="100vw"
-            unoptimized={true}
-            style={{ imageRendering: 'crisp-edges' }}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
           />
           <Image 
             src="/banner.webp" 
@@ -303,9 +325,10 @@ export default function Home() {
             fill 
             className="object-cover hidden md:block" 
             priority 
-            quality={100}
-            unoptimized={true}
-            style={{ imageRendering: 'crisp-edges' }}
+            quality={85}
+            sizes="100vw"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
           />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex justify-start pt-[35%] md:pt-[8%]" style={{ alignItems: 'flex-start' }}>
@@ -387,6 +410,7 @@ export default function Home() {
                   width={50}
                   height={50}
                   className="h-12 w-auto"
+                  loading="eager"
                 />
                 <Image 
                   src="/svg icons/WOTY_badge-certified2025.svg" 
@@ -394,6 +418,7 @@ export default function Home() {
                   width={50}
                   height={50}
                   className="h-12 w-auto"
+                  loading="eager"
                 />
               </div>
             </div>
@@ -411,7 +436,7 @@ export default function Home() {
       </section>
 
       {/* Trust Indicators Section */}
-      <section className="py-8 bg-gray-50">
+      <section className="py-8 bg-gray-50" data-trust-indicators>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Mobile Layout - 3 columns grid */}
           <div className="md:hidden">
@@ -1152,7 +1177,8 @@ export default function Home() {
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
+                  poster="/svg icons/videoframe_21189.png"
                 >
                   <source src="/svg icons/company-video-2-se.mp4" type="video/mp4" />
                   {/* Fallback image */}
@@ -1229,7 +1255,9 @@ export default function Home() {
                 alt="Bureau stoelen collectie"
                 fill
                 className="object-cover"
-                priority
+                loading="lazy"
+                quality={80}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
               <div className="relative h-full flex flex-col justify-center p-12">
@@ -1261,37 +1289,41 @@ export default function Home() {
       {/* Testimonials Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Aanbevolen door dermatologen & ergonomie-specialisten
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 leading-tight px-2">
+              <span className="block sm:hidden">Aanbevolen door<br />specialisten</span>
+              <span className="hidden sm:block">Aanbevolen door dermatologen & ergonomie-specialisten</span>
             </h2>
           </div>
           {/* Mobile Layout - Horizontal Scroll */}
           <div className="md:hidden">
-            <div className="flex overflow-x-auto gap-6 pb-4 -mx-4 px-4">
+            <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 snap-x snap-mandatory">
               {/* Testimonial 1 - Mobile */}
-              <div className="flex-shrink-0 w-80 text-left">
-                <div className="mb-6">
-                  <div className="w-full h-64 rounded-lg overflow-hidden mb-6 bg-gray-200">
+              <div className="flex-shrink-0 w-72 sm:w-80 text-left bg-gray-50 p-6 rounded-xl snap-center">
+                <div className="mb-4">
+                  <div className="w-full h-48 sm:h-56 rounded-lg overflow-hidden mb-4 bg-gray-200">
                     <Image
                       src="/Chris winter.webp"
                       alt="Dr. Chris Winter"
                       width={320}
-                      height={256}
+                      height={224}
                       className="w-full h-full object-cover grayscale"
+                      loading="lazy"
+                      quality={75}
+                      sizes="(max-width: 640px) 280px, 320px"
                     />
                   </div>
                 </div>
-                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed">
-                  "De luxe, wasbare kussens van onze ergonomische bureaustoelen zijn ongelooflijk zacht en blokkeren het licht moeiteloos, waardoor de werkdag enorm verbetert. Het is perfect voor in het kantoor of op reis, en de verkoeelende stof creëert overal de ideale werkomgeving."
+                <blockquote className="text-sm sm:text-base text-gray-700 mb-4 leading-relaxed">
+                  "De luxe, wasbare kussens van onze ergonomische bureaustoelen zijn ongelooflijk zacht en blokkeren het licht moeiteloos, waardoor de werkdag enorm verbetert."
                 </blockquote>
                 <div className="flex items-center">
                   <div>
-                    <p className="font-semibold text-gray-900">Dr. Chris Winter</p>
-                    <p className="text-sm text-gray-600">Ergonomie Expert</p>
+                    <p className="font-semibold text-gray-900 text-sm sm:text-base">Dr. Chris Winter</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Ergonomie Expert</p>
                   </div>
-                  <div className="ml-2">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
+                  <div className="ml-2 flex-shrink-0">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
                       <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -1299,28 +1331,31 @@ export default function Home() {
               </div>
 
               {/* Testimonial 2 - Mobile */}
-              <div className="flex-shrink-0 w-80 text-left">
-                <div className="mb-6">
-                  <div className="w-full h-64 rounded-lg overflow-hidden mb-6 bg-gray-200">
+              <div className="flex-shrink-0 w-72 sm:w-80 text-left bg-gray-50 p-6 rounded-xl snap-center">
+                <div className="mb-4">
+                  <div className="w-full h-48 sm:h-56 rounded-lg overflow-hidden mb-4 bg-gray-200">
                     <Image
                       src="/Krisel Woltman.webp"
                       alt="Drs. Kristel Woltman"
                       width={320}
-                      height={256}
+                      height={224}
                       className="w-full h-full object-cover grayscale"
+                      loading="lazy"
+                      quality={75}
+                      sizes="(max-width: 640px) 280px, 320px"
                     />
                   </div>
                 </div>
-                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed">
-                  "Een gezonde houding krijg je met de juiste ondersteuning in je werkstoel. De ergonomische eigenschappen die je consumeert en de juiste zitpositie. Ik raad mijn patiënten deze stoelen aan omdat het de effectiviteit van je werk en comfort verbetert. Daarnaast vermindert de zachte stof de kans op rugklachten."
+                <blockquote className="text-sm sm:text-base text-gray-700 mb-4 leading-relaxed">
+                  "Een gezonde houding krijg je met de juiste ondersteuning in je werkstoel. Ik raad mijn patiënten deze stoelen aan omdat het de effectiviteit van je werk verbetert."
                 </blockquote>
                 <div className="flex items-center">
                   <div>
-                    <p className="font-semibold text-gray-900">Drs. Kristel Woltman</p>
-                    <p className="text-sm text-gray-600">Fysiotherapeut</p>
+                    <p className="font-semibold text-gray-900 text-sm sm:text-base">Drs. Kristel Woltman</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Fysiotherapeut</p>
                   </div>
-                  <div className="ml-2">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
+                  <div className="ml-2 flex-shrink-0">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
                       <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>
@@ -1328,28 +1363,31 @@ export default function Home() {
               </div>
 
               {/* Testimonial 3 - Mobile */}
-              <div className="flex-shrink-0 w-80 text-left">
-                <div className="mb-6">
-                  <div className="w-full h-64 rounded-lg overflow-hidden mb-6 bg-gray-200">
+              <div className="flex-shrink-0 w-72 sm:w-80 text-left bg-gray-50 p-6 rounded-xl snap-center">
+                <div className="mb-4">
+                  <div className="w-full h-48 sm:h-56 rounded-lg overflow-hidden mb-4 bg-gray-200">
                     <Image
                       src="/Joep.webp"
                       alt="Joep Rovers"
                       width={320}
-                      height={256}
+                      height={224}
                       className="w-full h-full object-cover grayscale"
+                      loading="lazy"
+                      quality={75}
+                      sizes="(max-width: 640px) 280px, 320px"
                     />
                   </div>
                 </div>
-                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed">
-                  "Ik heb zelf ernstig eczeem gehad in mijn gezicht en kon dit oplossen door mijn werkstoel aan te passen. De kussensloop waar je de hele dag op zit, heeft grote invloed op hoe je huid 's nachts herstelt. Door te zitten op een antibacteriële kussensloop van onze stoelen, is iets wat ik iedereen zou aanraden."
+                <blockquote className="text-sm sm:text-base text-gray-700 mb-4 leading-relaxed">
+                  "Door te zitten op een antibacteriële kussensloop van onze stoelen, heeft grote invloed op hoe je huid 's nachts herstelt. Dit is iets wat ik iedereen zou aanraden."
                 </blockquote>
                 <div className="flex items-center">
                   <div>
-                    <p className="font-semibold text-gray-900">Joep Rovers</p>
-                    <p className="text-sm text-gray-600">Ergonomie Adviseur</p>
+                    <p className="font-semibold text-gray-900 text-sm sm:text-base">Joep Rovers</p>
+                    <p className="text-xs sm:text-sm text-gray-600">Ergonomie Adviseur</p>
                   </div>
-                  <div className="ml-2">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
+                  <div className="ml-2 flex-shrink-0">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: '#00c8fc' }}>
                       <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   </div>

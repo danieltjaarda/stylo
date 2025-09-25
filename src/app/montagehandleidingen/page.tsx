@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Montagehandleidingen | DESKNA',
+  description: 'Download gratis montagehandleidingen voor DESKNA bureaus, stoelen en accessoires. Stap-voor-stap instructies en video tutorials.',
+};
+
 export default function Montagehandleidingen() {
   const manuals = [
     {
@@ -150,4 +157,8 @@ export default function Montagehandleidingen() {
     </div>
   );
 }
+
+
+
+
 

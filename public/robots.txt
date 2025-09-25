@@ -1,0 +1,17 @@
+# Robots.txt voor DESKNA webshop
+
+User-agent: *
+Allow: /
+
+# Blokkeer interne tools en validatie pagina's
+Disallow: /api/feed-checker
+Disallow: /test-*
+Disallow: /api/validate-feed
+Disallow: /api/shopify-debug
+Disallow: /api/products-test
+
+# Sta Google Merchant feed toe (moet crawlbaar zijn)
+Allow: /api/google-feed
+
+# Sitemap locatie
+Sitemap: https://deskna.nl/sitemap.xml

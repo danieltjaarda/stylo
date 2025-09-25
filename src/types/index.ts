@@ -14,8 +14,10 @@ export interface ProductVariant {
   price: number;
   compareAtPrice?: number | null;
   available: boolean;
+  availableForSale?: boolean; // Shopify property alias
   selectedOptions?: ProductVariantOptionValue[];
-  imageUrl?: string;
+  image?: ProductImage | null; // New structured image property
+  imageUrl?: string; // Legacy property for backwards compatibility
 }
 
 export interface ProductOption {
@@ -46,6 +48,7 @@ export interface Product {
   images?: ProductImage[];
   videoUrl?: string;
   videoPoster?: string;
+  tags?: string[]; // Shopify product tags for video mapping
   category: string;
   stock: number;
   rating: number;

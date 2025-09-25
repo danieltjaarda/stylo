@@ -1,5 +1,42 @@
 import { Product } from '@/types';
 
+// Haal producten op van een specifieke Shopify collection
+export async function getShopifyCollection(collectionHandle: string): Promise<Product[]> {
+  try {
+    console.log(`🔍 Fetching collection '${collectionHandle}' from Shopify...`);
+    
+    const response = await fetch(`/api/collections/${collectionHandle}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.log('❌ Collection API error:', response.status);
+      return [];
+    }
+
+    const data = await response.json();
+    console.log('📦 Collection API response:', data);
+
+    if (data.error) {
+      console.log('❌ Collection API error:', data.error);
+      return [];
+    }
+
+    if (data.success && data.products && data.products.length > 0) {
+      console.log(`✅ ${data.products.length} products loaded from collection '${collectionHandle}'!`);
+      return data.products;
+    }
+
+    return [];
+  } catch (error) {
+    console.error('❌ Error fetching collection:', error);
+    return [];
+  }
+}
+
 // Haal alle producten op van Shopify via server-side API
 export async function getShopifyProducts(limit: number = 10): Promise<Product[]> {
   try {
@@ -39,8 +76,13 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
           price: v.price,
           compareAtPrice: v.compareAtPrice,
           available: v.available,
+          availableForSale: v.available, // Add both properties for consistency
           selectedOptions: v.selectedOptions,
-          imageUrl: v.imageUrl,
+          image: v.image ? {
+            url: v.image.url || v.imageUrl,
+            altText: v.image.altText
+          } : null,
+          imageUrl: v.imageUrl || v.image?.url, // Keep legacy property
         }));
         const options = (product.options || []).map((o: any) => ({ name: o.name, values: o.values }));
         const firstVariantId = variants[0]?.id;
@@ -82,6 +124,75 @@ export async function getShopifyProducts(limit: number = 10): Promise<Product[]>
   } catch (error) {
     console.error('❌ Error fetching products:', error);
     return [];
+  }
+}
+
+// Haal een specifiek product op van Shopify
+export async function getShopifyProduct(handle: string): Promise<Product | null> {
+  try {
+    console.log(`🔍 Fetching product '${handle}' from Shopify...`);
+    
+    const response = await fetch(`/api/products/${handle}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.log('❌ Product API error:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    console.log('📦 Product API response:', data);
+
+    if (data.error) {
+      console.log('❌ Product API error:', data.error);
+      return null;
+    }
+
+    if (data.success && data.product) {
+      console.log(`✅ Product loaded: ${data.product.title}`);
+      
+      // Transform to match our Product type
+      const product = data.product;
+      const transformedProduct: Product = {
+        id: product.id,
+        handle: product.handle,
+        variantId: product.variants[0]?.id,
+        name: product.title,
+        description: product.description,
+        image: product.images[0]?.url || '/stoel-wit.png',
+        images: product.images?.map((img: any) => img.url) || [],
+        price: parseFloat(product.priceRange?.minVariantPrice?.amount || '0'),
+        category: product.productType || 'Product',
+        stock: product.variants?.some((v: any) => v.availableForSale) ? 10 : 0,
+        rating: 4.5,
+        reviews: 150,
+        variants: product.variants?.map((variant: any) => ({
+          id: variant.id,
+          title: variant.title,
+          price: parseFloat(variant.price?.amount || '0'),
+          compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount) : undefined,
+          availableForSale: variant.availableForSale,
+          selectedOptions: variant.selectedOptions,
+          image: variant.image ? {
+            url: variant.image.url,
+            altText: variant.image.altText
+          } : null,
+          imageUrl: variant.image?.url, // Keep legacy property for backwards compatibility
+        })) || [],
+        options: product.options || [],
+      };
+      
+      return transformedProduct;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('❌ Error fetching product:', error);
+    return null;
   }
 }
 

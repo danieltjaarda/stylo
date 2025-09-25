@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Klaviyo Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .event-test {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            background: #000;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .stars {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ddd;
+        }
+        .stars.active {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Klaviyo Events</h1>
+        <p>Gebruik deze pagina om je Klaviyo integratie te testen</p>
+
+        <!-- Test Discount Signup -->
+        <div class="event-test">
+            <h3>📧 Test Discount Signup Event</h3>
+            <input type="email" id="discountEmail" placeholder="Je email adres" value="test@deskna.nl">
+            <button onclick="testDiscountSignup()">Test Discount Signup</button>
+            <div id="discountResult"></div>
+        </div>
+
+        <!-- Test Review Submission -->
+        <div class="event-test">
+            <h3>⭐ Test Review Submission Event</h3>
+            <input type="email" id="reviewEmail" placeholder="Je email adres" value="test@deskna.nl">
+            <input type="text" id="reviewName" placeholder="Je naam" value="Test Gebruiker">
+            
+            <div>
+                <label>Rating:</label><br>
+                <span class="stars" id="star1" onclick="setRating(1)">★</span>
+                <span class="stars" id="star2" onclick="setRating(2)">★</span>
+                <span class="stars" id="star3" onclick="setRating(3)">★</span>
+                <span class="stars" id="star4" onclick="setRating(4)">★</span>
+                <span class="stars" id="star5" onclick="setRating(5)">★</span>
+            </div>
+            
+            <textarea id="reviewText" placeholder="Je review (optioneel)" rows="3">Geweldig product! Zeer tevreden.</textarea>
+            <button onclick="testReviewSubmission()">Test Review Submission</button>
+            <div id="reviewResult"></div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="event-test">
+            <h3>📋 Hoe te controleren:</h3>
+            <ol>
+                <li>Klik op een van de test buttons hierboven</li>
+                <li>Ga naar je Klaviyo dashboard</li>
+                <li>Kijk in <strong>Analytics → Events</strong> voor de events</li>
+                <li>Kijk in <strong>Profiles</strong> naar het test email profiel</li>
+                <li>Controleer je <strong>Flows</strong> of ze getriggerd worden</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let currentRating = 5;
+
+        function setRating(rating) {
+            currentRating = rating;
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById(`star${i}`);
+                if (i <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            }
+        }
+
+        // Initialize with 5 stars
+        setRating(5);
+
+        async function testDiscountSignup() {
+            const email = document.getElementById('discountEmail').value;
+            const resultDiv = document.getElementById('discountResult');
+            
+            if (!email) {
+                showResult('discountResult', 'Voer een email adres in', 'error');
+                return;
+            }
+
+            try {
+                // Test subscribe
+                const subscribeResponse = await fetch('/api/klaviyo/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        properties: {
+                            source: 'test_page',
+                            test_signup: true
+                        }
+                    }),
+                });
+
+                const subscribeData = await subscribeResponse.json();
+                
+                if (subscribeData.success) {
+                    // Test discount event
+                    const discountCode = `TEST${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+                    
+                    const eventResponse = await fetch('/api/klaviyo/track', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            eventName: 'Discount Code Generated',
+                            properties: {
+                                discount_code: discountCode,
+                                discount_percentage: 5,
+                                source: 'test_page',
+                                test_event: true
+                            }
+                        }),
+                    });
+
+                    const eventData = await eventResponse.json();
+                    
+                    if (eventData.success) {
+                        showResult('discountResult', `✅ Success! Discount code: ${discountCode}. Check je Klaviyo dashboard.`, 'success');
+                    } else {
+                        showResult('discountResult', `❌ Event failed: ${eventData.error}`, 'error');
+                    }
+                } else {
+                    showResult('discountResult', `❌ Subscribe failed: ${subscribeData.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('discountResult', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testReviewSubmission() {
+            const email = document.getElementById('reviewEmail').value;
+            const name = document.getElementById('reviewName').value;
+            const reviewText = document.getElementById('reviewText').value;
+            
+            if (!email) {
+                showResult('reviewResult', 'Voer een email adres in', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/klaviyo/track-review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        productId: 'test-product-123',
+                        productTitle: 'Test DESKNA Product',
+                        rating: currentRating,
+                        reviewText: reviewText,
+                        customerName: name
+                    }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('reviewResult', `✅ Success! Review met ${currentRating} sterren verstuurd. Check je Klaviyo dashboard.`, 'success');
+                } else {
+                    showResult('reviewResult', `❌ Failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showResult('reviewResult', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        function showResult(elementId, message, type) {
+            const resultDiv = document.getElementById(elementId);
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+        }
+    </script>
+</body>
+</html>

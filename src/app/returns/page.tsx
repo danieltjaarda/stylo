@@ -1,3 +1,10 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Retourneren & Terugbetalingen | DESKNA',
+  description: 'Eenvoudig en gratis retourneren binnen 30 dagen. Lees alles over ons retourbeleid en hoe je jouw bestelling kunt retourneren.',
+};
+
 export default function Returns() {
   return (
     <div className="min-h-screen bg-white">
@@ -130,4 +137,8 @@ export default function Returns() {
     </div>
   );
 }
+
+
+
+
 

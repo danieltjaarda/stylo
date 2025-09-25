@@ -7,6 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { createCheckout, addToCheckout, cartItemsToLineItems, getCheckoutUrl } from '@/services/checkoutService';
+import { useMarketingConsent } from '@/contexts/CookieConsentContext';
+import { useMetaPixelTracking, cartItemsToMetaPixel } from '@/lib/metaPixel';
 
 export default function Cart() {
   const { 
@@ -20,6 +22,10 @@ export default function Cart() {
   } = useCartStore();
 
   const [isRedirecting, setIsRedirecting] = useState(false);
+  
+  // Meta Pixel tracking
+  const hasMarketingConsent = useMarketingConsent();
+  const { trackInitiateCheckout } = useMetaPixelTracking(hasMarketingConsent);
 
   const total = getTotalPrice();
   const shipping = total > 50 ? 0 : 5.99;
@@ -35,20 +41,71 @@ export default function Cart() {
 
   const handleShopifyCheckout = async () => {
     if (items.length === 0) return;
+    
+    // Track InitiateCheckout before redirecting to Shopify
+    if (hasMarketingConsent && items.length > 0) {
+      console.log('🔥 InitiateCheckout - Marketing consent:', hasMarketingConsent);
+      console.log('🔥 InitiateCheckout - Cart items:', items);
+      
+      const { content_ids, contents, value, num_items } = cartItemsToMetaPixel(items);
+      
+      console.log('🔥 InitiateCheckout - Tracking data:', { content_ids, contents, value, num_items });
+      
+      // Use direct fbq call to ensure correct event type
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
+          content_type: 'product',
+          content_ids,
+          contents,
+          value,
+          currency: 'EUR',
+          num_items,
+        });
+        console.log('✅ InitiateCheckout tracked directly via fbq');
+      }
+      
+      // Also use our helper (backup)
+      trackInitiateCheckout({
+        content_type: 'product',
+        content_ids,
+        contents,
+        value,
+        currency: 'EUR',
+        num_items,
+      });
+    } else {
+      console.log('❌ InitiateCheckout - Not tracking:', { hasMarketingConsent, itemsLength: items.length });
+    }
+    
     setIsRedirecting(true);
     try {
+      console.log('🚀 Starting checkout process...');
       const checkout = await createCheckout();
       const lineItems = cartItemsToLineItems(items);
+      
+      // Check if we have valid line items
+      if (!lineItems || lineItems.length === 0) {
+        console.error('❌ No valid line items for checkout');
+        alert('Er zijn geen geldige producten in je winkelwagen voor checkout. Probeer de producten opnieuw toe te voegen.');
+        return;
+      }
+      
+      console.log('📦 Line items for checkout:', lineItems);
       const updatedCheckout = await addToCheckout(checkout.id, lineItems);
       const checkoutUrl = getCheckoutUrl(updatedCheckout);
+      
       if (checkoutUrl) {
+        console.log('✅ Checkout URL received:', checkoutUrl);
         toggleCart();
+        
+        // Use the same simple redirect as desktop - this should work everywhere
         window.location.href = checkoutUrl;
         return;
       }
-      console.error('No checkout URL returned from Shopify');
+      console.error('❌ No checkout URL returned from Shopify');
     } catch (error) {
-      console.error('Checkout redirect failed:', error);
+      console.error('❌ Checkout redirect failed:', error);
+      alert('Er ging iets mis bij het doorsturen naar de checkout. Probeer het opnieuw.');
     } finally {
       setIsRedirecting(false);
     }
@@ -201,6 +258,9 @@ export default function Cart() {
                           <button
                             onClick={handleShopifyCheckout}
                             disabled={isRedirecting}
+                            type="button"
+                            data-testid="checkout-button"
+                            aria-label="Ga naar afrekenen"
                             className="w-full text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-center block"
                             style={{ backgroundColor: '#9dafaa' }}
                           >
@@ -225,7 +285,7 @@ export default function Cart() {
                           />
                           <span className="text-sm font-medium text-gray-700 mr-2">Trustpilot</span>
                           <Image
-                            src="/trustpilot stars.png"
+                            src="/trustpilot-stars-new.png"
                             alt="Trustpilot 5 sterren"
                             width={120}
                             height={20}

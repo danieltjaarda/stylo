@@ -6,35 +6,35 @@ export default function Footer() {
     <footer className="text-black" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-          {/* Onze hardlopers */}
+          {/* Topproducten */}
           <div>
             <div className="mb-6">
               <img 
-                src="/black logo 1.png" 
-                alt="STYLO Logo" 
+                src="/DESKNA LOGO BLACK.png" 
+                alt="DESKNA Logo" 
                 className="h-8 w-auto"
               />
             </div>
-            <h3 className="text-lg font-medium mb-6 text-black">Onze hardlopers</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">Topproducten</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/products/homeone-bureau" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  HomeOne bureau
+                <Link href="/products/777-test-product" className="text-gray-600 hover:text-black transition-colors text-sm">
+                  DeskOne Bureau
                 </Link>
               </li>
               <li>
-                <Link href="/products/homepro-bureau" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  HomePro bureau
+                <Link href="/products/deskpro" className="text-gray-600 hover:text-black transition-colors text-sm">
+                  DeskPro
                 </Link>
               </li>
               <li>
-                <Link href="/products/sitone-ergonomische-bureustoel" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  SitOne ergonomische bureustoel
+                <Link href="/products/seatpro-ergonomische-bureau-stoel" className="text-gray-600 hover:text-black transition-colors text-sm">
+                  SeatPro ergonomische bureau stoel
                 </Link>
               </li>
               <li>
-                <Link href="/products/sitpro-ergonomische-bureustoel" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  SitPro ergonomische bureustoel
+                <Link href="/products/monitorarm-enkel" className="text-gray-600 hover:text-black transition-colors text-sm">
+                  Monitorarm - Enkel
                 </Link>
               </li>
             </ul>
@@ -45,28 +45,18 @@ export default function Footer() {
             <h3 className="text-lg font-medium mb-6 text-black">Shop</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/products" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/shop-alles" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Alle producten
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=zit-sta-bureaus" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/verstelbare-bureaus" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Zit-Sta bureaus
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=ergonomische-bureaustoelen" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/bureaustoelen" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Ergonomische bureaustoelen
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=verstelbare-bureauframes" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Verstelbare bureauframes
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=accessoires" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Accessoires
                 </Link>
               </li>
             </ul>
@@ -87,7 +77,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/over-ons" className="text-gray-600 hover:text-black transition-colors text-sm">
                   Over ons
                 </Link>
               </li>
@@ -137,15 +127,11 @@ export default function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex items-center">
                 <span className="text-gray-600">📞</span>
-                <span className="ml-2 text-gray-600">NL: +31 620 176 727</span>
-              </div>
-              <div className="flex items-center">
-                <span className="text-gray-600">📞</span>
-                <span className="ml-2 text-gray-600">BE: +32 620 176 727</span>
+                <span className="ml-2 text-gray-600">085 060 2482</span>
               </div>
               <div className="flex items-center">
                 <span className="text-gray-600">✉️</span>
-                <span className="ml-2 text-gray-600">info@stylo.nl</span>
+                <span className="ml-2 text-gray-600">info@deskna.nl</span>
               </div>
               <div className="flex items-center">
                 <span className="text-gray-600">🕒</span>
@@ -220,7 +206,7 @@ export default function Footer() {
                 <div className="flex items-center space-x-2">
                   <span className="text-black font-medium">Uitstekend</span>
                   <img 
-                    src="/trustpilot stars.png" 
+                    src="/trustpilot-stars-new.png" 
                     alt="5 sterren Trustpilot" 
                     className="h-4 w-auto"
                   />
@@ -235,7 +221,7 @@ export default function Footer() {
           {/* Bottom links and payment */}
           <div className="mt-8 pt-8 border-t border-gray-300 flex flex-col lg:flex-row justify-between items-center">
             <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-4 lg:mb-0">
-              <span>© 2025 Stylo. Alle rechten voorbehouden.</span>
+              <span>© 2025 DESKNA. Alle rechten voorbehouden.</span>
               <Link href="/privacy" className="hover:text-black transition-colors">Privacy-beleid</Link>
               <Link href="/terms" className="hover:text-black transition-colors">Algemene Voorwaarden</Link>
               <Link href="/colofon" className="hover:text-black transition-colors">Colofon</Link>

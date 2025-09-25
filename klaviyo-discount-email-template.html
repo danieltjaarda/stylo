@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Je 5% kortingscode is hier!</title>
+    <style>
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #fe8b51 0%, #ff6b35 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .discount-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #fe8b51;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .discount-code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fe8b51;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            display: inline-block;
+        }
+        
+        .discount-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .discount-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #000000;
+            color: white !important;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 30px 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #333333;
+            color: white !important;
+        }
+        
+        .features {
+            margin: 40px 0;
+            text-align: left;
+        }
+        
+        .features h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: #fe8b51;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon::before {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .expiry-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 25px 0;
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #666;
+            text-decoration: none;
+        }
+        
+        /* Mobile responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px 20px;
+            }
+            
+            .discount-code {
+                font-size: 24px;
+                letter-spacing: 2px;
+                padding: 12px 20px;
+            }
+            
+            .cta-button {
+                display: block;
+                text-align: center;
+                margin: 25px 0;
+            }
+            
+            /* Trustpilot mobile styling */
+            .footer div[style*="display: flex"] {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://cdn.shopify.com/s/files/1/0944/8272/7236/files/deskna_logo_zwart.png?v=1757873345" alt="DESKNA Logo" style="height: 40px; margin-bottom: 15px;">
+            <p style="color: #000000;">Bedankt voor je aanmelding - hier is je beloofde korting!</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="discount-box">
+                <div class="discount-text">Je 5% kortingscode:</div>
+                <div class="discount-code">DESKNA5</div>
+                <div class="discount-subtitle">Kopieer deze code en gebruik hem bij het afrekenen</div>
+            </div>
+            
+            <a href="https://deskna.nl" class="cta-button">SHOP NU MET KORTING</a>
+            
+            <div class="expiry-notice">
+                ⏰ <strong>Let op:</strong> Deze kortingscode is slechts 24 uur geldig! Bestel vandaag nog.
+            </div>
+            
+            <div class="features">
+                <h3>Waarom kiezen voor DESKNA?</h3>
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <div>Gratis verzending vanaf €50</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <div>30 dagen retourgarantie</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <div>Topkwaliteit ergonomische producten</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"></div>
+                    <div>Uitstekende klantenservice</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>DESKNA</strong> - Jouw partner voor ergonomisch werken</p>
+            <p>Heb je vragen? Stuur ons een email op <a href="mailto:info@deskna.nl">info@deskna.nl</a></p>
+            
+            <!-- Trustpilot Section -->
+            <div style="margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;">
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
+                    <img src="https://cdn.shopify.com/s/files/1/0944/8272/7236/files/trustpilot-logo.png?v=1757873556" alt="Trustpilot" style="height: 30px;">
+                    <div style="text-align: center;">
+                        <div style="color: #00b67a; font-weight: bold; font-size: 16px;">★★★★★</div>
+                        <div style="font-size: 14px; color: #333; margin-top: 2px;">Uitstekend beoordeeld door onze klanten</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#">Facebook</a> |
+                <a href="#">Instagram</a> |
+                <a href="#">LinkedIn</a>
+            </div>
+            
+            <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                Je ontvangt deze email omdat je je hebt aangemeld voor onze nieuwsbrief.<br>
+                <a href="{{ unsubscribe_url }}" style="color: #999;">Uitschrijven</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
