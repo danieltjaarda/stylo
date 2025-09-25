@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { notFound } from 'next/navigation';
 import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame } from 'lucide-react';
-import { mockProducts } from '@/data/products';
+// import { mockProducts } from '@/data/products'; // Removed - using Shopify data only
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
 import { getShopifyProducts } from '@/services/shopifyService';
@@ -113,7 +113,9 @@ export default function ProductPage({ params }: ProductPageProps) {
     if (resolvedParams.id === '1' && shopifyProducts.length > 0) {
       return shopifyProducts[0];
     }
-    return mockProducts.find(p => p.id === resolvedParams.id);
+    // Get product from Shopify instead of mock data
+    const products = await getShopifyProducts();
+    return products.find(p => p.id === resolvedParams.id);
   })() : null;
   
   // Initialize and preload images when product data is available
@@ -223,7 +225,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   const colors = ['bg-gray-800', 'bg-blue-900', 'bg-zinc-700'];
   const sizes = ['Klein (1.5m)', 'Medium (1.8m)', 'Groot (2.1m)'];
-  const relatedProducts = mockProducts.filter(p => p.id !== product.id).slice(0, 4);
+  const relatedProducts = shopifyProducts.filter(p => p.id !== product.id).slice(0, 4);
 
   // Compute selected variant (once) for consistency
   const selectedVariant = product.variants?.find(v => {
