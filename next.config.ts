@@ -24,7 +24,7 @@ const nextConfig = {
   },
   // Bundle analyzer for production builds
   ...(process.env.ANALYZE === 'true' && {
-    webpack: (config, { isServer }) => {
+    webpack: (config: any, { isServer }: any) => {
       if (!isServer) {
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
         config.plugins.push(
