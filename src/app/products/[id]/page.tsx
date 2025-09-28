@@ -2073,7 +2073,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         {/* Sticky Add to Cart */}
         {product && selectedVariant && (
           <StickyAddToCart
-            productTitle={product.title}
+            productTitle={product.name}
             productPrice={selectedVariant.price?.amount}
             compareAtPrice={selectedVariant.compareAtPrice?.amount}
             quantity={quantity}
