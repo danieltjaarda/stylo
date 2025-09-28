@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CookieConsentProvider } from "@/contexts/CookieConsentContext";
+import { StickyCartProvider } from "@/contexts/StickyCartContext";
 // import PerformanceOptimizer from "@/components/PerformanceOptimizer"; // Temporarily disabled
 // import PerformanceMonitor from "@/components/PerformanceMonitor"; // Temporarily disabled
 // Import dynamically loaded client components
@@ -14,6 +15,7 @@ import {
   CookieBanner,
   GoogleAnalytics,
   GoogleAds,
+  GoogleTagManager,
   MetaPixel,
   MicrosoftClarity
 } from "@/components/ClientComponents";
@@ -83,9 +85,10 @@ export default function RootLayout({
         className={`${nunito.variable} font-sans antialiased min-h-screen flex flex-col`}
       >
         <CookieConsentProvider>
-          {/* <PerformanceOptimizer /> */}
-          {/* <PerformanceMonitor /> */}
-          <Header />
+          <StickyCartProvider>
+            {/* <PerformanceOptimizer /> */}
+            {/* <PerformanceMonitor /> */}
+            <Header />
           <main className="flex-1">
             {children}
           </main>
@@ -94,8 +97,12 @@ export default function RootLayout({
           <FloatingWhatsApp />
           <EmailPopup />
           <CookieBanner />
+          </StickyCartProvider>
           
           {/* Conditional Analytics Scripts */}
+          {process.env.NEXT_PUBLIC_GTM_ID && (
+            <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+          )}
           {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
             <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
           )}

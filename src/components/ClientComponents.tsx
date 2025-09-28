@@ -9,6 +9,7 @@ export const EmailPopup = dynamic(() => import("@/components/EmailPopup"), { ssr
 export const CookieBanner = dynamic(() => import("@/components/CookieBanner"), { ssr: false });
 export const GoogleAnalytics = dynamic(() => import("@/components/GoogleAnalytics"), { ssr: false });
 export const GoogleAds = dynamic(() => import("@/components/GoogleAds"), { ssr: false });
+export const GoogleTagManager = dynamic(() => import("@/components/GoogleTagManager"), { ssr: false });
 export const MetaPixel = dynamic(() => import("@/components/MetaPixel"), { ssr: false });
 export const MicrosoftClarity = dynamic(() => import("@/components/MicrosoftClarity"), { ssr: false });
 

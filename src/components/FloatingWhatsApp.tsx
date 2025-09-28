@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useStickyCart } from '@/contexts/StickyCartContext';
 import { X } from 'lucide-react';
 
 interface FloatingWhatsAppProps {
@@ -13,6 +14,7 @@ export default function FloatingWhatsApp({
   message = "Hallo! Ik heb een vraag over jullie producten."
 }: FloatingWhatsAppProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const { isStickyCartVisible } = useStickyCart();
 
   const handleWhatsAppClick = () => {
     const encodedMessage = encodeURIComponent(message);
@@ -24,7 +26,7 @@ export default function FloatingWhatsApp({
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || isStickyCartVisible) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">

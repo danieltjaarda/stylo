@@ -11,6 +11,7 @@ import WidgetsSection from '@/components/WidgetsSection';
 import KlarnaWidget from '@/components/KlarnaWidget';
 import ProductInfoModal from '@/components/ProductInfoModal';
 import AddOnModal from '@/components/AddOnModal';
+import StickyAddToCart from '@/components/StickyAddToCart';
 import { getShopifyProducts } from '@/services/shopifyService';
 import { Product } from '@/types';
 import { useMarketingConsent } from '@/contexts/CookieConsentContext';
@@ -58,6 +59,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [addedAddOns, setAddedAddOns] = useState<Record<string, boolean>>({});
     const imageCache = useRef(new Map());
   const mainImageRef = useRef<HTMLDivElement>(null);
+  const addToCartButtonRef = useRef<HTMLButtonElement>(null);
 
   // No longer need to resolve params - use(params) handles it directly
 
@@ -940,6 +942,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
               {/* Add to Cart */}
               <button
+                ref={addToCartButtonRef}
                 onClick={handleAddToCart}
                 className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
               >
@@ -2066,6 +2069,19 @@ export default function ProductPage({ params }: ProductPageProps) {
           onClose={() => setShowProductInfoModal(false)}
           productHandle={product?.handle || resolvedParams.id}
         />
+
+        {/* Sticky Add to Cart */}
+        {product && selectedVariant && (
+          <StickyAddToCart
+            productTitle={product.title}
+            productPrice={selectedVariant.price?.amount}
+            compareAtPrice={selectedVariant.compareAtPrice?.amount}
+            quantity={quantity}
+            onQuantityChange={setQuantity}
+            onAddToCart={handleAddToCart}
+            originalButtonRef={addToCartButtonRef}
+          />
+        )}
             </div>
     </div>
   );
