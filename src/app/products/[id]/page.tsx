@@ -2074,8 +2074,8 @@ export default function ProductPage({ params }: ProductPageProps) {
         {product && selectedVariant && (
           <StickyAddToCart
             productTitle={product.name}
-            productPrice={selectedVariant.price?.amount}
-            compareAtPrice={selectedVariant.compareAtPrice?.amount}
+            productPrice={selectedVariant.price?.toString()}
+            compareAtPrice={selectedVariant.compareAtPrice?.toString()}
             quantity={quantity}
             onQuantityChange={setQuantity}
             onAddToCart={handleAddToCart}

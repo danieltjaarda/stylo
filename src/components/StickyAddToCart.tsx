@@ -11,7 +11,7 @@ interface StickyAddToCartProps {
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   onAddToCart: () => void;
-  originalButtonRef: React.RefObject<HTMLElement>;
+  originalButtonRef: React.RefObject<HTMLButtonElement | null>;
   isVisible?: boolean;
 }
 
