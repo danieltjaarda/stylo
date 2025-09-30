@@ -14,4 +14,4 @@ Disallow: /api/products-test
 Allow: /api/google-feed
 
 # Sitemap locatie
-Sitemap: https://deskna.nl/sitemap.xml
+Sitemap: https://deskna.se/sitemap.xml
