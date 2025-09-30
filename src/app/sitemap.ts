@@ -115,6 +115,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Dutch language versions of main pages
+  const dutchPages = [
+    {
+      url: `${baseUrl}?lang=nl`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/shop-alles?lang=nl`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/bureaustoelen?lang=nl`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/verstelbare-bureaus?lang=nl`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+  ];
+
   // Swedish language versions of main pages
   const swedishPages = [
     {
@@ -143,5 +171,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticPages, ...productPages, ...swedishPages];
+  return [...staticPages, ...productPages, ...dutchPages, ...swedishPages];
 }
