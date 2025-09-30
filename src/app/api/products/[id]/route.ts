@@ -101,7 +101,7 @@ export async function GET(request: Request, { params }: RouteParams) {
     
     // Detect domain from request headers
     const host = request.headers.get('host') || '';
-    const language = host.includes('deskna.es') ? 'SV' : 'NL';
+    const language = host.includes('deskna.se') ? 'SV' : 'NL';
     
     console.log(`🔍 Fetching detailed product info for: ${id}, domain: ${host}, language: ${language}`);
 

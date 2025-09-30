@@ -114,7 +114,7 @@ export async function GET(request: Request) {
   try {
     // Detect domain from request headers
     const host = request.headers.get('host') || '';
-    const language = host.includes('deskna.es') ? 'SV' : 'NL';
+    const language = host.includes('deskna.se') ? 'SV' : 'NL';
     
     console.log(`🛍️ Testing products for domain: ${host}, language: ${language}...`);
     

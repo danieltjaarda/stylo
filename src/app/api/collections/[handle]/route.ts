@@ -12,7 +12,7 @@ export async function GET(
     
     // Detect domain from request headers
     const host = request.headers.get('host') || '';
-    const language = host.includes('deskna.es') ? 'SV' : 'NL';
+    const language = host.includes('deskna.se') ? 'SV' : 'NL';
     
     console.log(`🔍 Fetching collection: ${handle}, domain: ${host}, language: ${language}`);
 
