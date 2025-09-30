@@ -5,7 +5,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://deskna.se';
   
   // Fetch all products from Shopify
-  let products = [];
+  let products: any[] = [];
   try {
     products = await getShopifyProducts(100); // Get up to 100 products
   } catch (error) {
