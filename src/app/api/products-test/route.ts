@@ -8,7 +8,7 @@ const SHOPIFY_DOMAIN = 'shaa16-zi.myshopify.com';
 const SHOPIFY_TOKEN = 'b1f59b8d8c3532330b6de85a4c728d59';
 
 const PRODUCTS_QUERY = `
-  query getProducts($first: Int!) {
+  query getProducts($first: Int!, $language: LanguageCode!) @inContext(language: $language) {
     products(first: $first) {
       edges {
         node {
@@ -110,9 +110,13 @@ const PRODUCTS_QUERY = `
   }
 `;
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    console.log('🛍️ Testing products with working domain...');
+    // Detect domain from request headers
+    const host = request.headers.get('host') || '';
+    const language = host.includes('deskna.es') ? 'SV' : 'NL';
+    
+    console.log(`🛍️ Testing products for domain: ${host}, language: ${language}...`);
     
     const response = await fetch(`https://${SHOPIFY_DOMAIN}/api/unstable/graphql.json`, {
       method: 'POST',
@@ -122,7 +126,10 @@ export async function GET() {
       },
       body: JSON.stringify({
         query: PRODUCTS_QUERY,
-        variables: { first: 10 }
+        variables: { 
+          first: 10,
+          language: language
+        }
       }),
     });
 
