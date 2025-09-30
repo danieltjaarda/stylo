@@ -16,6 +16,10 @@ const PRODUCTS_QUERY = `
           title
           handle
           description
+          translations(locale: "sv") {
+            key
+            value
+          }
           priceRange {
             minVariantPrice {
               amount
@@ -79,6 +83,10 @@ const PRODUCTS_QUERY = `
                     title
                     handle
                     description
+                    translations(locale: "sv") {
+                      key
+                      value
+                    }
                     priceRange {
                       minVariantPrice {
                         amount
@@ -195,10 +203,18 @@ export async function GET(request: Request) {
         // Get compareAtPrice from the first variant if available
         const firstVariantCompareAt = variants[0]?.compareAtPrice;
         
+        // Use Swedish translations if available and requesting Swedish
+        const translations = edge.node.translations || [];
+        const titleTranslation = translations.find((t: any) => t.key === 'title');
+        const descriptionTranslation = translations.find((t: any) => t.key === 'description');
+        
+        const productTitle = (isSwedish && titleTranslation) ? titleTranslation.value : edge.node.title;
+        const productDescription = (isSwedish && descriptionTranslation) ? descriptionTranslation.value : (edge.node.description || 'Geen beschrijving');
+        
         return {
           id: edge.node.id,
-          name: edge.node.title,
-          description: edge.node.description || 'Geen beschrijving',
+          name: productTitle,
+          description: productDescription,
           image: productImages[0]?.url || '/stoel-wit.png',
           images: productImages,
           videoUrl,
@@ -224,9 +240,17 @@ export async function GET(request: Request) {
               const ratings = [4.7, 4.8, 4.6, 4.5, 4.9]; // Voor de eerste 5 add-ons
               const rating = ratings[index] || 4.5;
               
+              // Use Swedish translations for add-ons if available
+              const addonTranslations = product.translations || [];
+              const addonTitleTranslation = addonTranslations.find((t: any) => t.key === 'title');
+              const addonDescriptionTranslation = addonTranslations.find((t: any) => t.key === 'description');
+              
+              const addonTitle = (isSwedish && addonTitleTranslation) ? addonTitleTranslation.value : product.title;
+              const addonDescription = (isSwedish && addonDescriptionTranslation) ? addonDescriptionTranslation.value : product.description;
+              
               return {
                 id: product.id,
-                name: product.title,
+                name: addonTitle,
                 price: price,
                 compareAtPrice: compareAtPrice,
                 image: product.images?.edges?.[0]?.node?.url || '/stoel-wit.png',
@@ -234,7 +258,7 @@ export async function GET(request: Request) {
                 discount: compareAtPrice && compareAtPrice > price ? 
                   Math.round(((compareAtPrice - price) / compareAtPrice) * 100) : null,
                 handle: product.handle,
-                description: product.description
+                description: addonDescription
               };
             });
             })() : null,
