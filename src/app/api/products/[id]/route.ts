@@ -4,7 +4,7 @@ const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shaa16-z
 const SHOPIFY_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN || 'b1f59b8d8c3532330b6de85a4c728d59';
 
 const PRODUCT_DETAILS_QUERY = `
-  query getProductDetails($handle: String!, $language: LanguageCode!) @inContext(language: $language) {
+  query getProductDetails($handle: String!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
     product(handle: $handle) {
       id
       title
@@ -101,9 +101,11 @@ export async function GET(request: Request, { params }: RouteParams) {
     
     // Detect domain from request headers
     const host = request.headers.get('host') || '';
-    const language = host.includes('deskna.se') ? 'SV' : 'NL';
+    const isSwedish = host.includes('deskna.se');
+    const language = isSwedish ? 'SV' : 'NL';
+    const country = isSwedish ? 'SE' : 'NL';
     
-    console.log(`🔍 Fetching detailed product info for: ${id}, domain: ${host}, language: ${language}`);
+    console.log(`🔍 Fetching detailed product info for: ${id}, domain: ${host}, language: ${language}, country: ${country}`);
 
     if (!SHOPIFY_DOMAIN || !SHOPIFY_TOKEN) {
       console.log('❌ Missing Shopify credentials');
@@ -123,7 +125,8 @@ export async function GET(request: Request, { params }: RouteParams) {
         query: PRODUCT_DETAILS_QUERY,
         variables: { 
           handle: id,
-          language: language
+          language: language,
+          country: country
         }
       }),
     });
