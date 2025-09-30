@@ -6,15 +6,19 @@ import { Product } from '@/types';
 import { videoOverridesByHandle, videoOverridesById, videoOverridesByIndex, videoOverridesByTag } from '@/data/videoOverrides';
 import { useCartStore } from '@/store/useCartStore';
 import { useEffect, useRef, useState } from 'react';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
 interface ProductCollectionProps {
   title: string;
   subtitle?: string;
   products: Product[];
   showTitle?: boolean;
+  translations?: Translations;
+  locale?: Locale;
 }
 
-export default function ProductCollection({ title, subtitle, products, showTitle = true }: ProductCollectionProps) {
+export default function ProductCollection({ title, subtitle, products, showTitle = true, translations, locale }: ProductCollectionProps) {
+  const { t } = translations && locale ? useTranslation(translations) : { t: (key: string) => key };
   const { addItem } = useCartStore();
   const [visibleProductIndex, setVisibleProductIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -119,7 +123,7 @@ export default function ProductCollection({ title, subtitle, products, showTitle
             href="/shop-alles" 
             className="hidden md:flex items-center text-gray-900 font-medium text-sm mt-2"
           >
-            <span className="mr-2">Bekijk de hele collectie</span>
+            <span className="mr-2">{translations ? t('home.productsSection.viewAll') : 'Bekijk de hele collectie'}</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -155,14 +159,10 @@ export default function ProductCollection({ title, subtitle, products, showTitle
             const reviewCounts = [127, 89, 203, 156, 94, 178, 112, 145];
             const reviewCount = reviewCounts[index % reviewCounts.length];
 
-            // Korting badge kleuren zoals Desktronic
-            const badgeTexts = [
-              '29% korting',
-              '21% korting', 
-              '27% korting',
-              '16% korting'
-            ];
-            const badgeText = badgeTexts[index % badgeTexts.length];
+            // Korting badge percentages
+            const discountPercentages = [29, 21, 27, 16];
+            const badgePercentage = discountPercentages[index % discountPercentages.length];
+            const badgeText = t ? t('home.productsSection.discount', { percentage: badgePercentage }) : `${badgePercentage}% rabatt`;
 
             // Use real product id so PDP resolves the correct item
             const productPath = product.handle ? product.handle : encodeURIComponent(product.id);
@@ -263,7 +263,7 @@ export default function ProductCollection({ title, subtitle, products, showTitle
                         decoding="async"
                       />
                       <span className="text-sm font-semibold text-gray-900">{product.rating}</span>
-                      <span className="text-sm text-gray-500 ml-1">({reviewCount} beoordelingen)</span>
+                      <span className="text-sm text-gray-500 ml-1">({reviewCount} {t ? t('home.productsSection.reviews') : 'omdömen'})</span>
                     </div>
 
                   {/* Product Name */}

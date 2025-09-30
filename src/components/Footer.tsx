@@ -1,7 +1,14 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube, Linkedin, ArrowRight } from 'lucide-react';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
-export default function Footer() {
+interface FooterProps {
+  translations: Translations;
+  locale: Locale;
+}
+
+export default function Footer({ translations, locale }: FooterProps) {
+  const { t } = useTranslation(translations);
   return (
     <footer className="text-black" style={{ backgroundColor: '#f7f7f7' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,26 +22,26 @@ export default function Footer() {
                 className="h-8 w-auto"
               />
             </div>
-            <h3 className="text-lg font-medium mb-6 text-black">Topproducten</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">{t('footer.topProducts.title')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/products/777-test-product" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  DeskOne Bureau
+                  {t('footer.topProducts.deskOne')}
                 </Link>
               </li>
               <li>
                 <Link href="/products/deskpro" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  DeskPro
+                  {t('footer.topProducts.deskPro')}
                 </Link>
               </li>
               <li>
                 <Link href="/products/seatpro-ergonomische-bureau-stoel" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  SeatPro ergonomische bureau stoel
+                  {t('footer.topProducts.seatPro')}
                 </Link>
               </li>
               <li>
                 <Link href="/products/monitorarm-enkel" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Monitorarm - Enkel
+                  {t('footer.topProducts.monitorArm')}
                 </Link>
               </li>
             </ul>
@@ -42,21 +49,21 @@ export default function Footer() {
 
           {/* Shop */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Shop</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">{t('footer.shop.title')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/shop-alles" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Alle producten
+                  {t('footer.shop.allProducts')}
                 </Link>
               </li>
               <li>
                 <Link href="/verstelbare-bureaus" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Zit-Sta bureaus
+                  {t('footer.shop.sitStandDesks')}
                 </Link>
               </li>
               <li>
                 <Link href="/bureaustoelen" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Ergonomische bureaustoelen
+                  {t('footer.shop.ergonomicChairs')}
                 </Link>
               </li>
             </ul>
@@ -64,31 +71,31 @@ export default function Footer() {
 
           {/* Hulp */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Hulp</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">{t('footer.help.title')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/b2b" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  B2B
+                  {t('footer.help.b2b')}
                 </Link>
               </li>
               <li>
                 <Link href="/returns" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Retourneren en Terugbetalingen
+                  {t('footer.help.returnsRefunds')}
                 </Link>
               </li>
               <li>
                 <Link href="/over-ons" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Over ons
+                  {t('footer.help.aboutUs')}
                 </Link>
               </li>
               <li>
                 <Link href="/shipping" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Verzending
+                  {t('footer.help.shipping')}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Contact met ons
+                  {t('footer.help.contact')}
                 </Link>
               </li>
             </ul>
@@ -96,26 +103,26 @@ export default function Footer() {
 
           {/* Bronnen */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Bronnen</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">{t('footer.resources.title')}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/blog" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Blog
+                  {t('footer.resources.blog')}
                 </Link>
               </li>
               <li>
                 <Link href="/quiz" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Quiz
+                  {t('footer.resources.quiz')}
                 </Link>
               </li>
               <li>
                 <Link href="/montagehandleidingen" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Montagehandleidingen
+                  {t('footer.resources.montageGuides')}
                 </Link>
               </li>
               <li>
                 <Link href="/kortingen" className="text-gray-600 hover:text-black transition-colors text-sm">
-                  Actieve kortingen
+                  {t('footer.resources.discounts')}
                 </Link>
               </li>
             </ul>
@@ -123,19 +130,19 @@ export default function Footer() {
 
           {/* Contact met ons */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Contact met ons</h3>
+            <h3 className="text-lg font-medium mb-6 text-black">{t('footer.contact.title')}</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center">
                 <span className="text-gray-600">📞</span>
-                <span className="ml-2 text-gray-600">085 060 2482</span>
+                <span className="ml-2 text-gray-600">{t('footer.contact.phone')}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-gray-600">✉️</span>
-                <span className="ml-2 text-gray-600">info@deskna.nl</span>
+                <span className="ml-2 text-gray-600">{locale === 'sv' ? 'info@deskna.se' : t('footer.contact.email')}</span>
               </div>
               <div className="flex items-center">
                 <span className="text-gray-600">🕒</span>
-                <span className="ml-2 text-gray-600">Ma - Vr | 07:00 - 16:00 uur</span>
+                <span className="ml-2 text-gray-600">{t('footer.contact.hours')}</span>
               </div>
             </div>
           </div>
@@ -146,11 +153,11 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             {/* Newsletter - aligned with first column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Blijf op de hoogte van ons laatste nieuws</h3>
+              <h3 className="text-lg font-medium mb-4 text-black">{t('footer.stayUpToDate.title')}</h3>
               <div className="flex">
                 <input
                   type="email"
-                  placeholder="Voer je e-mailadres in"
+                  placeholder={t('footer.stayUpToDate.inputPlaceholder')}
                   className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500"
                 />
                 <button 
@@ -166,7 +173,7 @@ export default function Footer() {
 
             {/* Social Media - aligned with Hulp column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Volg ons</h3>
+              <h3 className="text-lg font-medium mb-4 text-black">{t('footer.socialMedia.followUs')}</h3>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-600 hover:text-black transition-colors">
                   <Facebook className="w-6 h-6" />
@@ -187,7 +194,7 @@ export default function Footer() {
 
             {/* Certificates and Trustpilot - aligned with Contact column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Certificeringen:</h3>
+              <h3 className="text-lg font-medium mb-4 text-black">{t('footer.certifications.title')}</h3>
               <div className="flex items-center space-x-4 mb-6">
                 <img 
                   src="/svg icons/certificaat 1.svg.png" 
@@ -204,7 +211,7 @@ export default function Footer() {
               {/* Trustpilot in same column */}
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-black font-medium">Uitstekend</span>
+                  <span className="text-black font-medium">{t('footer.trustpilot.excellent')}</span>
                   <img 
                     src="/trustpilot-stars-new.png" 
                     alt="5 sterren Trustpilot" 
@@ -212,7 +219,7 @@ export default function Footer() {
                   />
                 </div>
                 <div className="text-sm text-black mt-1">
-                  1.500+ beoordelingen
+                  {t('footer.trustpilot.reviews')}
                 </div>
               </div>
             </div>
@@ -221,11 +228,11 @@ export default function Footer() {
           {/* Bottom links and payment */}
           <div className="mt-8 pt-8 border-t border-gray-300 flex flex-col lg:flex-row justify-between items-center">
             <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-4 lg:mb-0">
-              <span>© 2025 DESKNA. Alle rechten voorbehouden.</span>
-              <Link href="/privacy" className="hover:text-black transition-colors">Privacy-beleid</Link>
-              <Link href="/terms" className="hover:text-black transition-colors">Algemene Voorwaarden</Link>
-              <Link href="/colofon" className="hover:text-black transition-colors">Colofon</Link>
-              <Link href="/herroepingsrecht" className="hover:text-black transition-colors">Herroepingsrecht</Link>
+              <span>{t('footer.copyright')}</span>
+              <Link href="/privacy" className="hover:text-black transition-colors">{t('footer.privacyPolicy')}</Link>
+              <Link href="/terms" className="hover:text-black transition-colors">{t('footer.terms')}</Link>
+              <Link href="/colofon" className="hover:text-black transition-colors">{t('footer.colophon')}</Link>
+              <Link href="/herroepingsrecht" className="hover:text-black transition-colors">{t('footer.rightOfWithdrawal')}</Link>
             </div>
 
             {/* Payment Methods */}

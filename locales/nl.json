@@ -1,0 +1,1230 @@
+{
+  "common": {
+    "search": "Zoeken",
+    "cart": "Winkelwagen",
+    "menu": "Menu",
+    "close": "Sluiten",
+    "loading": "Laden...",
+    "error": "Er is iets misgegaan",
+    "retry": "Opnieuw proberen",
+    "contactUs": "Contact",
+    "aboutUs": "Over Ons"
+  },
+  "cookies": {
+    "banner": {
+      "title": "🍪 We gebruiken cookies",
+      "description": "We gebruiken cookies om je ervaring te verbeteren en onze website te analyseren. Door verder te gaan, ga je akkoord met ons cookiebeleid.",
+      "moreInfo": "Meer informatie",
+      "settings": "Instellingen",
+      "acceptNecessary": "Alleen Noodzakelijk",
+      "acceptAll": "Alles Accepteren"
+    },
+    "settings": {
+      "title": "Cookie Instellingen",
+      "close": "Sluit instellingen",
+      "description": "We gebruiken cookies om je ervaring op onze website te verbeteren. Je kunt hieronder aangeven welke cookies je wilt accepteren.",
+      "necessary": {
+        "title": "Noodzakelijke Cookies",
+        "status": "Altijd actief",
+        "description": "Deze cookies zijn essentieel voor het functioneren van de website. Ze kunnen niet worden uitgeschakeld."
+      },
+      "statistics": {
+        "title": "Statistiek Cookies",
+        "description": "Deze cookies helpen ons begrijpen hoe bezoekers onze website gebruiken. Bijvoorbeeld Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "Deze cookies worden gebruikt voor gepersonaliseerde advertenties. Bijvoorbeeld Meta Pixel (Facebook)."
+      },
+      "save": "Instellingen Opslaan",
+      "cancel": "Annuleren"
+    }
+  },
+  "emailPopup": {
+    "title": "Ontgrendel",
+    "titleHighlight": "voor 5% korting!",
+    "emailPlaceholder": "Voer je e-mailadres in",
+    "submitButton": "ONTGRENDEL JE KORTING",
+    "submitButtonLoading": "BEZIG...",
+    "saveLaterButton": "KORTING BEWAREN VOOR LATER",
+    "closeButton": "Sluiten",
+    "success": {
+      "title": "Bedankt!",
+      "message": "Je kortingscode is onderweg naar je inbox!",
+      "spamWarning": "Check ook je spam/ongewenste e-mail folder!"
+    },
+    "error": "Er ging iets mis bij het aanmelden. Probeer het opnieuw."
+  },
+  "nav": {
+    "bureaustoelen": "Bureaustoelen",
+    "bureaus": "Verstelbare bureaus",
+    "alles": "Shop alles",
+    "over-ons": "Over ons",
+    "contact": "Contact",
+    "blog": "Blog",
+    "b2b": "Zakelijk",
+    "products": "Producten"
+  },
+  "megaMenu": {
+    "products": "Producten",
+    "desks": {
+      "title": "Zit-sta bureaus",
+      "description": "Elektrisch verstelbare bureaus voor een gezonde werkhouding",
+      "cta": "Bekijk collectie →"
+    },
+    "chairs": {
+      "title": "Bureau stoelen",
+      "description": "Ergonomische werkplekstoelen voor optimaal zitcomfort",
+      "cta": "Bekijk collectie →"
+    },
+    "accessories": {
+      "title": "Accessoires",
+      "description": "Monitorarmen, bureaulampen en andere kantooraccessoires",
+      "cta": "Bekijk collectie →"
+    },
+    "viewAll": "Bekijk alle producten →",
+    "recommended": "Aanbevolen",
+    "recommendedProduct": {
+      "title": "SeatPro Ergonomische Stoel",
+      "description": "Premium ergonomie voor optimaal zitcomfort",
+      "cta": "Bekijk product →"
+    }
+  },
+  "header": {
+    "freeShipping": "Gratis verzending",
+    "warranty": "5 jaar garantie",
+    "returns": "30 dagen retour",
+    "support": "Klantenservice"
+  },
+  "footer": {
+    "topProducts": {
+      "title": "Topproducten",
+      "deskOne": "DeskOne Bureau",
+      "deskPro": "DeskPro",
+      "seatPro": "SeatPro ergonomische bureau stoel",
+      "monitorArm": "Monitorarm - Enkel"
+    },
+    "shop": {
+      "title": "Shop",
+      "allProducts": "Alle producten",
+      "sitStandDesks": "Zit-Sta bureaus",
+      "ergonomicChairs": "Ergonomische bureaustoelen"
+    },
+    "help": {
+      "title": "Hulp",
+      "b2b": "B2B",
+      "returnsRefunds": "Retourneren en Terugbetalingen",
+      "aboutUs": "Over ons",
+      "shipping": "Verzending",
+      "contact": "Contact met ons"
+    },
+    "resources": {
+      "title": "Bronnen",
+      "blog": "Blog",
+      "faq": "FAQ",
+      "quiz": "Quiz",
+      "discounts": "Actieve kortingen",
+      "colophon": "Colofon",
+      "montageGuides": "Montagehandleidingen"
+    },
+    "legal": {
+      "title": "Juridisch",
+      "privacy": "Privacy",
+      "terms": "Algemene voorwaarden",
+      "rightOfWithdrawal": "Herroepingsrecht"
+    },
+    "contact": {
+      "title": "Contact met ons",
+      "phone": "085 060 2482",
+      "email": "info@deskna.nl",
+      "hours": "Ma-Vr: 9:00-17:00"
+    },
+    "stayUpToDate": {
+      "title": "Blijf op de hoogte van ons laatste nieuws",
+      "description": "Schrijf je in voor onze nieuwsbrief en ontvang exclusieve aanbiedingen en ergonomische tips.",
+      "inputPlaceholder": "Voer je e-mailadres in",
+      "button": "Aanmelden",
+      "privacyNote": "Door je aan te melden ga je akkoord met ons",
+      "privacyLink": "privacybeleid"
+    },
+    "socialMedia": {
+      "followUs": "Volg ons"
+    },
+    "certifications": {
+      "title": "Certificeringen:"
+    },
+    "trustpilot": {
+      "excellent": "Uitstekend",
+      "reviews": "1.500+ beoordelingen"
+    },
+    "copyright": "© 2025 DESKNA. Alle rechten voorbehouden.",
+    "privacyPolicy": "Privacy-beleid",
+    "terms": "Algemene Voorwaarden",
+    "colophon": "Colofon",
+    "rightOfWithdrawal": "Herroepingsrecht"
+  },
+  "product": {
+    "addToCart": "In winkelwagen",
+    "outOfStock": "Uitverkocht",
+    "price": "Prijs",
+    "vat": "incl. BTW",
+    "description": "Beschrijving",
+    "specifications": "Specificaties",
+    "reviews": "Reviews",
+    "warranty": "jaar garantie",
+    "freeShipping": "Gratis verzending",
+    "inStock": "Op voorraad",
+    "limitedStock": "Beperkte voorraad"
+  },
+  "productDetail": {
+    "easyOperation": {
+      "title": "Eenvoudige bediening",
+      "description": "Met de intuïtieve touchscreenbediening kun je de hoogte van het bureau in centimeters veranderen en 3 voorkeursstanden opslaan voor snelle toegang.",
+      "features": {
+        "touchscreen": {
+          "title": "Intuïtief touchscreen",
+          "description": "1-touch aanpassingen met LCD scherm voor precieze hoogte"
+        },
+        "memory": {
+          "title": "3 geheugenposities",
+          "description": "Sla tot 3 hoogteposities op voor snelle en eenvoudige toegang"
+        },
+        "childLock": {
+          "title": "Kinderslot",
+          "description": "Vergrendel je bureau voor extra veiligheid en voorkom per ongeluk aanpassingen"
+        },
+        "programmable": {
+          "title": "Programmeerbaar",
+          "description": "Stel hoogtemeters, aanpassingssnelheid, anti-botsingevoeligheid en meer in"
+        }
+      }
+    },
+    "reliability": {
+      "title": "Betrouwbare prestaties",
+      "description": "De HomeOne tafel overtreft de hoogste normen op het gebied van prestaties en duurzaamheid. Hij is getest om de uitdagingen van dagelijks gebruik te weerstaan, waardoor hij de perfecte keuze is voor al je behoeften. De garantie van 5 jaar garandeert de superieure kwaliteit van ons product.",
+      "tests": {
+        "columnLifespan": {
+          "title": "Levensduurtest kolommen",
+          "description": "Onze kolommen ondergaan een strenge test met 30.000 cycli op en neer. Deze test simuleert meerder 16 jaar waarin het bureau 5 keer per dag in hoogte wordt versteld om de duurzaamheid van de motor en de ondersteunende mechanische onderdelen te controleren."
+        },
+        "motorLifespan": {
+          "title": "Levensduurtest van de motor",
+          "description": "Onze dubbele elektromotoren zijn ontworpen om minstens 20.000 cycli van intensief gebruik te doorstaan. Hij die op neer beweging leveren ze optimale prestaties gedurende vele jaren."
+        },
+        "loadTest": {
+          "title": "Verdeelde belastingstest",
+          "description": "Er zijn tests uitgevoerd door 120 kg op het bureau te plaatsen om te controleren of het verstelbare bureau robuust genoeg is om zelfs de zwaarste multi-monitoropstellingen te verdragen. Het kan complexe belastingen aan zonder afbreuk te doen aan de prestaties."
+        }
+      }
+    },
+    "comparison": {
+      "title": "Hoe vergelijken wij?",
+      "subtitle": "Welke keuzes heb je? Kijk hiervoor naar dit handige overzicht.",
+      "deskna": "DESKNA Logo",
+      "amazon": "Merken op Amazon",
+      "others": "Andere merken",
+      "rows": {
+        "price": {
+          "title": "Prijs",
+          "deskna": "De prijs houdt je niet aan je stoel gekluisterd",
+          "amazon": "Goedkoop, maar je moet het volgend jaar vervangen",
+          "others": "Tweede baan nodig om er één te betalen"
+        },
+        "stability": {
+          "title": "Stabiliteit",
+          "deskna": "Zo stabiel dat je er zelfs op kunt staan",
+          "amazon": "Laat er geen vlieg op landen",
+          "others": "Stabiel genoeg"
+        },
+        "noise": {
+          "title": "Geluidsniveau",
+          "deskna": "Fluisterstil - goedgekeurd door ninja's!",
+          "amazon": "Daar gaat over vergaderd worden",
+          "others": "Matig"
+        },
+        "desktop": {
+          "title": "Tafelblad uit één stuk",
+          "deskna": "Naadloos, waterdicht en duurzaam",
+          "amazon": "Puzzelstukjes met vuil verzamelende gaten",
+          "others": "Duurzaam, maar verwacht niet te veel"
+        },
+        "motors": {
+          "title": "Twee-motorensysteem",
+          "deskna": "Standaard op alle modellen",
+          "amazon": "Één motor - als een fiets met één pedaal",
+          "others": "Alleen bij de premium modellen"
+        },
+        "certification": {
+          "title": "Certificatie",
+          "deskna": "TÜV Rheinland & IGR keurmerken",
+          "amazon": "Keurmerken?",
+          "others": "Gewoon het gebruikelijke"
+        },
+        "speed": {
+          "title": "Hefsnelheid",
+          "deskna": "±50mm/s - binnen één oogwenk",
+          "amazon": "~18mm/s - alsof je verf ziet drogen",
+          "others": "±36mm/s - een medaille voor de tweede plaats"
+        },
+        "returns": {
+          "title": "Retourbeleid",
+          "deskna": "Gratis en vrijblijvend",
+          "amazon": "Veel succes daarmee",
+          "others": "Maak je klaar om te onderhandelen"
+        },
+        "support": {
+          "title": "Klantenservice",
+          "deskna": "Wij zijn dol op 5-sterren-beoordelingen",
+          "amazon": "Neem je geduld en een woordenboek mee!",
+          "others": "Varieert, sommige zijn ok"
+        }
+      }
+    },
+    "specs": {
+      "title": "Technische specificaties",
+      "general": "Algemene informatie",
+      "deskSpecs": "Bureau technische specificaties",
+      "assemblyMethod": "Montage methode",
+      "assembly": "Montage",
+      "assemblyTime": "Gemiddelde montagetijd",
+      "warranty": "Garantie",
+      "freeReturns": "Gratis retourneren",
+      "desktopSpecs": "Tafelblad specificaties",
+      "frameSpecs": "Specificaties elektrisch frame",
+      "selfAssembly": "Zelfmontage",
+      "easyNoTools": "Eenvoudig, geen extra gereedschap nodig",
+      "minutes30": "30 minuten",
+      "years5": "5 jaar",
+      "days30": "30 dagen"
+    },
+    "inspiration": {
+      "title": "Laat je inspireren",
+      "description": "Bekijk hoe onze bureaus eruit zien in de interieurs van onze klanten.",
+      "altPrefix": "Bureau setup inspiratie"
+    },
+    "customerReviews": {
+      "title": "Wat onze klanten zeggen",
+      "trustpilotRating": "/ 5",
+      "reviews": "reviews",
+      "excellent": "Uitstekend",
+      "good": "Goed",
+      "average": "Gemiddeld",
+      "poor": "Slecht",
+      "veryPoor": "Zeer slecht",
+      "collectedBy": "Verzameld door DESKNA"
+    }
+  },
+  "whatsapp": {
+    "title": "Vragen over onze producten?",
+    "description": "Onze experts staan klaar om je te helpen! Chat direct met ons via WhatsApp voor persoonlijk advies over de perfecte werkplek oplossing.",
+    "cta": "Chat via WhatsApp",
+    "hours": "Ma - Vr | 07:00 - 16:00 uur",
+    "defaultMessage": "Hallo! Ik heb een vraag over jullie producten."
+  },
+  "shopAll": {
+    "breadcrumbs": {
+      "home": "Home",
+      "products": "Producten",
+      "all": "Alle Producten"
+    },
+    "title": "Alle Producten",
+    "subtitle": "Ontdek ons complete assortiment ergonomische werkplekken",
+    "loading": "Alle producten laden...",
+    "error": "Fout bij het laden van alle producten",
+    "retry": "Opnieuw proberen"
+  },
+  "cart": {
+    "title": "Winkelwagen",
+    "empty": "Je winkelwagen is leeg",
+    "continueShopping": "Verder winkelen",
+    "subtotal": "Subtotaal",
+    "shipping": "Verzending",
+    "shippingFree": "Gratis",
+    "vat": "BTW",
+    "total": "Totaal",
+    "checkout": "Afrekenen",
+    "remove": "Verwijderen",
+    "quantity": "Aantal",
+    "update": "Bijwerken",
+    "clearCart": "Winkelwagen Legen",
+    "freeShippingNote": "Gratis verzending vanaf €50",
+    "deliveryDate": "Morgen geleverd op {{date}}",
+    "emptyMessage": "Je winkelwagen is leeg",
+    "startShopping": "Begin met winkelen",
+    "redirecting": "Je wordt doorgestuurd naar de checkout...",
+    "addMore": "Voeg nog €{{amount}} toe voor gratis verzending",
+    "qualifyFreeShipping": "Je hebt recht op gratis verzending!"
+  },
+  "checkout": {
+    "title": "Afrekenen",
+    "contact": "Contactgegevens",
+    "shipping": "Verzending",
+    "payment": "Betaling",
+    "review": "Bestelling controleren",
+    "placeOrder": "Bestelling plaatsen",
+    "processing": "Verwerken...",
+    "success": "Bestelling succesvol geplaatst!"
+  },
+  "seo": {
+    "title": "DESKNA - Ergonomische Bureaustoelen & Zit-Sta Bureaus",
+    "description": "Ontdek de perfecte ergonomische bureaustoelen en elektrische zit-sta bureaus bij DESKNA. In hoogte verstelbare bureaus, ergonomische stoelen en kantooraccessoires voor jouw ideale werkplek. Gratis verzending, 5 jaar garantie en 30 dagen retourneren.",
+    "keywords": "ergonomische bureaustoelen, zit-sta bureaus, verstelbare bureaus, kantoormeubels, thuiswerken, ergonomie, werkplek, bureaustoelen"
+  },
+  "home": {
+    "hero": {
+      "title": "De back to work deals",
+      "subtitle": "Premium ergonomische werkplekken: verstelbare bureaus, ergonomische stoelen en professionele kantoorinrichting — snel geleverd",
+      "cta": "Shop Nu",
+      "imageAlt": "Workspace of the Year 2025"
+    },
+    "features": {
+      "title": "Waarom kiezen voor DESKNA?",
+      "items": [
+        {
+          "title": "Premium kwaliteit",
+          "description": "Alleen de beste materialen voor langdurig comfort"
+        },
+        {
+          "title": "5 jaar garantie",
+          "description": "We staan achter onze producten"
+        },
+        {
+          "title": "Gratis verzending",
+          "description": "Bezorging door heel Nederland"
+        },
+        {
+          "title": "30 dagen retour",
+          "description": "Niet tevreden? Geld terug"
+        },
+        {
+          "title": "Uitstekende service",
+          "description": "Persoonlijk advies van experts"
+        },
+        {
+          "title": "Duurzaam",
+          "description": "Milieuvriendelijk geproduceerd"
+        }
+      ]
+    },
+    "categories": {
+      "title": "Onze categorieën",
+      "subtitle": "Vind de perfecte oplossing voor jouw werkplek",
+      "bureaustoelen": {
+        "title": "Bureaustoelen",
+        "description": "Ergonomische stoelen voor optimaal zitcomfort",
+        "features": ["Verstelbare hoogte", "Lendensteun", "Ademende materialen"],
+        "cta": "Bekijk stoelen"
+      },
+      "bureaus": {
+        "title": "Zit-sta bureaus",
+        "description": "Elektrisch verstelbare bureaus voor een gezonde werkhouding",
+        "features": ["Elektrisch verstelbaar", "Memory functie", "Stevige constructie"],
+        "cta": "Bekijk bureaus"
+      }
+    },
+    "bestSellers": {
+      "title": "Bestsellers",
+      "subtitle": "Ontdek onze populairste producten",
+      "cta": "Bekijk alle producten"
+    },
+    "reviews": {
+      "title": "Wat klanten zeggen",
+      "subtitle": "Meer dan 1370+ tevreden klanten",
+      "seeAll": "Bekijk alle reviews"
+    },
+    "trust": {
+      "title": "Vertrouwd door duizenden professionals",
+      "subtitle": "Al meer dan 5 jaar de specialist in ergonomische werkplekken",
+      "stats": {
+        "customers": "50.000+ Tevreden klanten",
+        "rating": "4.8/5 Klantbeoordeling",
+        "returns": "30 dagen retourrecht",
+        "shipping": "Gratis verzending",
+        "warranty": "5 jaar garantie",
+        "support": "24/7 Klantenservice"
+      }
+    },
+    "testimonials": {
+      "title": "Wat onze experts zeggen",
+      "subtitle": "Aanbevolen door professionals"
+    },
+    "cta": {
+      "title": "Klaar om je werkplek te upgraden?",
+      "subtitle": "Ontdek onze collectie ergonomische producten",
+      "button": "Shop nu"
+    },
+    "faq": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Alles wat je moet weten over onze producten"
+    },
+    "trustIndicators": {
+      "customers": {
+        "title": "Meer dan 20.000",
+        "subtitle": "blije klanten"
+      },
+      "rating": {
+        "title": "Een 4.8 van onze",
+        "subtitle": "klanten"
+      },
+      "guarantee": {
+        "title": "30 dagen geld-terug-",
+        "subtitle": "garantie"
+      },
+      "delivery": {
+        "title": "Snelle bezorging en",
+        "subtitle": "retourneren"
+      },
+      "ergonomics": {
+        "title": "Gecertificeerde",
+        "subtitle": "ergonomie"
+      },
+      "service": {
+        "title": "Bekroonde",
+        "subtitle": "klantenservice"
+      }
+    },
+    "productsSection": {
+      "title": "Topproducten",
+      "subtitle": "Dit zijn niet voor niets onze hardlopers.",
+      "viewAll": "Bekijk de hele collectie",
+      "discount": "{{percentage}}% korting",
+      "reviews": "beoordelingen"
+    },
+    "carouselSection": {
+      "limitedEdition": {
+        "badge": "Nieuw",
+        "title": "Limited edition kleuren",
+        "cta": "Meer info"
+      },
+      "stableFrames": {
+        "badge": "Nieuw",
+        "title": "Stabiele bureau frames",
+        "cta": "Meer info"
+      }
+    },
+    "reviewsSection": {
+      "title": "Wat zeggen",
+      "titleHighlight": "onze",
+      "titleEnd": "klanten?",
+      "subtitle": "Lees hier wat voor beoordeling andere klanten ons geven.",
+      "defaultCustomer": "Tevreden klant",
+      "trustpilot": {
+        "ratingText": "4.8 • 1.370+ reviews",
+        "reviewsOn": "beoordelingen op"
+      },
+      "reviews": [
+        {
+          "name": "Willem",
+          "title": "",
+          "text": "Mijn nieuwe bureausstoel heeft mijn rugpijn volledig weggenomen. Eindelijk een stoel die echt ergonomisch is!",
+          "days": "4 dagen geleden"
+        },
+        {
+          "name": "Miranda",
+          "title": "Perfecte bureausstoel!",
+          "text": "Deze bureausstoel is een game-changer voor mijn thuiskantoor. Zit de hele dag comfortabel te werken!",
+          "days": "4 dagen geleden"
+        },
+        {
+          "name": "Paul",
+          "title": "Uitstekend zit-sta bureau",
+          "text": "Het elektrische bureau werkt perfect. Stil, stabiel en de hoogteverstelling is supersnel. Aanrader!",
+          "days": "4 dagen geleden"
+        },
+        {
+          "name": "Tineke",
+          "title": "Ergonomische bureausstoel top!",
+          "text": "Na jaren zoeken eindelijk de perfecte bureausstoel gevonden. Mijn rug voelt zoveel beter!",
+          "days": "6 dagen geleden"
+        },
+        {
+          "name": "Rosanne",
+          "title": "Zit-sta bureau aanrader",
+          "text": "Het bureau is stabiel en stil. De overgang van zitten naar staan gaat heel natuurlijk.",
+          "days": "8 dagen geleden"
+        },
+        {
+          "name": "Mark",
+          "title": "Bureau setup compleet",
+          "text": "Zowel het bureau als de stoel zijn van uitstekende kwaliteit. Mijn thuiskantoor is nu perfect!",
+          "days": "5 dagen geleden"
+        },
+        {
+          "name": "Lisa",
+          "title": "Ergonomie op zijn best",
+          "text": "Deze bureausstoel heeft al mijn verwachtingen overtroffen. Zit uren comfortabel te werken.",
+          "days": "7 dagen geleden"
+        },
+        {
+          "name": "Jan",
+          "title": "Zit-sta bureau topkeuze",
+          "text": "Het elektrische bureau werkt feilloos. Stabiel, stil en de bediening is intuïtief.",
+          "days": "3 dagen geleden"
+        },
+        {
+          "name": "Emma",
+          "title": "Elektrisch bureau geweldig",
+          "text": "Het zit-sta bureau heeft mijn werkdag getransformeerd. Geen rugpijn meer!",
+          "days": "2 dagen geleden"
+        },
+        {
+          "name": "Tom",
+          "title": "Bureausstoel van topkwaliteit",
+          "text": "Eindelijk een stoel die mijn lange werkdagen ondersteunt. Materiaal voelt premium aan.",
+          "days": "1 dag geleden"
+        },
+        {
+          "name": "Sophie",
+          "title": "Ergonomische stoel top",
+          "text": "Mijn productiviteit is enorm gestegen sinds ik deze bureausstoel heb. Zit zo comfortabel!",
+          "days": "6 uur geleden"
+        },
+        {
+          "name": "David",
+          "title": "Bureau en stoel combi perfect",
+          "text": "Hele set gekocht - bureau en stoel. Perfecte combinatie voor mijn werkplek!",
+          "days": "30 minuten geleden"
+        }
+      ]
+    },
+    "bureausSection": {
+      "title": "Onze bureaus",
+      "description": "Verken ons uitgebreide assortiment elektrische zit-sta bureaus en in hoogte verstelbare bureau oplossingen. Van compacte thuiskantoor bureaus tot professionele werkstations - onze verstelbare bureaus bieden de juiste hoogte voor staand werken en zittend werken. Kies uit verschillende tafelblad afmetingen, kleuren en premium materialen.",
+      "features": {
+        "stock": "Altijd ruime voorraad",
+        "warranty": "Tot 12 jaar garantie!",
+        "priceRange": "Varianten in alle prijsklassen"
+      },
+      "cta": "Ontdek alle bureaus"
+    },
+    "chairsSection": {
+      "title": "Ergonomische bureaustoelen voor optimaal zitcomfort",
+      "description": "Ontdek onze collectie ergonomische bureaustoelen met verstelbare rugsteun, hoofdsteun en armleuningen. Perfect voor lange werkdagen, thuiswerken en professionele kantooromgevingen.",
+      "mobileDescription": "Verstelbare rugsteun, hoofdsteun en armleuningen voor optimaal comfort tijdens lange werkdagen.",
+      "cta": "Bekijk Collectie"
+    },
+    "testimonialsSection": {
+      "title": "Aanbevolen door specialisten",
+      "titleMobile": "Aanbevolen door<br />specialisten",
+      "titleDesktop": "Aanbevolen door dermatologen & ergonomie-specialisten",
+      "recommended": "Aanbevolen",
+      "testimonials": [
+        {
+          "name": "Dr. Chris Winter",
+          "role": "Ergonomie Expert",
+          "quote": "De luxe, wasbare kussens van onze ergonomische bureaustoelen zijn ongelooflijk zacht en blokkeren het licht moeiteloos, waardoor de werkdag enorm verbetert.",
+          "fullQuote": "De luxe, wasbare kussens van onze ergonomische bureaustoelen zijn ongelooflijk zacht en blokkeren het licht moeiteloos, waardoor de werkdag enorm verbetert. Het is perfect voor in het kantoor of op reis, en de verkoeelende stof creëert overal de ideale werkomgeving."
+        },
+        {
+          "name": "Drs. Kristel Woltman",
+          "role": "Fysiotherapeut",
+          "quote": "Een gezonde houding krijg je met de juiste ondersteuning in je werkstoel. Ik raad mijn patiënten deze stoelen aan omdat het de effectiviteit van je werk verbetert.",
+          "fullQuote": "Een gezonde houding krijg je met de juiste ondersteuning in je werkstoel. De ergonomische eigenschappen die je consumeert en de juiste zitpositie. Ik raad mijn patiënten deze stoelen aan omdat het de effectiviteit van je werk en comfort verbetert. Daarnaast vermindert de zachte stof de kans op rugklachten."
+        },
+        {
+          "name": "Joep Rovers",
+          "role": "Ergonomie Adviseur",
+          "quote": "Door te zitten op een antibacteriële kussensloop van onze stoelen, heeft grote invloed op hoe je huid 's nachts herstelt. Dit is iets wat ik iedereen zou aanraden.",
+          "fullQuote": "Ik heb zelf ernstig eczeem gehad in mijn gezicht en kon dit oplossen door mijn werkstoel aan te passen. De kussensloop waar je de hele dag op zit, heeft grote invloed op hoe je huid 's nachts herstelt. Door te zitten op een antibacteriële kussensloop van onze stoelen, is iets wat ik iedereen zou aanraden."
+        }
+      ]
+    },
+    "serviceFeatures": {
+      "shipping": {
+        "title": "Snelle bezorging",
+        "description": "Alle bestellingen worden binnen 3-5 dagen verzonden"
+      },
+      "returns": {
+        "title": "Gratis & gemakkelijk retourneren",
+        "description": "Niet tevreden? Retourneer gratis binnen 30 dagen na aankoop."
+      },
+      "warranty": {
+        "title": "Uitgebreide garantie",
+        "description": "Stressvrije ervaring met snelle vervanging en uitzonderlijke duurzaamheid."
+      },
+      "payment": {
+        "title": "Flexibele betalingsopties",
+        "description": "Krijg vandaag wat je wilt. Betaal later of in meerdere rentevrije termijnen."
+      }
+    },
+    "faqSection": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Hier vind je antwoorden op de meest gestelde vragen over onze producten en service.",
+      "contactNote": "Staat je vraag er niet bij? We helpen je graag verder!",
+      "contactCta": "Neem contact op",
+      "liveChatCta": "Live chat starten",
+      "faqs": [
+        {
+          "question": "Hoe lang duurt de levering van mijn bestelling?",
+          "answer": "Alle bestellingen worden binnen 1-3 werkdagen verzonden. De levertijd is afhankelijk van je locatie: Nederland 1-2 werkdagen, België 2-3 werkdagen. Je ontvangt altijd een track & trace code om je bestelling te volgen."
+        },
+        {
+          "question": "Kan ik mijn bestelling retourneren als ik niet tevreden ben?",
+          "answer": "Ja, je kunt je bestelling binnen 30 dagen na ontvangst gratis retourneren. De producten moeten wel in originele staat zijn. Neem contact met ons op voor een retourlabel en verdere instructies."
+        },
+        {
+          "question": "Welke garantie krijg ik op mijn bureau of stoel?",
+          "answer": "Op onze bureaus geven we 5 jaar garantie op het mechanisme en 2 jaar op het tafelblad. Op bureaustoelen hebben we 5 jaar garantie op het mechanisme en 2 jaar op de bekleding. Deze garantie dekt productiefouten en normale slijtage."
+        },
+        {
+          "question": "Hoe weet ik welke maat bureau het beste bij mij past?",
+          "answer": "Meet eerst je werkruimte op. Voor een comfortabele werkplek adviseren we minimaal 120x60 cm. Heb je twee monitoren? Dan is 160x80 cm of groter ideaal. In onze productbeschrijvingen vind je gedetailleerde afmetingen en tips."
+        },
+        {
+          "question": "Zijn jullie bureaustoelen geschikt voor lange werkdagen?",
+          "answer": "Absoluut! Onze ergonomische bureaustoelen zijn speciaal ontworpen voor 8+ uur dagelijks gebruik en lange werkdagen. Ze bieden optimale rugondersteuning, verstelbare armleuningen, hoofdsteun en ademende mesh materialen. Perfect voor thuiswerken, kantoor gebruik en intensieve werkzaamheden."
+        },
+        {
+          "question": "Kan ik de montage laten uitvoeren?",
+          "answer": "Ja, we bieden een montageservice aan voor €49. Onze monteurs komen bij je thuis en zorgen voor een professionele installatie. Je kunt deze service toevoegen tijdens het bestellen of achteraf via de klantenservice."
+        },
+        {
+          "question": "Welke betaalmogelijkheden hebben jullie?",
+          "answer": "Je kunt betalen met iDEAL, creditcard (Visa/Mastercard), PayPal, Klarna (achteraf betalen), en bankoverschrijving. Voor bedrijven bieden we ook betaling op factuur aan na goedkeuring."
+        },
+        {
+          "question": "Hebben jullie een fysieke showroom?",
+          "answer": "Ja, je bent welkom in onze showroom in Amsterdam om producten uit te proberen. We adviseren je graag persoonlijk. Maak een afspraak via onze website of bel ons voor de openingstijden en adresgegevens."
+        }
+      ]
+    }
+  },
+  "bureaustoelen": {
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Producten",
+      "chairs": "Bureaustoelen"
+    },
+    "loading": "Bureaustoelen laden...",
+    "error": "Fout bij het laden van bureaustoelen producten",
+    "retry": "Opnieuw proberen",
+    "header": {
+      "title": "Ergonomische bureaustoelen voor kantoor & thuis",
+      "description": "Op zoek naar een ergonomische bureaustoel die je lichaam optimaal ondersteunt? Bij Deskna vind je comfortabele, verstelbare bureaustoelen die perfect passen bij een moderne werkplek. Ideaal voor thuiswerken én kantoor, met snelle levering en topkwaliteit garantie."
+    },
+    "viewCollection": "Bekijk de hele collectie",
+    "discount": "{{percentage}}% korting",
+    "reviews": "({{count}} beoordelingen)",
+    "colors": "+{{count}}",
+    "whySection": {
+      "title": "Waarom kiezen voor onze ergonomische bureaustoelen?",
+      "assemblyTitle": "Gemiddelde montagetijd",
+      "video1Title": "Op 1 lijn met je lichaam",
+      "video1Description": "Perfecte ergonomische ondersteuning voor een gezonde werkhouding.",
+      "video2Title": "Vermindert druk op benen",
+      "video2Description": "Ontlast je benen en verbeter je doorbloeding tijdens het werken.",
+      "video3Title": "Drukvermindering",
+      "video3Description": "Vermindert druk op je lichaam voor optimaal zitcomfort."
+    },
+    "guide": {
+      "title": "Waar let je op bij de keuze?",
+      "content1": "Een goede bureaustoel moet meer kunnen dan alleen comfortabel zitten. Let bij je keuze op verstelbaarheid (hoogte, rug, armleuningen), ergonomische vormgeving en de juiste ondersteuning tijdens lange werkdagen.",
+      "content2": "Kijk bij het kiezen van een bureaustoel vooral naar verstelbaarheid en ondersteuning. Hoe beter je de stoel kunt aanpassen aan je lichaam, hoe langer je zonder klachten kunt werken. Bij Deskna selecteren we bureaustoelen die voldoen aan de hoogste ergonomische standaarden, zodat jij verzekerd bent van kwaliteit en comfort."
+    },
+    "seo": {
+      "title": "Ergonomische bureaustoelen voor kantoor & thuis",
+      "content1": "Op zoek naar een bureaustoel die écht comfort biedt tijdens lange werkdagen? Bij Deskna vind je ergonomische bureaustoelen die volledig verstelbaar zijn en je lichaam optimaal ondersteunen. Of je nu vanuit huis werkt of een kantoor wilt inrichten: een goede bureaustoel is onmisbaar voor een gezonde werkhouding.",
+      "subtitle1": "Waarom kiezen voor een ergonomische bureaustoel?",
+      "content2": "Een ergonomische bureaustoel is ontworpen om klachten aan rug, nek en schouders te voorkomen. Dankzij de verstelbare zithoogte, rugleuning en armleuningen pas je de stoel eenvoudig aan jouw lichaam aan. Zo werk je niet alleen comfortabeler, maar ook productiever en met minder kans op lichamelijke klachten.",
+      "subtitle2": "De voordelen van onze bureaustoelen",
+      "benefits": [
+        "Verstelbare zithoogte en rugleuning",
+        "Ergonomisch design dat de juiste zithouding ondersteunt",
+        "Gemaakt van duurzame materialen en modern afgewerkt",
+        "Binnen 1–3 werkdagen geleverd"
+      ]
+    },
+    "faq": {
+      "title": "Veelgestelde Vragen",
+      "subtitle": "Hier vind je antwoorden op de meest gestelde vragen over onze producten en services. Staat jouw vraag er niet bij? Neem gerust contact met ons op!",
+      "questions": [
+        {
+          "question": "Welke ergonomische bureaustoel is het beste voor thuiswerken?",
+          "answer": "Voor thuiswerken raden wij de SeatPro aan. Deze ergonomische bureaustoel heeft verstelbare hoofd- en rugsteun, 4D-armleuningen en een uitschuifbare voetensteun. Perfect voor lange werkdagen en biedt optimale ondersteuning voor rug en nek."
+        },
+        {
+          "question": "Hoe stel ik mijn bureaustoel ergonomisch correct in?",
+          "answer": "Stel eerst de zithoogte in zodat je voeten plat op de grond staan. Pas de rugsteun aan voor ondersteuning van je onderrug. Zet armleuningen op ellebooghoogte en zorg dat je scherm op ooghoogte staat. Onze bureaustoelen hebben alle nodige verstelmogelijkheden."
+        },
+        {
+          "question": "Wat is het verschil tussen mesh en gestoffeerde bureaustoelen?",
+          "answer": "Mesh bureaustoelen zoals onze SeatPro bieden betere ventilatie en blijven koeler tijdens lange werkdagen. Gestoffeerde stoelen geven meer zachtheid en warmte. Beide types in ons assortiment bieden uitstekende ergonomische ondersteuning."
+        },
+        {
+          "question": "Hoeveel moet ik uitgeven aan een goede bureaustoel?",
+          "answer": "Een goede ergonomische bureaustoel is een investering in je gezondheid. Onze bureaustoelen beginnen bij €199 en bieden uitstekende kwaliteit. Voor dagelijks gebruik van 6+ uur raden we aan minimaal €200-400 te investeren voor optimale ondersteuning."
+        },
+        {
+          "question": "Hoe lang gaat een ergonomische bureaustoel mee?",
+          "answer": "Onze bureaustoelen zijn gemaakt van duurzame materialen en gaan bij normaal gebruik 5-10 jaar mee. We geven uitgebreide garantie op alle onderdelen. De hoogwaardige constructie zorgt voor langdurige ondersteuning en comfort."
+        },
+        {
+          "question": "Kan ik mijn bureaustoel retourneren als deze niet bevalt?",
+          "answer": "Ja, je hebt 30 dagen bedenktijd. Als de bureaustoel niet aan je verwachtingen voldoet, kun je deze gratis retourneren. We zorgen voor een snelle terugbetaling zodat je zorgeloos kunt bestellen."
+        }
+      ]
+    }
+  },
+  "verstelbarebreaus": {
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Producten",
+      "desks": "Verstelbare Bureaus"
+    },
+    "loading": "Verstelbare bureaus laden...",
+    "error": "Fout bij het laden van verstelbare bureaus producten",
+    "retry": "Opnieuw proberen",
+    "header": {
+      "title": "Elektrische zit-sta bureaus voor kantoor & thuis",
+      "description": "Op zoek naar een verstelbaar bureau dat je werkdag revolutioneert? Bij Deskna vind je hoogwaardige zit-sta bureaus die elektrisch verstelbaar zijn en perfect passen bij elke werkplek. Ideaal voor een gezonde werkhouding, met snelle levering en topkwaliteit garantie."
+    },
+    "benefits": {
+      "title": "Waarom kiezen voor onze zit-sta bureaus?",
+      "items": [
+        "Elektrisch verstelbaar van 65-130cm",
+        "Dubbele motoren voor stabiliteit",
+        "Geheugenfunctie voor favoriete hoogtes",
+        "Binnen 1–3 werkdagen geleverd"
+      ]
+    },
+    "guide": {
+      "title": "Waar let je op bij de keuze van een zit-sta bureau?",
+      "content1": "Een goed zit-sta bureau moet meer bieden dan alleen hoogteverstelling. Let bij je keuze op stabiliteit, geluidsniveau, verstelsnelheid en de maximale belasting. Ook de afmetingen van het tafelblad en de aanwezige aansluitingen zijn belangrijk voor je werkcomfort.",
+      "content2": "Kijk vooral naar de kwaliteit van het motorsysteem en het frame. Hoe steviger de constructie, hoe langer je bureau meegaat. Bij Deskna selecteren we alleen zit-sta bureaus met bewezen duurzaamheid en uitstekende ergonomische eigenschappen voor een gezonde werkhouding."
+    },
+    "seo": {
+      "title": "Zit-sta bureaus voor een gezonde werkhouding",
+      "content1": "Op zoek naar een bureau dat meebeweegt met je werkdag? Bij Deskna vind je elektrische zit-sta bureaus die je werkplek transformeren. Door af te wisselen tussen zitten en staan verbeter je je houding, verhoog je je energie en verminder je de kans op rugklachten.",
+      "subtitle1": "Waarom kiezen voor een elektrisch zit-sta bureau?",
+      "content2": "Een elektrisch verstelbaar bureau stimuleert beweging tijdens je werkdag. Het wisselen tussen zit- en staposities activeert je spieren, verbetert je doorbloeding en verhoogt je concentratie. Dankzij de elektrische bediening wissel je moeiteloos van positie met één druk op de knop.",
+      "subtitle2": "De voordelen van onze zit-sta bureaus",
+      "benefits": [
+        "Elektrisch verstelbaar van 65-130cm hoogte",
+        "Dubbele motoren voor maximale stabiliteit",
+        "Geheugenfunctie voor je favoriete hoogtes",
+        "Stille werking onder 50dB geluidsniveau",
+        "Robuust stalen frame met 10 jaar garantie",
+        "Binnen 1–3 werkdagen geleverd"
+      ]
+    },
+    "faq": {
+      "title": "Veelgestelde Vragen",
+      "subtitle": "Hier vind je antwoorden op de meest gestelde vragen over onze zit-sta bureaus. Staat jouw vraag er niet bij? Neem gerust contact met ons op!",
+      "questions": [
+        {
+          "question": "Welk zit-sta bureau is het beste voor thuiswerken?",
+          "answer": "Voor thuiswerken raden wij de DeskOne aan. Dit elektrische zit-sta bureau heeft een dubbel motorsysteem, 3 geheugenstanden en USB-poorten. Perfect voor dagelijks gebruik en biedt uitstekende stabiliteit tijdens het verstellen."
+        },
+        {
+          "question": "Hoe vaak moet ik wisselen tussen zitten en staan?",
+          "answer": "Experts raden aan om elke 30-60 minuten van houding te wisselen. Begin met 15 minuten staan per uur en bouw dit geleidelijk op. Onze bureaus hebben geheugenstanden waarmee je snel kunt wisselen tussen je favoriete hoogtes."
+        },
+        {
+          "question": "Wat is het verschil tussen enkele en dubbele motoren?",
+          "answer": "Dubbele motoren bieden meer kracht, stabiliteit en gelijkmatige beweging. Ze kunnen zwaarder gewicht dragen en hebben een langere levensduur. Alle onze zit-sta bureaus hebben dubbele motoren voor optimale prestaties."
+        },
+        {
+          "question": "Hoeveel gewicht kan een zit-sta bureau dragen?",
+          "answer": "Onze zit-sta bureaus kunnen tot 80kg belasting aan, inclusief het tafelblad. Dit is ruim voldoende voor meerdere monitoren, laptop, documenten en andere kantoorbenodigdheden. Het stevige stalen frame garandeert stabiliteit."
+        },
+        {
+          "question": "Hoe stil zijn elektrische zit-sta bureaus?",
+          "answer": "Onze bureaus werken onder 50dB, vergelijkbaar met een zachte conversatie. Door hoogwaardige motoren en precisie-engineering zijn ze geschikt voor open kantoren en thuiswerken zonder collega's of huisgenoten te storen."
+        },
+        {
+          "question": "Kan ik mijn zit-sta bureau retourneren als het niet bevalt?",
+          "answer": "Ja, je hebt 30 dagen bedenktijd. Als het bureau niet aan je verwachtingen voldoet, kun je het gratis retourneren. We organiseren de ophaal service en zorgen voor een snelle terugbetaling."
+        }
+      ]
+    }
+  },
+  "contact": {
+    "metadata": {
+      "title": "Contact | DESKNA - Ergonomische Werkplekken",
+      "description": "Neem contact op met DESKNA voor vragen over ergonomische bureaustoelen en zit-sta bureaus. Persoonlijk advies, productinformatie en klantenservice. Bereikbaar via telefoon 085 060 2482, e-mail of contactformulier."
+    },
+    "header": {
+      "title": "Contact met ons",
+      "subtitle": "Heb je een vraag over onze producten of service? Neem gerust contact met ons op. We helpen je graag verder!"
+    },
+    "info": {
+      "title": "Contactgegevens",
+      "phone": {
+        "title": "Telefoon",
+        "number": "085 060 2482",
+        "description": "Voor vragen en ondersteuning"
+      },
+      "email": {
+        "title": "E-mail",
+        "address": "info@deskna.nl",
+        "description": "We reageren binnen 24 uur"
+      },
+      "hours": {
+        "title": "Openingstijden",
+        "weekdays": "Maandag - Vrijdag: 07:00 - 16:00",
+        "weekend": "Weekend: Gesloten"
+      },
+      "address": {
+        "title": "Adres",
+        "company": "DESKNA",
+        "country": "Nederland"
+      },
+      "quickActions": {
+        "title": "Snelle acties",
+        "call": "Bel ons nu",
+        "email": "Stuur e-mail"
+      }
+    },
+    "form": {
+      "title": "Stuur ons een bericht",
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
+      "email": "E-mailadres",
+      "phone": "Telefoonnummer (optioneel)",
+      "subject": {
+        "label": "Onderwerp",
+        "placeholder": "Selecteer een onderwerp",
+        "options": {
+          "productQuestion": "Productvraag",
+          "order": "Bestelling",
+          "return": "Retour/Ruiling",
+          "support": "Technische ondersteuning",
+          "complaint": "Klacht",
+          "other": "Anders"
+        }
+      },
+      "message": {
+        "label": "Bericht",
+        "placeholder": "Beschrijf je vraag of opmerking..."
+      },
+      "submit": "Verstuur bericht"
+    },
+    "faq": {
+      "title": "Veelgestelde vragen",
+      "subtitle": "Misschien staat je vraag hier al tussen",
+      "questions": [
+        {
+          "question": "Hoe kan ik contact opnemen?",
+          "answer": "Je kunt ons bereiken via telefoon (085 060 2482), e-mail (info@deskna.nl) of via het contactformulier op deze pagina."
+        },
+        {
+          "question": "Wat zijn de openingstijden?",
+          "answer": "We zijn bereikbaar van maandag tot vrijdag van 07:00 tot 16:00 uur."
+        },
+        {
+          "question": "Hoe snel krijg ik antwoord?",
+          "answer": "We reageren binnen 24 uur op e-mails en berichten via het contactformulier. Voor telefonische vragen zijn we direct beschikbaar tijdens openingstijden."
+        },
+        {
+          "question": "Kan ik langskomen in een showroom?",
+          "answer": "Neem contact met ons op om de mogelijkheden te bespreken en een afspraak in te plannen."
+        }
+      ]
+    }
+  },
+  "about": {
+    "breadcrumb": {
+      "home": "Home",
+      "about": "Over Ons"
+    },
+    "hero": {
+      "title": "Over",
+      "titleBrand": "DESKNA",
+      "subtitle": "Wij zijn gepassioneerd over het creëren van ergonomische werkplekken die niet alleen comfort bieden, maar ook bijdragen aan een gezondere en productievere werkdag.",
+      "stats": {
+        "customers": {
+          "number": "1500+",
+          "label": "Tevreden klanten"
+        },
+        "rating": {
+          "number": "4.8",
+          "label": "Sterren rating"
+        },
+        "experience": {
+          "number": "5+",
+          "label": "Jaar ervaring"
+        }
+      }
+    },
+    "mission": {
+      "title": "Onze Missie & Waarden",
+      "subtitle": "Bij DESKNA geloven we dat iedereen recht heeft op een gezonde en comfortabele werkplek. Daarom ontwikkelen we producten die niet alleen functioneel zijn, maar ook bijdragen aan je welzijn.",
+      "values": [
+        {
+          "title": "Kwaliteit",
+          "description": "Wij gebruiken alleen de beste materialen en productietechnieken om producten te maken die jarenlang meegaan en hun functionaliteit behouden."
+        },
+        {
+          "title": "Ergonomie",
+          "description": "Elke product wordt ontworpen met de menselijke anatomie in gedachten, zodat je comfortabel en gezond kunt werken, dag in dag uit."
+        },
+        {
+          "title": "Service",
+          "description": "Van snelle levering tot uitstekende klantenservice - wij zorgen voor een zorgeloze ervaring van bestelling tot montage."
+        }
+      ]
+    },
+    "story": {
+      "title": "Ons Verhaal",
+      "content": [
+        "DESKNA is ontstaan uit de frustratie over de slechte kwaliteit en hoge prijzen van ergonomische werkplekproducten. Wij zagen te veel mensen worstelen met rugklachten en oncomfortabele werkplekken.",
+        "Daarom besloten we om zelf de beste ergonomische bureaus en stoelen te ontwikkelen. Producten die niet alleen betaalbaar zijn, maar ook voldoen aan de hoogste kwaliteitseisen en ergonomische standaarden.",
+        "Vandaag de dag helpen we meer dan 1500 tevreden klanten met het creëren van hun perfecte werkplek. En dat is nog maar het begin."
+      ],
+      "cta": "Bekijk onze producten",
+      "stats": [
+        {
+          "number": "25",
+          "label": "Minuten montage"
+        },
+        {
+          "number": "5",
+          "label": "Jaar garantie"
+        },
+        {
+          "number": "100%",
+          "label": "Duurzaam"
+        },
+        {
+          "number": "24/7",
+          "label": "Support"
+        }
+      ]
+    },
+    "team": {
+      "title": "Ons Team",
+      "subtitle": "Ontmoet de mensen achter DESKNA - een team van experts die gepassioneerd zijn over ergonomie en klanttevredenheid.",
+      "members": [
+        {
+          "name": "Chris",
+          "role": "Product Manager",
+          "description": "Verantwoordelijk voor productinnovatie en kwaliteitscontrole. Chris zorgt ervoor dat elk product voldoet aan onze hoge standaarden."
+        },
+        {
+          "name": "Joep",
+          "role": "Customer Success",
+          "description": "Joep zorgt ervoor dat elke klant de beste ervaring heeft, van bestelling tot montage en nazorg."
+        },
+        {
+          "name": "Drs. Kristel Woltman",
+          "role": "Ergonomie Expert",
+          "description": "Als fysiotherapeut adviseert Kristel ons over de ergonomische aspecten van onze producten voor optimale gezondheidsvoordelen."
+        }
+      ]
+    },
+    "whyUs": {
+      "title": "Waarom DESKNA?",
+      "subtitle": "Ontdek wat ons onderscheidt van andere aanbieders van werkplekproducten.",
+      "features": [
+        {
+          "title": "Snelle Levering",
+          "description": "Binnen 1-2 werkdagen geleverd"
+        },
+        {
+          "title": "Expert Support",
+          "description": "Persoonlijk advies van specialisten"
+        },
+        {
+          "title": "Kwaliteitsgarantie",
+          "description": "5 jaar garantie op alle producten"
+        },
+        {
+          "title": "Hoge Waardering",
+          "description": "4.8/5 sterren van 1500+ klanten"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Klaar voor je perfecte werkplek?",
+      "subtitle": "Ontdek onze collectie ergonomische bureaus en stoelen en ervaar het verschil dat kwaliteit en comfort maken.",
+      "shopNow": "Shop nu",
+      "takeQuiz": "Doe de werkplek quiz"
+    }
+  },
+  "b2b": {
+    "metadata": {
+      "title": "B2B Oplossingen | DESKNA - Zakelijke Ergonomische Werkplekken",
+      "description": "Professionele ergonomische werkplek oplossingen voor bedrijven. Bulk kortingen op zit-sta bureaus en bureaustoelen, maatwerk service, verlengde garantie en dedicated accountmanagement voor zakelijke klanten en grote organisaties."
+    },
+    "header": {
+      "title": "B2B Oplossingen",
+      "subtitle": "Professionele werkplek oplossingen voor bedrijven van elke omvang"
+    },
+    "benefits": [
+      {
+        "title": "Volume kortingen",
+        "description": "Aantrekkelijke prijzen bij grotere aantallen voor uw hele kantoor."
+      },
+      {
+        "title": "Persoonlijk advies",
+        "description": "Onze ergonomie experts helpen bij het inrichten van uw kantoor."
+      },
+      {
+        "title": "Volledige service",
+        "description": "Van advies tot levering en montage - wij regelen alles voor u."
+      }
+    ],
+    "services": {
+      "title": "Onze B2B Services",
+      "items": [
+        {
+          "title": "Kantoor Inrichting",
+          "features": [
+            "Volledige kantoor ergonomie analyse",
+            "Maatwerk oplossingen voor uw ruimte",
+            "3D visualisatie van uw nieuwe kantoor",
+            "Projectmanagement van A tot Z"
+          ]
+        },
+        {
+          "title": "Leasing & Financiering",
+          "features": [
+            "Flexibele leasing opties",
+            "Betaling op factuur mogelijk",
+            "Gespreide betalingen",
+            "Zakelijke garantievoorwaarden"
+          ]
+        },
+        {
+          "title": "Onderhoud & Service",
+          "features": [
+            "Preventief onderhoudscontracten",
+            "24/7 technische support",
+            "Snelle reparatieservice",
+            "Vervanging bij defecten"
+          ]
+        },
+        {
+          "title": "Training & Educatie",
+          "features": [
+            "Ergonomie workshops voor medewerkers",
+            "Instructie voor optimaal gebruik",
+            "Gezondheid & welzijn programma's",
+            "Online training modules"
+          ]
+        }
+      ]
+    },
+    "cta": {
+      "title": "Klaar voor een professionele werkplek?",
+      "subtitle": "Laat ons een offerte op maat maken voor uw bedrijf.",
+      "requestQuote": "Vraag offerte aan",
+      "callForAdvice": "Bel voor advies",
+      "emailSubject": "B2B Offerte Aanvraag"
+    }
+  },
+  "privacy": {
+    "metadata": {
+      "title": "Privacybeleid | DESKNA",
+      "description": "Lees ons privacybeleid en ontdek hoe DESKNA omgaat met jouw persoonlijke gegevens. Transparantie en privacy staan bij ons voorop."
+    },
+    "header": {
+      "title": "Privacybeleid",
+      "subtitle": "Hoe wij omgaan met jouw persoonlijke gegevens"
+    },
+    "sections": [
+      {
+        "title": "1. Inleiding",
+        "content": [
+          "DESKNA hecht veel waarde aan de bescherming van uw persoonlijke gegevens en de privacy van onze bezoekers. Wij gaan zorgvuldig om met persoonlijke gegevens en houden ons aan de geldende wet- en regelgeving, waaronder de Algemene Verordening Gegevensbescherming (AVG).",
+          "In dit privacybeleid leggen wij uit welke persoonlijke gegevens wij verzamelen, waarom wij deze verzamelen, hoe wij deze gebruiken en welke rechten u heeft met betrekking tot uw persoonlijke gegevens.",
+          "Dit privacybeleid is van toepassing op alle diensten die worden aangeboden door DESKNA via onze website, webshop en andere kanalen."
+        ]
+      },
+      {
+        "title": "2. Welke gegevens verzamelen wij?",
+        "intro": "Wij verzamelen alleen die persoonlijke gegevens die noodzakelijk zijn voor het uitvoeren van onze diensten. Dit kunnen de volgende gegevens zijn:",
+        "categories": [
+          {
+            "title": "Contactgegevens:",
+            "items": [
+              "Voor- en achternaam",
+              "E-mailadres",
+              "Telefoonnummer",
+              "Bedrijfsnaam (indien van toepassing)"
+            ]
+          },
+          {
+            "title": "Adresgegevens:",
+            "items": [
+              "Straatnaam en huisnummer",
+              "Postcode en woonplaats",
+              "Land",
+              "Afwijkend bezorgadres (indien van toepassing)"
+            ]
+          },
+          {
+            "title": "Bestellingsgegevens:",
+            "items": [
+              "Bestellingsgeschiedenis",
+              "Productvoorkeuren",
+              "Betaalgegevens (via beveiligde externe diensten)",
+              "Communicatie over uw bestelling"
+            ]
+          },
+          {
+            "title": "Website gebruiksgegevens:",
+            "items": [
+              "IP-adres",
+              "Browsertype en -versie",
+              "Bezochte pagina's en klikgedrag",
+              "Cookies en vergelijkbare technologieën"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "3. Waarom verzamelen wij deze gegevens?",
+        "intro": "Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden:",
+        "purposes": [
+          "Het verwerken en afhandelen van uw bestellingen",
+          "Het leveren van producten op het door u opgegeven adres",
+          "Het versturen van orderbevestigingen en statusupdates",
+          "Het beantwoorden van vragen en het bieden van klantenservice",
+          "Het verbeteren van onze website en diensten",
+          "Het naleven van wettelijke verplichtingen",
+          "Het versturen van nieuwsbrieven (alleen met uw toestemming)"
+        ]
+      },
+      {
+        "title": "4. Uw rechten",
+        "intro": "U heeft onder de AVG verschillende rechten met betrekking tot uw persoonlijke gegevens:",
+        "rights": [
+          {
+            "title": "Recht op inzage",
+            "description": "U kunt opvragen welke gegevens wij van u hebben"
+          },
+          {
+            "title": "Recht op rectificatie",
+            "description": "U kunt onjuiste gegevens laten corrigeren"
+          },
+          {
+            "title": "Recht op verwijdering",
+            "description": "U kunt verzoeken om uw gegevens te laten verwijderen"
+          },
+          {
+            "title": "Recht op beperking",
+            "description": "U kunt de verwerking van uw gegevens laten beperken"
+          },
+          {
+            "title": "Recht op overdraagbaarheid",
+            "description": "U kunt uw gegevens opvragen in een leesbaar formaat"
+          },
+          {
+            "title": "Recht op bezwaar",
+            "description": "U kunt bezwaar maken tegen de verwerking van uw gegevens"
+          }
+        ]
+      }
+    ],
+    "contact": {
+      "title": "Contact",
+      "intro": "Heeft u vragen over dit privacybeleid of wilt u gebruik maken van uw rechten? Neem dan contact met ons op:",
+      "company": "DESKNA",
+      "email": "E-mail: privacy@deskna.nl",
+      "phone": "Telefoon: 085 060 2482",
+      "address": "Adres: Nederland"
+    },
+    "lastUpdated": "Laatst bijgewerkt: Januari 2024"
+  }
+}

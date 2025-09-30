@@ -5,14 +5,18 @@ import { CheckCircle, Truck, Shield } from 'lucide-react';
 import { Product } from '@/types';
 import { useCartStore } from '@/store/useCartStore';
 import { useState } from 'react';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
 interface ProductCardProps {
   product: Product;
+  translations?: Translations;
+  locale?: Locale;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, translations, locale }: ProductCardProps) {
+  const { t } = translations && locale ? useTranslation(translations) : { t: (key: string) => key };
   const { addItem } = useCartStore();
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({}); 
 
   const formatPrice = (price: number) => {
     return `€ ${price.toFixed(0)}`;
@@ -35,7 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="absolute top-3 left-3 z-10">
           <span className="text-white px-3 py-1 rounded text-xs font-bold shadow-sm"
             style={{ backgroundColor: '#FD8B51' }}>
-            {discountPercentage}% korting
+            {t ? t('home.productsSection.discount', { percentage: discountPercentage }) : `${discountPercentage}% rabatt`}
           </span>
         </div>
 
@@ -59,7 +63,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="h-5 w-auto mr-2"
           />
           <span className="text-sm font-semibold text-gray-900">{product.rating}</span>
-          <span className="text-sm text-gray-500 ml-1">({product.reviews} beoordelingen)</span>
+          <span className="text-sm text-gray-500 ml-1">({product.reviews} {t ? t('home.productsSection.reviews') : 'omdömen'})</span>
         </div>
 
         {/* Product Name */}

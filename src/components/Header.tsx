@@ -6,8 +6,15 @@ import { ShoppingCart, Menu, X, ChevronDown } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
-export default function Header() {
+interface HeaderProps {
+  translations: Translations;
+  locale: Locale;
+}
+
+export default function Header({ translations, locale }: HeaderProps) {
+  const { t } = useTranslation(translations);
   const { toggleCart } = useCartStore();
   const items = useCartStore(s => s.items);
   const totalItems = items.reduce((sum, it) => sum + it.quantity, 0);
@@ -64,7 +71,7 @@ export default function Header() {
                 ? 'text-white hover:text-gray-200'
                 : 'text-gray-700 hover-brown'
             }`}>
-              Shop alles
+              {t('nav.alles')}
             </Link>
             {/* Products mega menu */}
             <div className="relative group">
@@ -73,7 +80,7 @@ export default function Header() {
                   ? 'text-white hover:text-gray-200'
                   : 'text-gray-700 hover-brown'
               }`}>
-                <span>Producten</span>
+                <span>{t('nav.products') || 'Producten'}</span>
                 <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
               </Link>
               {/* Mega panel */}
@@ -82,32 +89,32 @@ export default function Header() {
                   <div className="grid grid-cols-3 gap-10">
                     {/* Products Column */}
                     <div className="col-span-2">
-                      <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wide">Onze Producten</h3>
+                      <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wide">{t('megaMenu.products')}</h3>
                       <div className="space-y-6">
                         <Link href="/verstelbare-bureaus" className="block p-4 rounded-xl border border-transparent hover:border-gray-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:shadow-md transition-all duration-300 group/item transform hover:scale-[1.02]">
-                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">Zit-sta bureaus</div>
-                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">Elektrisch verstelbare bureaus voor een gezonde werkhouding</div>
+                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">{t('megaMenu.desks.title')}</div>
+                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">{t('megaMenu.desks.description')}</div>
                           <div className="mt-2 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">
-                            <span className="text-xs font-medium text-blue-600">Bekijk collectie →</span>
+                            <span className="text-xs font-medium text-blue-600">{t('megaMenu.desks.cta')}</span>
                           </div>
                         </Link>
                         <Link href="/bureaustoelen" className="block p-4 rounded-xl border border-transparent hover:border-gray-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:shadow-md transition-all duration-300 group/item transform hover:scale-[1.02]">
-                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">Bureau stoelen</div>
-                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">Ergonomische werkplekstoelen voor optimaal zitcomfort</div>
+                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">{t('megaMenu.chairs.title')}</div>
+                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">{t('megaMenu.chairs.description')}</div>
                           <div className="mt-2 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">
-                            <span className="text-xs font-medium text-blue-600">Bekijk collectie →</span>
+                            <span className="text-xs font-medium text-blue-600">{t('megaMenu.chairs.cta')}</span>
                           </div>
                         </Link>
                         <Link href="/shop-alles" className="block p-4 rounded-xl border border-transparent hover:border-gray-200 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:shadow-md transition-all duration-300 group/item transform hover:scale-[1.02]">
-                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">Accessoires</div>
-                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">Monitorarmen, bureaulampen en andere kantooraccessoires</div>
+                          <div className="text-lg font-semibold text-gray-900 mb-1 group-hover/item:text-gray-800 transition-colors">{t('megaMenu.accessories.title')}</div>
+                          <div className="text-sm text-gray-600 group-hover/item:text-gray-700 transition-colors">{t('megaMenu.accessories.description')}</div>
                           <div className="mt-2 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">
-                            <span className="text-xs font-medium text-blue-600">Bekijk collectie →</span>
+                            <span className="text-xs font-medium text-blue-600">{t('megaMenu.accessories.cta')}</span>
                           </div>
                         </Link>
                         <div className="pt-4 border-t border-gray-200">
                           <Link href="/shop-alles" className="inline-flex items-center text-sm font-semibold hover:underline" style={{ color: '#2e572d' }}>
-                            Bekijk alle producten →
+                            {t('megaMenu.viewAll')}
                           </Link>
                         </div>
                       </div>
@@ -116,11 +123,11 @@ export default function Header() {
                     {/* Featured Product Column */}
                     <Link href="/bureaustoelen" className="block rounded-2xl overflow-hidden border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 hover:shadow-xl hover:border-gray-300 transition-all duration-300 transform hover:scale-105 group/featured">
                       <div className="p-6 bg-white group-hover/featured:bg-gray-50 transition-colors">
-                        <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide group-hover/featured:text-gray-600 transition-colors">Aanbevolen</p>
-                        <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover/featured:text-gray-800 transition-colors">SeatPro Ergonomische Stoel</h4>
-                        <p className="text-sm text-gray-600 mb-4 group-hover/featured:text-gray-700 transition-colors">Premium ergonomie voor optimaal zitcomfort</p>
+                        <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide group-hover/featured:text-gray-600 transition-colors">{t('megaMenu.recommended')}</p>
+                        <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover/featured:text-gray-800 transition-colors">{t('megaMenu.recommendedProduct.title')}</h4>
+                        <p className="text-sm text-gray-600 mb-4 group-hover/featured:text-gray-700 transition-colors">{t('megaMenu.recommendedProduct.description')}</p>
                         <div className="inline-flex items-center text-sm font-semibold transition-colors group-hover/featured:underline" style={{ color: '#2e572d' }}>
-                          Bekijk product →
+                          {t('megaMenu.recommendedProduct.cta')}
                         </div>
                       </div>
                       <div className="relative h-40 bg-gray-200 overflow-hidden">
@@ -170,7 +177,7 @@ export default function Header() {
                       : 'text-gray-700 hover-brown')
                 }`}
               >
-                Contact
+                {t('common.contactUs')}
               </button>
               <Link href="/over-ons" className={`transition-colors ${
                 isMenuOpen 
@@ -179,7 +186,7 @@ export default function Header() {
                     ? 'text-white hover:text-gray-200'
                     : 'text-gray-700 hover-brown')
               }`}>
-                Over Ons
+                {t('common.aboutUs')}
               </Link>
             </nav>
             
@@ -305,14 +312,14 @@ export default function Header() {
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Accessoires
+                    {t('megaMenu.accessories.title')}
                   </Link>
                   <Link 
                     href="/over-ons" 
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Over Ons
+                    {t('common.aboutUs')}
                   </Link>
                 </div>
               </div>

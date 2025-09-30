@@ -9,8 +9,16 @@ import { useCartStore } from '@/store/useCartStore';
 import { createCheckout, addToCheckout, cartItemsToLineItems, getCheckoutUrl } from '@/services/checkoutService';
 import { useMarketingConsent } from '@/contexts/CookieConsentContext';
 import { useMetaPixelTracking, cartItemsToMetaPixel } from '@/lib/metaPixel';
+import { useGTMDataLayer } from '@/components/GoogleTagManager';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
-export default function Cart() {
+interface CartProps {
+  translations: Translations;
+  locale: Locale;
+}
+
+export default function Cart({ translations, locale }: CartProps) {
+  const { t } = useTranslation(translations);
   const { 
     items, 
     isOpen, 
@@ -26,6 +34,7 @@ export default function Cart() {
   // Meta Pixel tracking
   const hasMarketingConsent = useMarketingConsent();
   const { trackInitiateCheckout } = useMetaPixelTracking(hasMarketingConsent);
+  const { pushBeginCheckout } = useGTMDataLayer();
 
   const total = getTotalPrice();
   const shipping = total > 50 ? 0 : 5.99;
@@ -34,7 +43,7 @@ export default function Cart() {
   // Get tomorrow's date
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowDate = tomorrow.toLocaleDateString('nl-NL', { 
+  const tomorrowDate = tomorrow.toLocaleDateString(locale === 'sv' ? 'sv-SE' : 'nl-NL', { 
     day: 'numeric', 
     month: 'long' 
   });
@@ -76,6 +85,21 @@ export default function Cart() {
     } else {
       console.log('❌ InitiateCheckout - Not tracking:', { hasMarketingConsent, itemsLength: items.length });
     }
+
+    // Push GTM begin_checkout event
+    const gtmItems = items.map(item => ({
+      item_id: item.product.id?.toString() || item.product.handle || '',
+      item_name: item.product.name || item.product.handle || 'Product',
+      item_category: item.product.category || 'Product',
+      price: parseFloat(item.product.price?.toString() || '0'),
+      quantity: item.quantity || 1,
+    }));
+
+    pushBeginCheckout(
+      'EUR',
+      finalTotal,
+      gtmItems
+    );
     
     setIsRedirecting(true);
     try {
@@ -143,7 +167,7 @@ export default function Cart() {
                     {/* Header */}
                     <div className="flex items-start justify-between p-4 border-b">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
-                        Winkelwagen
+                        {t('cart.title')}
                       </Dialog.Title>
                       <div className="ml-3 flex h-7 items-center">
                         <button
@@ -152,7 +176,7 @@ export default function Cart() {
                           onClick={toggleCart}
                         >
                           <span className="absolute -inset-0.5" />
-                          <span className="sr-only">Sluit paneel</span>
+                          <span className="sr-only">{t('common.close')}</span>
                           <X className="h-6 w-6" aria-hidden="true" />
                         </button>
                       </div>
@@ -163,8 +187,8 @@ export default function Cart() {
                       {items.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-gray-500">
                           <ShoppingBag className="h-12 w-12 mb-4" />
-                          <p className="text-lg">Je winkelwagen is leeg</p>
-                          <p className="text-sm">Voeg producten toe om te beginnen</p>
+                          <p className="text-lg">{t('cart.empty')}</p>
+                          <p className="text-sm">{t('cart.emptyMessage')}</p>
                         </div>
                       ) : (
                         <div className="space-y-4">
@@ -224,17 +248,17 @@ export default function Cart() {
                       <div className="border-t bg-gray-50 p-4">
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
-                            <span>Subtotaal:</span>
+                            <span>{t('cart.subtotal')}:</span>
                             <span>€{total.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span>Verzending:</span>
+                            <span>{t('cart.shipping')}:</span>
                             <div className="text-right">
                               {shipping === 0 ? (
                                 <div className="flex items-center gap-1 text-xs" style={{ color: '#265125' }}>
                                   <Truck className="w-3 h-3 flex-shrink-0" />
                                   <div>
-                                    <strong>Gratis verzending!</strong> Morgen {tomorrowDate} in huis!
+                                    <strong>{t('cart.shippingFree')}!</strong> {t('cart.deliveryDate').replace('{{date}}', tomorrowDate)}
                                   </div>
                                 </div>
                               ) : (
@@ -242,14 +266,14 @@ export default function Cart() {
                                   <span>€{shipping.toFixed(2)}</span>
                                   <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
                                     <Truck className="w-3 h-3 flex-shrink-0" />
-                                    <span>Morgen {tomorrowDate} in huis!</span>
+                                    <span>{t('cart.deliveryDate').replace('{{date}}', tomorrowDate)}</span>
                                   </div>
                                 </div>
                               )}
                             </div>
                           </div>
                           <div className="flex justify-between font-semibold text-base border-t pt-2">
-                            <span>Totaal:</span>
+                            <span>{t('cart.total')}:</span>
                             <span>€{finalTotal.toFixed(2)}</span>
                           </div>
                         </div>
@@ -260,17 +284,17 @@ export default function Cart() {
                             disabled={isRedirecting}
                             type="button"
                             data-testid="checkout-button"
-                            aria-label="Ga naar afrekenen"
+                            aria-label={t('cart.checkout')}
                             className="w-full text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-center block"
                             style={{ backgroundColor: '#9dafaa' }}
                           >
-                            {isRedirecting ? 'Bezig met doorsturen...' : 'Afrekenen'}
+                            {isRedirecting ? t('cart.redirecting') : t('cart.checkout')}
                           </button>
                           <button
                             onClick={clearCart}
                             className="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
                           >
-                            Winkelwagen Legen
+                            {t('cart.clearCart')}
                           </button>
                         </div>
 
@@ -295,7 +319,7 @@ export default function Cart() {
 
                         {shipping > 0 && (
                           <p className="text-xs text-gray-600 mt-2 text-center">
-                            Bestel nog €{(50 - total).toFixed(2)} voor gratis verzending!
+                            {t('cart.addMore').replace('{{amount}}', (50 - total).toFixed(2))}
                           </p>
                         )}
                       </div>

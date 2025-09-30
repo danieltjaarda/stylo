@@ -16,6 +16,9 @@ import { getShopifyProducts } from '@/services/shopifyService';
 import { Product } from '@/types';
 import { useMarketingConsent } from '@/contexts/CookieConsentContext';
 import { useMetaPixelTracking } from '@/lib/metaPixel';
+import { useGTMDataLayer } from '@/components/GoogleTagManager';
+import GA4ViewItemTracker from '@/components/GA4ViewItemTracker';
+import { Translations, Locale, useTranslation, translations } from '@/lib/i18n-shared';
 
 interface ProductPageProps {
   params: Promise<{
@@ -26,6 +29,22 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  
+  // Get locale from URL or default to 'nl'
+  const [locale, setLocale] = useState<Locale>('nl');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const langParam = params.get('lang');
+      if (langParam === 'sv') {
+        setLocale('sv');
+      }
+    }
+  }, []);
+  
+  const currentTranslations = translations[locale];
+  const { t } = useTranslation(currentTranslations);
   const resolvedParams = use(params);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -48,6 +67,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   // Meta Pixel tracking
   const hasMarketingConsent = useMarketingConsent();
   const { trackViewContent, trackAddToCart } = useMetaPixelTracking(hasMarketingConsent);
+  const { pushAddToCart, pushViewItem } = useGTMDataLayer();
   const [showTreeInfo, setShowTreeInfo] = useState(false);
   const [seatProErgonomicsOpen, setSeatProErgonomicsOpen] = useState(false);
   const [seatProMaterialsOpen, setSeatProMaterialsOpen] = useState(false);
@@ -143,6 +163,43 @@ export default function ProductPage({ params }: ProductPageProps) {
       }
     }
   }, [product, hasMarketingConsent, selectedOptions, trackViewContent]);
+
+  // Track GTM view_item event when product loads - ONLY ONCE per pageload
+  useEffect(() => {
+    if (product && typeof window !== "undefined") {
+      // URL-specifieke tracking key om dubbele events te voorkomen
+      const currentUrl = window.location.pathname;
+      const trackingKey = `gtm_view_item_tracked_${currentUrl}`;
+      
+      // Guard: controleer of dit event al is getrackt voor deze URL
+      if ((window as any)[trackingKey]) {
+        console.log('GTM view_item already tracked for this URL');
+        return;
+      }
+
+      const selectedVariant = product.variants?.find((v: any) => 
+        v.selectedOptions?.every((so: any) => selectedOptions[so.name] === so.value)
+      ) || product.variants?.[0];
+
+      const gtmItems = [{
+        item_id: product.id?.toString() || product.handle || '',
+        item_name: (product as any).title || product.handle || 'Product',
+        item_category: (product as any).productType || 'Product',
+        price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        quantity: 1,
+      }];
+
+      pushViewItem(
+        (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        gtmItems
+      );
+
+      // Markeer als getrackt voor deze URL
+      (window as any)[trackingKey] = true;
+      console.log('GTM view_item event tracked for', currentUrl);
+    }
+  }, []); // Lege dependency array = één keer per component mount
 
   // Initialize and preload all images, and initialize selectedOptions once per product
   useEffect(() => {
@@ -358,6 +415,21 @@ export default function ProductPage({ params }: ProductPageProps) {
       
       console.log('🛒 AddToCart - Tracking data:', trackingData);
       trackAddToCart(trackingData);
+      
+      // Push GTM add_to_cart event
+      const gtmItems = [{
+        item_id: product.id?.toString() || product.handle || '',
+        item_name: (product as any).title || product.handle || 'Product',
+        item_category: (product as any).productType || 'Product',
+        price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        quantity: quantity,
+      }];
+      
+      pushAddToCart(
+        (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0') * quantity,
+        gtmItems
+      );
     } else {
       console.log('❌ AddToCart - Not tracking, no marketing consent');
     }
@@ -439,6 +511,19 @@ export default function ProductPage({ params }: ProductPageProps) {
 
     return (
       <div className="min-h-screen bg-white">
+        {/* GA4 View Item Tracker - Automatisch één event per pageload */}
+        {product && (
+          <GA4ViewItemTracker 
+            product={{
+              id: product.id || product.handle || '',
+              name: (product as any).title || product.handle || 'Product',
+              price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+              currency: (selectedVariant?.price as any)?.currencyCode || 'EUR',
+              category: (product as any).productType || 'Product'
+            }}
+            quantity={1}
+          />
+        )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
         <div className="mb-6 bg-white border border-gray-200 rounded-lg px-4 py-3">
@@ -547,9 +632,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                     <span
                       className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold"
                       style={{ backgroundColor: '#FD8B51', color: '#ffffff' }}
-                      title={`${discountPercentage}% korting`}
+                      title={t('home.productsSection.discount', { percentage: discountPercentage })}
                     >
-                      {discountPercentage}% korting
+                      {t('home.productsSection.discount', { percentage: discountPercentage })}
                     </span>
                   )}
               </div>
@@ -618,10 +703,13 @@ export default function ProductPage({ params }: ProductPageProps) {
               const isColorOption = lowerName.includes('kleur') || lowerName.includes('color');
               const isSizeOption = lowerName.includes('grootte') || lowerName.includes('size') || lowerName.includes('maat');
 
+              // Translate option name if translation exists
+              const translatedOptionName = (currentTranslations as any)?.product?.optionNames?.[option.name] || option.name;
+              
               return (
                 <div key={option.name} className={(isColorOption || isSizeOption) ? "border border-gray-200 rounded-lg p-3" : ""}>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm font-medium text-gray-900">{option.name}:</span>
+                    <span className="text-sm font-medium text-gray-900">{translatedOptionName}:</span>
                     <span className="text-sm text-gray-600">{selectedOptions[option.name]}</span>
                 </div>
 
@@ -974,10 +1062,10 @@ export default function ProductPage({ params }: ProductPageProps) {
             <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                  Eenvoudige bediening
+                  {t('productDetail.easyOperation.title')}
                 </h2>
                 <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                  Met de intuïtieve touchscreenbediening kun je de hoogte van het bureau in centimeters veranderen en 3 voorkeursstanden opslaan voor snelle toegang.
+                  {t('productDetail.easyOperation.description')}
                 </p>
                 
                 {/* Main Video */}
@@ -1004,8 +1092,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Intuïtief touchscreen</h3>
-                    <p className="text-sm text-gray-600">1-touch aanpassingen met LCD scherm voor precieze hoogte</p>
+                    <h3 className="font-semibold text-gray-900 mb-2">{t('productDetail.easyOperation.features.touchscreen.title')}</h3>
+                    <p className="text-sm text-gray-600">{t('productDetail.easyOperation.features.touchscreen.description')}</p>
                   </div>
 
                   <div className="text-center p-6 bg-white rounded-xl">
@@ -1014,8 +1102,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                       </svg>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">3 geheugenposities</h3>
-                    <p className="text-sm text-gray-600">Sla tot 3 hoogteposities op voor snelle en eenvoudige toegang</p>
+                    <h3 className="font-semibold text-gray-900 mb-2">{t('productDetail.easyOperation.features.memory.title')}</h3>
+                    <p className="text-sm text-gray-600">{t('productDetail.easyOperation.features.memory.description')}</p>
                   </div>
 
                   <div className="text-center p-6 bg-white rounded-xl">
@@ -1024,8 +1112,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
         </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Kinderslot</h3>
-                    <p className="text-sm text-gray-600">Vergrendel je bureau voor extra veiligheid en voorkom per ongeluk aanpassingen</p>
+                    <h3 className="font-semibold text-gray-900 mb-2">{t('productDetail.easyOperation.features.childLock.title')}</h3>
+                    <p className="text-sm text-gray-600">{t('productDetail.easyOperation.features.childLock.description')}</p>
       </div>
       
                   <div className="text-center p-6 bg-white rounded-xl">
@@ -1035,8 +1123,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                 </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Programmeerbaar</h3>
-                    <p className="text-sm text-gray-600">Stel hoogtemeters, aanpassingssnelheid, anti-botsingevoeligheid en meer in</p>
+                    <h3 className="font-semibold text-gray-900 mb-2">{t('productDetail.easyOperation.features.programmable.title')}</h3>
+                    <p className="text-sm text-gray-600">{t('productDetail.easyOperation.features.programmable.description')}</p>
               </div>
             </div>
             </div>
@@ -1046,7 +1134,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                Betrouwbare prestaties
+                {t('productDetail.reliability.title')}
               </h2>
               <p className="text-lg text-gray-700 mb-8 leading-relaxed">
                 De HomeOne tafel overtreft de hoogste normen op het gebied van prestaties en duurzaamheid. Hij is getest om de uitdagingen van dagelijks gebruik te weerstaan, waardoor hij de perfecte keuze is voor al je behoeften. De garantie van 5 jaar garandeert de superieure kwaliteit van ons product.
@@ -1073,7 +1161,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 {/* Levensduurtest kolommen */}
                 <div className="text-left">
                   <h3 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                    Levensduurtest kolommen
+                    {t('productDetail.reliability.tests.columnLifespan.title')}
                   </h3>
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Onze kolommen ondergaan een strenge test met 30.000 cycli op en neer. 
@@ -1086,7 +1174,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 {/* Levensduurtest van de motor */}
                 <div className="text-left">
                   <h3 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                    Levensduurtest van de motor
+                    {t('productDetail.reliability.tests.motorLifespan.title')}
                   </h3>
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Onze dubbele elektromotoren zijn ontworpen om minstens 20.000 cycli 
@@ -1098,7 +1186,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 {/* Verdeelde belastingstest */}
                 <div className="text-left">
                   <h3 className="text-xl font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                    Verdeelde belastingstest
+                    {t('productDetail.reliability.tests.loadTest.title')}
                   </h3>
                   <p className="text-sm text-gray-700 leading-relaxed">
                     Er zijn tests uitgevoerd door 120 kg op het bureau te plaatsen om te 
@@ -1114,10 +1202,10 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Comparison Table Section */}
           <section className="bg-white rounded-3xl p-4 md:p-8 lg:p-12 border">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 md:mb-8 text-center">
-              Hoe vergelijken wij?
+              {t('productDetail.comparison.title')}
             </h2>
             <p className="text-center text-gray-600 mb-6 md:mb-12 text-sm md:text-base">
-              Welke keuzes heb je? Kijk hiervoor naar dit handige overzicht.
+              {t('productDetail.comparison.subtitle')}
             </p>
             
             {/* Mobile Layout - Cards */}
@@ -1231,14 +1319,14 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Technical Specifications */}
             <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
-                Technische specificaties
+                {t('productDetail.specs.title')}
               </h2>
               
               <div className="max-w-4xl mx-auto">
                 {/* General Information */}
                 <div className="bg-white rounded-2xl p-6 mb-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-semibold text-gray-900">Algemene informatie</h3>
+                    <h3 className="text-xl font-semibold text-gray-900">{t('productDetail.specs.general')}</h3>
                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
@@ -1446,10 +1534,10 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Laat je inspireren
+                {t('productDetail.inspiration.title')}
               </h2>
               <p className="text-lg text-gray-600">
-                Bekijk hoe onze bureaus eruit zien in de interieurs van onze klanten.
+                {t('productDetail.inspiration.description')}
               </p>
             </div>
 
@@ -1919,7 +2007,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
-                Wat onze klanten zeggen
+                {t('productDetail.customerReviews.title')}
               </h2>
               
               {/* Trustpilot Header */}

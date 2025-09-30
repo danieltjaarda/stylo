@@ -2,8 +2,44 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
   const pathname = request.nextUrl.pathname
+  
+  // Detecteer locale op basis van domein OF query parameter
+  const host = request.headers.get('host') || ''
+  const langParam = request.nextUrl.searchParams.get('lang')
+  let locale: 'nl' | 'sv' = 'nl' // Default naar Nederlands
+  
+  // Check voor ?lang=sv parameter EERST (heeft hoogste prioriteit)
+  if (langParam === 'sv') {
+    locale = 'sv' // Force Swedish voor test doeleinden
+    console.log('🌍 Locale set to Swedish via lang parameter')
+  } else if (langParam === 'nl') {
+    locale = 'nl' // Force Dutch
+    console.log('🌍 Locale set to Dutch via lang parameter')
+  } else if (host.endsWith('.se') || host.includes('deskna.se')) {
+    locale = 'sv' // Zweeds voor .se domeinen
+    console.log('🌍 Locale set to Swedish via .se domain')
+  } else if (host.endsWith('.nl') || host.includes('deskna.nl')) {
+    locale = 'nl' // Nederlands voor .nl domeinen
+    console.log('🌍 Locale set to Dutch via .nl domain')
+  } else {
+    console.log('🌍 Using default locale: nl')
+  }
+  
+  // Clone de request headers
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-locale', locale)
+  requestHeaders.set('x-url', request.url) // Add full URL for searchParams access
+  
+  // Maak een nieuwe response met de aangepaste headers
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    }
+  })
+  
+  // Voeg ook de locale toe aan response headers voor zekerheid
+  response.headers.set('x-locale', locale)
 
   // Blokkeer toegang tot interne tools in productie
   if (process.env.NODE_ENV === 'production') {

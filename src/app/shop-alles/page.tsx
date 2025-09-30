@@ -9,8 +9,25 @@ import WhatsAppWidget from '@/components/WhatsAppWidget';
 import WidgetsSection from '@/components/WidgetsSection';
 import FAQ from '@/components/FAQ';
 import { Product } from '@/types';
+import { Translations, Locale, useTranslation, translations } from '@/lib/i18n-shared';
 
 export default function ShopAllesPage() {
+  // Get locale from URL or default to 'nl'
+  const [locale, setLocale] = useState<Locale>('nl');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const langParam = params.get('lang');
+      if (langParam === 'sv') {
+        setLocale('sv');
+      }
+    }
+  }, []);
+  
+  const currentTranslations = translations[locale];
+  const { t } = useTranslation(currentTranslations);
+  
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +50,7 @@ export default function ShopAllesPage() {
         }
       } catch (error) {
         console.error('Error loading shop-alles:', error);
-        setError('Failed to load shop-alles products');
+        setError(t('shopAll.error'));
         setProducts([]);
       } finally {
         setLoading(false);
@@ -41,7 +58,7 @@ export default function ShopAllesPage() {
     };
 
     loadCollection();
-  }, []);
+  }, [t]);
 
   if (loading) {
     return (
@@ -49,7 +66,7 @@ export default function ShopAllesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Alle producten laden...</p>
+            <p className="mt-4 text-gray-600">{t('shopAll.loading')}</p>
           </div>
         </div>
       </div>
@@ -66,7 +83,7 @@ export default function ShopAllesPage() {
               onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              Opnieuw proberen
+              {t('shopAll.retry')}
             </button>
           </div>
         </div>
@@ -83,7 +100,7 @@ export default function ShopAllesPage() {
             <ol className="flex items-center space-x-2 text-sm">
               <li>
                 <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
-                  Home
+                  {t('shopAll.breadcrumbs.home')}
                 </Link>
               </li>
               <li>
@@ -91,7 +108,7 @@ export default function ShopAllesPage() {
               </li>
               <li>
                 <Link href="/products" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
-                  Producten
+                  {t('shopAll.breadcrumbs.products')}
                 </Link>
               </li>
               <li>
@@ -99,7 +116,7 @@ export default function ShopAllesPage() {
               </li>
               <li>
                 <span className="text-gray-900 font-semibold">
-                  Alle Producten
+                  {t('shopAll.breadcrumbs.all')}
                 </span>
               </li>
             </ol>
@@ -111,10 +128,10 @@ export default function ShopAllesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Alle Producten
+              {t('shopAll.title')}
             </h1>
             <p className="text-xl text-gray-600">
-              Ontdek ons complete assortiment ergonomische werkplekken
+              {t('shopAll.subtitle')}
             </p>
           </div>
 
@@ -130,7 +147,7 @@ export default function ShopAllesPage() {
       <WidgetsSection />
 
       {/* WhatsApp Widget */}
-      <WhatsAppWidget />
+      <WhatsAppWidget translations={currentTranslations} locale={locale} />
 
       {/* FAQ Section */}
       <FAQ />
