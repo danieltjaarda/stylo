@@ -1,5 +1,9 @@
-'use client';
+import OverOnsClient from './OverOnsClient';
+import { Metadata } from 'next';
+import { getTranslations, getLocale } from '@/lib/i18n-server';
+import { getTranslation } from '@/lib/i18n-shared';
 
+<<<<<<< HEAD
 import Image from 'next/image';
 import Link from 'next/link';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -322,4 +326,20 @@ export default function OverOns() {
       </section>
     </div>
   );
+=======
+export async function generateMetadata(): Promise<Metadata> {
+  const translations = await getTranslations();
+  
+  return {
+    title: getTranslation(translations, 'about.metadata.title'),
+    description: getTranslation(translations, 'about.metadata.description'),
+  };
+>>>>>>> bc2de36bea2326e7e2bb9a9413c983a360f3ff8c
+}
+
+export default async function OverOnsPage() {
+  const translations = await getTranslations();
+  const locale = await getLocale();
+  
+  return <OverOnsClient translations={translations} locale={locale} />;
 }

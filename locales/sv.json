@@ -1,0 +1,1239 @@
+{
+  "common": {
+    "search": "Sök",
+    "cart": "Varukorg",
+    "menu": "Meny",
+    "close": "Stäng",
+    "loading": "Laddar...",
+    "error": "Något gick fel",
+    "retry": "Försök igen",
+    "contactUs": "Kontakt",
+    "aboutUs": "Om Oss"
+  },
+  "cookies": {
+    "banner": {
+      "title": "🍪 Vi använder cookies",
+      "description": "Vi använder cookies för att förbättra din upplevelse och analysera vår webbplats. Genom att fortsätta godkänner du vår cookiepolicy.",
+      "moreInfo": "Mer information",
+      "settings": "Inställningar",
+      "acceptNecessary": "Endast Nödvändiga",
+      "acceptAll": "Acceptera Alla"
+    },
+    "settings": {
+      "title": "Cookie-inställningar",
+      "close": "Stäng inställningar",
+      "description": "Vi använder cookies för att förbättra din upplevelse på vår webbplats. Du kan ange nedan vilka cookies du vill acceptera.",
+      "necessary": {
+        "title": "Nödvändiga Cookies",
+        "status": "Alltid aktiv",
+        "description": "Dessa cookies är nödvändiga för att webbplatsen ska fungera. De kan inte inaktiveras."
+      },
+      "statistics": {
+        "title": "Statistik Cookies",
+        "description": "Dessa cookies hjälper oss att förstå hur besökare använder vår webbplats. Till exempel Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "Dessa cookies används för personliga annonser. Till exempel Meta Pixel (Facebook)."
+      },
+      "save": "Spara Inställningar",
+      "cancel": "Avbryt"
+    }
+  },
+  "emailPopup": {
+    "title": "Lås upp",
+    "titleHighlight": "för 5% rabatt!",
+    "emailPlaceholder": "Ange din e-postadress",
+    "submitButton": "LÅS UPP DIN RABATT",
+    "submitButtonLoading": "BEARBETAR...",
+    "saveLaterButton": "SPARA RABATT TILL SENARE",
+    "closeButton": "Stäng",
+    "success": {
+      "title": "Tack!",
+      "message": "Din rabattkod är på väg till din inbox!",
+      "spamWarning": "Kolla även din skräppost!"
+    },
+    "error": "Något gick fel vid registreringen. Försök igen."
+  },
+  "nav": {
+    "bureaustoelen": "Kontorsstolar",
+    "bureaus": "Höj- och sänkbara skrivbord",
+    "alles": "Alla produkter",
+    "over-ons": "Om oss",
+    "contact": "Kontakt",
+    "blog": "Blogg",
+    "b2b": "Företag",
+    "products": "Produkter"
+  },
+  "megaMenu": {
+    "products": "Produkter",
+    "desks": {
+      "title": "Höj- och sänkbara skrivbord",
+      "description": "Elektriskt justerbara skrivbord för en hälsosam arbetsställning",
+      "cta": "Se kollektion →"
+    },
+    "chairs": {
+      "title": "Kontorsstolar",
+      "description": "Ergonomiska arbetsplatsstolar för optimal sittkomfort",
+      "cta": "Se kollektion →"
+    },
+    "accessories": {
+      "title": "Tillbehör",
+      "description": "Monitorarmar, skrivbordslampor och andra kontorstillbehör",
+      "cta": "Se kollektion →"
+    },
+    "viewAll": "Se alla produkter →",
+    "recommended": "Rekommenderad",
+    "recommendedProduct": {
+      "title": "SeatPro Ergonomisk Stol",
+      "description": "Premium ergonomi för optimal sittkomfort",
+      "cta": "Se produkt →"
+    }
+  },
+  "header": {
+    "freeShipping": "Fri frakt",
+    "warranty": "5 års garanti",
+    "returns": "30 dagars retur",
+    "support": "Kundservice"
+  },
+  "footer": {
+    "topProducts": {
+      "title": "Toppprodukter",
+      "deskOne": "DeskOne Skrivbord",
+      "deskPro": "DeskPro",
+      "seatPro": "SeatPro ergonomisk kontorsstol",
+      "monitorArm": "Monitorarm - Enkel"
+    },
+    "shop": {
+      "title": "Handla",
+      "allProducts": "Alla produkter",
+      "sitStandDesks": "Höj- och sänkbara skrivbord",
+      "ergonomicChairs": "Ergonomiska kontorsstolar"
+    },
+    "help": {
+      "title": "Hjälp",
+      "b2b": "B2B",
+      "returnsRefunds": "Returer och återbetalningar",
+      "aboutUs": "Om oss",
+      "shipping": "Leverans",
+      "contact": "Kontakta oss"
+    },
+    "resources": {
+      "title": "Resurser",
+      "blog": "Blogg",
+      "faq": "FAQ",
+      "quiz": "Quiz",
+      "discounts": "Aktiva rabatter",
+      "colophon": "Kolofon",
+      "montageGuides": "Monteringsguider"
+    },
+    "legal": {
+      "title": "Juridiskt",
+      "privacy": "Integritet",
+      "terms": "Allmänna villkor",
+      "rightOfWithdrawal": "Ångerrätt"
+    },
+    "contact": {
+      "title": "Kontakta oss",
+      "phone": "085 060 2482",
+      "email": "info@deskna.se",
+      "hours": "Mån - Fre | 07:00 - 16:00"
+    },
+    "stayUpToDate": {
+      "title": "Håll dig uppdaterad med våra senaste nyheter",
+      "description": "Prenumerera på vårt nyhetsbrev och få exklusiva erbjudanden och ergonomiska tips.",
+      "inputPlaceholder": "Ange din e-postadress",
+      "button": "Registrera",
+      "privacyNote": "Genom att registrera dig godkänner du vår",
+      "privacyLink": "integritetspolicy"
+    },
+    "socialMedia": {
+      "followUs": "Följ oss"
+    },
+    "certifications": {
+      "title": "Certifieringar:"
+    },
+    "trustpilot": {
+      "excellent": "Utmärkt",
+      "reviews": "1.500+ omdömen"
+    },
+    "copyright": "© 2025 DESKNA. Alla rättigheter förbehållna.",
+    "privacyPolicy": "Integritetspolicy",
+    "terms": "Allmänna villkor",
+    "colophon": "Kolofon",
+    "rightOfWithdrawal": "Ångerrätt"
+  },
+  "product": {
+    "addToCart": "Lägg i varukorg",
+    "outOfStock": "Slutsåld",
+    "price": "Pris",
+    "vat": "inkl. moms",
+    "description": "Beskrivning",
+    "specifications": "Specifikationer",
+    "reviews": "Recensioner",
+    "warranty": "års garanti",
+    "freeShipping": "Fri frakt",
+    "inStock": "I lager",
+    "limitedStock": "Begränsat lager",
+    "optionNames": {
+      "Frame kleur": "Ramfärg",
+      "Frame color": "Ramfärg",
+      "Tafelblad kleur": "Bordsskivefärg",
+      "Tafelblad color": "Bordsskivefärg",
+      "Type": "Typ",
+      "Grootte": "Storlek",
+      "Maat": "Storlek"
+    }
+  },
+  "productDetail": {
+    "easyOperation": {
+      "title": "Enkel användning",
+      "description": "Med den intuitiva touchskärmkontrollen kan du ändra skrivbordets höjd i centimeter och spara 3 förinställningar för snabb åtkomst.",
+      "features": {
+        "touchscreen": {
+          "title": "Intuitiv pekskärm",
+          "description": "1-touch justeringar med LCD-skärm för exakt höjd"
+        },
+        "memory": {
+          "title": "3 minnespositioner",
+          "description": "Spara upp till 3 höjdpositioner för snabb och enkel åtkomst"
+        },
+        "childLock": {
+          "title": "Barnlås",
+          "description": "Lås ditt skrivbord för extra säkerhet och förhindra oavsiktliga justeringar"
+        },
+        "programmable": {
+          "title": "Programmerbar",
+          "description": "Ställ in höjdmätare, justeringshastighet, anti-kollisionskänslighet och mer"
+        }
+      }
+    },
+    "reliability": {
+      "title": "Pålitlig prestanda",
+      "description": "HomeOne-bordet överträffar de högsta standarderna för prestanda och hållbarhet. Det är testat för att motstå utmaningarna med daglig användning, vilket gör det till det perfekta valet för alla dina behov. 5 års garanti garanterar den överlägsna kvaliteten på vår produkt.",
+      "tests": {
+        "columnLifespan": {
+          "title": "Livslängdstest kolumner",
+          "description": "Våra kolumner genomgår ett rigoröst test med 30 000 cykler upp och ner. Detta test simulerar mer än 16 år där skrivbordet justeras i höjd 5 gånger om dagen för att kontrollera hållbarheten hos motorn och de stödjande mekaniska komponenterna."
+        },
+        "motorLifespan": {
+          "title": "Livslängdstest av motorn",
+          "description": "Våra dubbla elmotorer är designade för att klara minst 20 000 cykler av intensiv användning. De levererar optimal prestanda under många år."
+        },
+        "loadTest": {
+          "title": "Fördelad belastningstest",
+          "description": "Tester har utförts genom att placera 120 kg på skrivbordet för att kontrollera om det justerbara skrivbordet är robust nog att klara även de tyngsta multi-monitoruppsättningarna. Det klarar komplexa belastningar utan att kompromissa med prestandan."
+        }
+      }
+    },
+    "comparison": {
+      "title": "Hur jämför vi oss?",
+      "subtitle": "Vilka val har du? Se denna praktiska översikt.",
+      "deskna": "DESKNA Logo",
+      "amazon": "Märken på Amazon",
+      "others": "Andra märken",
+      "rows": {
+        "price": {
+          "title": "Pris",
+          "deskna": "Priset håller dig inte fastkedjad vid stolen",
+          "amazon": "Billigt, men du måste byta nästa år",
+          "others": "Andra jobb behövs för att betala för ett"
+        },
+        "stability": {
+          "title": "Stabilitet",
+          "deskna": "Så stabilt att du till och med kan stå på det",
+          "amazon": "Låt inte en fluga landa på det",
+          "others": "Stabilt nog"
+        },
+        "noise": {
+          "title": "Ljudnivå",
+          "deskna": "Viskande tyst - godkänt av ninjor!",
+          "amazon": "Där kommer det att diskuteras",
+          "others": "Måttlig"
+        },
+        "desktop": {
+          "title": "Bordsskiva i ett stycke",
+          "deskna": "Sömlös, vattentät och hållbar",
+          "amazon": "Pusselbitar med smuts-samlande hål",
+          "others": "Hållbar, men förvänta dig inte för mycket"
+        },
+        "motors": {
+          "title": "Tvåmotorssystem",
+          "deskna": "Standard på alla modeller",
+          "amazon": "En motor - som en cykel med en pedal",
+          "others": "Endast på premium-modeller"
+        },
+        "certification": {
+          "title": "Certifiering",
+          "deskna": "TÜV Rheinland & IGR märken",
+          "amazon": "Märken?",
+          "others": "Bara det vanliga"
+        },
+        "speed": {
+          "title": "Lyfthastighet",
+          "deskna": "±50mm/s - på ett ögonblick",
+          "amazon": "~18mm/s - som att se färg torka",
+          "others": "±36mm/s - en medalj för andraplatsen"
+        },
+        "returns": {
+          "title": "Returpolicy",
+          "deskna": "Gratis och utan förpliktelser",
+          "amazon": "Lycka till med det",
+          "others": "Gör dig redo att förhandla"
+        },
+        "support": {
+          "title": "Kundservice",
+          "deskna": "Vi älskar 5-stjärniga recensioner",
+          "amazon": "Ta med ditt tålamod och en ordbok!",
+          "others": "Varierar, vissa är ok"
+        }
+      }
+    },
+    "specs": {
+      "title": "Tekniska specifikationer",
+      "general": "Allmän information",
+      "deskSpecs": "Skrivbord tekniska specifikationer",
+      "assemblyMethod": "Monteringsmetod",
+      "assembly": "Montering",
+      "assemblyTime": "Genomsnittlig monteringstid",
+      "warranty": "Garanti",
+      "freeReturns": "Gratis returer",
+      "desktopSpecs": "Bordsskiva specifikationer",
+      "frameSpecs": "Specifikationer elektrisk ram",
+      "selfAssembly": "Självmontering",
+      "easyNoTools": "Enkelt, inget extra verktyg behövs",
+      "minutes30": "30 minuter",
+      "years5": "5 år",
+      "days30": "30 dagar"
+    },
+    "inspiration": {
+      "title": "Låt dig inspireras",
+      "description": "Se hur våra skrivbord ser ut i våra kunders interiörer.",
+      "altPrefix": "Skrivbordsinspiration"
+    },
+    "customerReviews": {
+      "title": "Vad våra kunder säger",
+      "trustpilotRating": "/ 5",
+      "reviews": "recensioner",
+      "excellent": "Utmärkt",
+      "good": "Bra",
+      "average": "Genomsnittlig",
+      "poor": "Dålig",
+      "veryPoor": "Mycket dålig",
+      "collectedBy": "Insamlat av DESKNA"
+    }
+  },
+  "whatsapp": {
+    "title": "Frågor om våra produkter?",
+    "description": "Våra experter är redo att hjälpa dig! Chatta direkt med oss via WhatsApp för personlig rådgivning om den perfekta arbetsplatslösningen.",
+    "cta": "Chatta via WhatsApp",
+    "hours": "Mån - Fre | 07:00 - 16:00",
+    "defaultMessage": "Hej! Jag har en fråga om era produkter."
+  },
+  "shopAll": {
+    "breadcrumbs": {
+      "home": "Hem",
+      "products": "Produkter",
+      "all": "Alla Produkter"
+    },
+    "title": "Alla Produkter",
+    "subtitle": "Upptäck vårt kompletta sortiment av ergonomiska arbetsplatser",
+    "loading": "Laddar alla produkter...",
+    "error": "Fel vid laddning av alla produkter",
+    "retry": "Försök igen"
+  },
+  "cart": {
+    "title": "Varukorg",
+    "empty": "Din varukorg är tom",
+    "continueShopping": "Fortsätt handla",
+    "subtotal": "Delsumma",
+    "shipping": "Frakt",
+    "shippingFree": "Gratis",
+    "vat": "Moms",
+    "total": "Totalt",
+    "checkout": "Till kassan",
+    "remove": "Ta bort",
+    "quantity": "Antal",
+    "update": "Uppdatera",
+    "clearCart": "Töm varukorg",
+    "freeShippingNote": "Fri frakt från €50",
+    "deliveryDate": "Levereras imorgon {{date}}",
+    "emptyMessage": "Din varukorg är tom",
+    "startShopping": "Börja handla",
+    "redirecting": "Du omdirigeras till kassan...",
+    "addMore": "Lägg till €{{amount}} för fri frakt",
+    "qualifyFreeShipping": "Du kvalificerar för fri frakt!"
+  },
+  "checkout": {
+    "title": "Kassa",
+    "contact": "Kontaktuppgifter",
+    "shipping": "Leverans",
+    "payment": "Betalning",
+    "review": "Granska beställning",
+    "placeOrder": "Lägg beställning",
+    "processing": "Bearbetar...",
+    "success": "Beställningen har lagts!"
+  },
+  "seo": {
+    "title": "DESKNA - Ergonomiska kontorsstolar & höj- och sänkbara skrivbord",
+    "description": "Upptäck de perfekta ergonomiska kontorsstolarna och elektriska höj- och sänkbara skrivborden hos DESKNA. Höjdjusterbara skrivbord, ergonomiska stolar och kontorsaccessoarer för din idealiska arbetsplats. Fri frakt, 5 års garanti och 30 dagars retur.",
+    "keywords": "ergonomiska kontorsstolar, höj- och sänkbara skrivbord, justerbara skrivbord, kontorsmöbler, hemarbete, ergonomi, arbetsplats, kontorsstolar"
+  },
+  "home": {
+    "hero": {
+      "title": "De back to work deals",
+      "subtitle": "Premium ergonomiska arbetsplatser: höj- och sänkbara skrivbord, ergonomiska stolar och professionell kontorsinredning — snabbt levererat",
+      "cta": "Handla nu",
+      "imageAlt": "Workspace of the Year 2025"
+    },
+    "features": {
+      "title": "Varför välja DESKNA?",
+      "items": [
+        {
+          "title": "Premiumkvalitet",
+          "description": "Endast de bästa materialen för långvarig komfort"
+        },
+        {
+          "title": "5 års garanti",
+          "description": "Vi står bakom våra produkter"
+        },
+        {
+          "title": "Fri frakt",
+          "description": "Leverans över hela Sverige"
+        },
+        {
+          "title": "30 dagars retur",
+          "description": "Inte nöjd? Pengarna tillbaka"
+        },
+        {
+          "title": "Utmärkt service",
+          "description": "Personlig rådgivning från experter"
+        },
+        {
+          "title": "Hållbart",
+          "description": "Miljövänligt producerat"
+        }
+      ]
+    },
+    "categories": {
+      "title": "Våra kategorier",
+      "subtitle": "Hitta den perfekta lösningen för din arbetsplats",
+      "bureaustoelen": {
+        "title": "Kontorsstolar",
+        "description": "Ergonomiska stolar för optimal sittkomfort",
+        "features": ["Justerbar höjd", "Ländryggsstöd", "Andningsbara material"],
+        "cta": "Se stolar"
+      },
+      "bureaus": {
+        "title": "Höj- och sänkbara skrivbord",
+        "description": "Elektriskt justerbara skrivbord för en hälsosam arbetsställning",
+        "features": ["Elektriskt justerbar", "Minnesfunktion", "Stabil konstruktion"],
+        "cta": "Se skrivbord"
+      }
+    },
+    "bestSellers": {
+      "title": "Bästsäljare",
+      "subtitle": "Upptäck våra mest populära produkter",
+      "cta": "Se alla produkter"
+    },
+    "reviews": {
+      "title": "Vad kunder säger",
+      "subtitle": "Mer än 1370+ nöjda kunder",
+      "seeAll": "Se alla recensioner"
+    },
+    "trust": {
+      "title": "Betrodd av tusentals proffs",
+      "subtitle": "I över 5 år specialisten på ergonomiska arbetsplatser",
+      "stats": {
+        "customers": "50.000+ Nöjda kunder",
+        "rating": "4.8/5 Kundbetyr",
+        "returns": "30 dagars returrätt",
+        "shipping": "Fri frakt",
+        "warranty": "5 års garanti",
+        "support": "24/7 Kundservice"
+      }
+    },
+    "testimonials": {
+      "title": "Vad våra experter säger",
+      "subtitle": "Rekommenderat av proffs"
+    },
+    "cta": {
+      "title": "Redo att uppgradera din arbetsplats?",
+      "subtitle": "Upptäck vår kollektion av ergonomiska produkter",
+      "button": "Handla nu"
+    },
+    "faq": {
+      "title": "Vanliga frågor",
+      "subtitle": "Allt du behöver veta om våra produkter"
+    },
+    "trustIndicators": {
+      "customers": {
+        "title": "Mer än 20 000",
+        "subtitle": "nöjda kunder"
+      },
+      "rating": {
+        "title": "4.8 betyg från våra",
+        "subtitle": "kunder"
+      },
+      "guarantee": {
+        "title": "30 dagars öppet köp-",
+        "subtitle": "garanti"
+      },
+      "delivery": {
+        "title": "Snabb leverans och",
+        "subtitle": "returservice"
+      },
+      "ergonomics": {
+        "title": "Certifierad",
+        "subtitle": "ergonomi"
+      },
+      "service": {
+        "title": "Prisbelönt",
+        "subtitle": "kundservice"
+      }
+    },
+    "productsSection": {
+      "title": "Topprodukter",
+      "subtitle": "Våra mest populära produkter av en anledning.",
+      "viewAll": "Se hela kollektionen",
+      "discount": "{{percentage}}% rabatt",
+      "reviews": "omdömen"
+    },
+    "carouselSection": {
+      "limitedEdition": {
+        "badge": "Nyhet",
+        "title": "Begränsade färger",
+        "cta": "Mer info"
+      },
+      "stableFrames": {
+        "badge": "Nyhet",
+        "title": "Stabila skrivbordsramar",
+        "cta": "Mer info"
+      }
+    },
+    "reviewsSection": {
+      "title": "Vad säger",
+      "titleHighlight": "våra",
+      "titleEnd": "kunder?",
+      "subtitle": "Läs vad våra kunder tycker om oss.",
+      "defaultCustomer": "Nöjd kund",
+      "trustpilot": {
+        "ratingText": "4,8 • 1 370+ omdömen",
+        "reviewsOn": "omdömen på"
+      },
+      "reviews": [
+        {
+          "name": "William",
+          "title": "",
+          "text": "Min nya kontorsstol har helt tagit bort min ryggsmärta. Äntligen en stol som verkligen är ergonomisk!",
+          "days": "4 dagar sedan"
+        },
+        {
+          "name": "Miranda",
+          "title": "Perfekt kontorsstol!",
+          "text": "Denna kontorsstol är en game-changer för mitt hemmakontor. Sitter bekvämt hela dagen!",
+          "days": "4 dagar sedan"
+        },
+        {
+          "name": "Paul",
+          "title": "Utmärkt höj- och sänkbart skrivbord",
+          "text": "Det elektriska skrivbordet fungerar perfekt. Tyst, stabilt och höjdjusteringen går supernabbt. Rekommenderas!",
+          "days": "4 dagar sedan"
+        },
+        {
+          "name": "Tina",
+          "title": "Ergonomisk kontorsstol toppen!",
+          "text": "Efter år av sökande har jag äntligen hittat den perfekta kontorsstolen. Min rygg mår så mycket bättre!",
+          "days": "6 dagar sedan"
+        },
+        {
+          "name": "Rosanne",
+          "title": "Höj- och sänkbart skrivbord rekommenderas",
+          "text": "Skrivbordet är stabilt och tyst. Övergången från att sitta till att stå går mycket naturligt.",
+          "days": "8 dagar sedan"
+        },
+        {
+          "name": "Mark",
+          "title": "Komplett kontorsuppsättning",
+          "text": "Både skrivbordet och stolen är av utmärkt kvalitet. Mitt hemmakontor är nu perfekt!",
+          "days": "5 dagar sedan"
+        },
+        {
+          "name": "Lisa",
+          "title": "Ergonomi när den är som bäst",
+          "text": "Denna kontorsstol har överträffat alla mina förväntningar. Sitter bekvämt i timmar.",
+          "days": "7 dagar sedan"
+        },
+        {
+          "name": "Jan",
+          "title": "Höj- och sänkbart skrivbord toppval",
+          "text": "Det elektriska skrivbordet fungerar felfritt. Stabilt, tyst och kontrollen är intuitiv.",
+          "days": "3 dagar sedan"
+        },
+        {
+          "name": "Emma",
+          "title": "Elektriskt skrivbord fantastiskt",
+          "text": "Höj- och sänkbart skrivbord har förvandlat min arbetsdag. Ingen mer ryggsmärta!",
+          "days": "2 dagar sedan"
+        },
+        {
+          "name": "Tom",
+          "title": "Kontorsstol av toppkvalitet",
+          "text": "Äntligen en stol som stödjer mina långa arbetsdagar. Materialet känns premium.",
+          "days": "1 dag sedan"
+        },
+        {
+          "name": "Sophie",
+          "title": "Ergonomisk stol toppen",
+          "text": "Min produktivitet har ökat enormt sedan jag fick denna kontorsstol. Sitter så bekvämt!",
+          "days": "6 timmar sedan"
+        },
+        {
+          "name": "David",
+          "title": "Skrivbord och stol kombi perfekt",
+          "text": "Köpte hela uppsättningen - skrivbord och stol. Perfekt kombination för min arbetsplats!",
+          "days": "30 minuter sedan"
+        }
+      ]
+    },
+    "bureausSection": {
+      "title": "Våra skrivbord",
+      "description": "Utforska vårt omfattande sortiment av elektriska höj- och sänkbara skrivbord och höjdjusterbara skrivbordslösningar. Från kompakta hemmakontor till professionella arbetsstationer - våra justerbara skrivbord erbjuder rätt höjd för både stående och sittande arbete. Välj mellan olika bordsstorlekar, färger och premiummaterial.",
+      "features": {
+        "stock": "Alltid god lagertillgång",
+        "warranty": "Upp till 12 års garanti!",
+        "priceRange": "Varianter i alla prisklasser"
+      },
+      "cta": "Upptäck alla skrivbord"
+    },
+    "chairsSection": {
+      "title": "Ergonomiska kontorsstolar för optimal sittkomfort",
+      "description": "Upptäck vår kollektion av ergonomiska kontorsstolar med justerbart ryggstöd, nackstöd och armstöd. Perfekt för långa arbetsdagar, hemarbete och professionella kontorsmiljöer.",
+      "mobileDescription": "Justerbart ryggstöd, nackstöd och armstöd för optimal komfort under långa arbetsdagar.",
+      "cta": "Se kollektionen"
+    },
+    "testimonialsSection": {
+      "title": "Rekommenderas av specialister",
+      "titleMobile": "Rekommenderas av<br />specialister",
+      "titleDesktop": "Rekommenderas av dermatologer & ergonomispecialister",
+      "recommended": "Rekommenderas",
+      "testimonials": [
+        {
+          "name": "Dr. Chris Winter",
+          "role": "Ergonomiexpert",
+          "quote": "De lyxiga, tvättbara kuddarna på våra ergonomiska kontorsstolar är otroligt mjuka och blockerar ljuset utan ansträngning, vilket förbättrar arbetsdagen enormt.",
+          "fullQuote": "De lyxiga, tvättbara kuddarna på våra ergonomiska kontorsstolar är otroligt mjuka och blockerar ljuset utan ansträngning, vilket förbättrar arbetsdagen enormt. Det är perfekt för kontoret eller på resan, och det svala tyget skapar den idealiska arbetsmiljön överallt."
+        },
+        {
+          "name": "Drs. Kristel Woltman",
+          "role": "Fysioterapeut",
+          "quote": "En hälsosam hållning får du med rätt stöd i din arbetsstol. Jag rekommenderar dessa stolar till mina patienter eftersom det förbättrar effektiviteten i ditt arbete.",
+          "fullQuote": "En hälsosam hållning får du med rätt stöd i din arbetsstol. De ergonomiska egenskaperna och den rätta sittställningen. Jag rekommenderar dessa stolar till mina patienter eftersom det förbättrar effektiviteten i ditt arbete och komfort. Dessutom minskar det mjuka tyget risken för ryggbesvär."
+        },
+        {
+          "name": "Joep Rovers",
+          "role": "Ergonomirådgivare",
+          "quote": "Att sitta på ett antibakteriellt kuddfodral från våra stolar har stor påverkan på hur din hud återhämtar sig på natten. Detta är något jag skulle rekommendera alla.",
+          "fullQuote": "Jag hade själv allvarligt eksem i ansiktet och kunde lösa detta genom att anpassa min arbetsstol. Kudden du sitter på hela dagen har stor påverkan på hur din hud återhämtar sig på natten. Att sitta på ett antibakteriellt kuddfodral från våra stolar är något jag skulle rekommendera alla."
+        }
+      ]
+    },
+    "serviceFeatures": {
+      "shipping": {
+        "title": "Snabb leverans",
+        "description": "Alla beställningar skickas inom 3-5 dagar"
+      },
+      "returns": {
+        "title": "Gratis & enkel retur",
+        "description": "Inte nöjd? Returnera gratis inom 30 dagar efter köp."
+      },
+      "warranty": {
+        "title": "Utökad garanti",
+        "description": "Stressfri upplevelse med snabbt utbyte och exceptionell hållbarhet."
+      },
+      "payment": {
+        "title": "Flexibla betalningsalternativ",
+        "description": "Få det du vill ha idag. Betala senare eller i flera räntefria delbetalningar."
+      }
+    },
+    "faqSection": {
+      "title": "Vanliga frågor",
+      "subtitle": "Här hittar du svar på de vanligaste frågorna om våra produkter och service.",
+      "contactNote": "Finns inte din fråga här? Vi hjälper dig gärna!",
+      "contactCta": "Kontakta oss",
+      "liveChatCta": "Starta livechatt",
+      "faqs": [
+        {
+          "question": "Hur lång är leveranstiden för min beställning?",
+          "answer": "Alla beställningar skickas inom 1-3 arbetsdagar. Leveranstiden beror på din plats: Sverige 1-2 arbetsdagar, Norge 2-3 arbetsdagar. Du får alltid ett spårningsnummer för att följa din beställning."
+        },
+        {
+          "question": "Kan jag returnera min beställning om jag inte är nöjd?",
+          "answer": "Ja, du kan returnera din beställning gratis inom 30 dagar efter mottagandet. Produkterna måste vara i originalskick. Kontakta oss för returlabel och ytterligare instruktioner."
+        },
+        {
+          "question": "Vilken garanti får jag på mitt skrivbord eller stol?",
+          "answer": "På våra skrivbord ger vi 5 års garanti på mekanismen och 2 år på bordsskivan. På kontorsstolar har vi 5 års garanti på mekanismen och 2 år på klädseln. Denna garanti täcker tillverkningsfel och normalt slitage."
+        },
+        {
+          "question": "Hur vet jag vilken storlek skrivbord som passar mig bäst?",
+          "answer": "Mät först ditt arbetsområde. För en bekväm arbetsplats rekommenderar vi minst 120x60 cm. Har du två skärmar? Då är 160x80 cm eller större idealiskt. I våra produktbeskrivningar hittar du detaljerade mått och tips."
+        },
+        {
+          "question": "Är era kontorsstolar lämpliga för långa arbetsdagar?",
+          "answer": "Absolut! Våra ergonomiska kontorsstolar är speciellt designade för 8+ timmars daglig användning och långa arbetsdagar. De erbjuder optimalt ryggstöd, justerbara armstöd, nackstöd och andningsbara mesh-material. Perfekt för hemarbete, kontorsanvändning och intensivt arbete."
+        },
+        {
+          "question": "Kan jag få monteringshjälp?",
+          "answer": "Ja, vi erbjuder monteringsservice för 499 SEK. Våra montörer kommer hem till dig och sköter professionell installation. Du kan lägga till denna tjänst vid beställning eller efteråt via kundservice."
+        },
+        {
+          "question": "Vilka betalningsalternativ har ni?",
+          "answer": "Du kan betala med kort (Visa/Mastercard), PayPal, Klarna (betala senare), och banköverföring. För företag erbjuder vi även faktura efter godkännande."
+        },
+        {
+          "question": "Har ni ett fysiskt showroom?",
+          "answer": "Ja, du är välkommen till vårt showroom i Stockholm för att prova produkter. Vi ger gärna personlig rådgivning. Boka tid via vår webbplats eller ring oss för öppettider och adress."
+        }
+      ]
+    }
+  },
+  "bureaustoelen": {
+    "breadcrumb": {
+      "home": "Hem",
+      "products": "Produkter",
+      "chairs": "Kontorsstolar"
+    },
+    "loading": "Laddar kontorsstolar...",
+    "error": "Fel vid laddning av kontorsstolar",
+    "retry": "Försök igen",
+    "header": {
+      "title": "Ergonomiska kontorsstolar för kontor & hem",
+      "description": "Letar du efter en ergonomisk kontorsstol som ger optimal stöd för din kropp? Hos Deskna hittar du bekväma, justerbara kontorsstolar som passar perfekt för en modern arbetsplats. Idealisk för hemarbete och kontor, med snabb leverans och toppkvalitetsgaranti."
+    },
+    "viewCollection": "Se hela kollektionen",
+    "discount": "{{percentage}}% rabatt",
+    "reviews": "({{count}} omdömen)",
+    "colors": "+{{count}}",
+    "whySection": {
+      "title": "Varför välja våra ergonomiska kontorsstolar?",
+      "assemblyTitle": "Genomsnittlig monteringstid",
+      "video1Title": "I linje med din kropp",
+      "video1Description": "Perfekt ergonomiskt stöd för en hälsosam arbetshållning.",
+      "video2Title": "Minskar tryck på ben",
+      "video2Description": "Avlastar dina ben och förbättrar din cirkulation under arbetet.",
+      "video3Title": "Tryckavlastning",
+      "video3Description": "Minskar tryck på din kropp för optimal sittkomfort."
+    },
+    "guide": {
+      "title": "Vad ska du tänka på vid valet?",
+      "content1": "En bra kontorsstol måste kunna mer än bara att sitta bekvämt. Tänk på justerbarhet (höjd, rygg, armstöd), ergonomisk design och rätt stöd under långa arbetsdagar.",
+      "content2": "När du väljer en kontorsstol, titta framför allt på justerbarhet och stöd. Ju bättre du kan anpassa stolen till din kropp, desto längre kan du arbeta utan besvär. På Deskna väljer vi kontorsstolar som uppfyller de högsta ergonomiska standarderna, så att du är säker på kvalitet och komfort."
+    },
+    "seo": {
+      "title": "Ergonomiska kontorsstolar för kontor & hem",
+      "content1": "Letar du efter en kontorsstol som verkligen erbjuder komfort under långa arbetsdagar? Hos Deskna hittar du ergonomiska kontorsstolar som är helt justerbara och ger optimal stöd för din kropp. Oavsett om du arbetar hemifrån eller inreder ett kontor: en bra kontorsstol är onödvändig för en hälsosam arbetshållning.",
+      "subtitle1": "Varför välja en ergonomisk kontorsstol?",
+      "content2": "En ergonomisk kontorsstol är designad för att förebygga problem med rygg, nacke och axlar. Tack vare den justerbara sitthöjden, ryggstödet och armstöden kan du enkelt anpassa stolen efter din kropp. Så arbetar du inte bara bekvämare, utan också mer produktivt och med mindre risk för fysiska besvär.",
+      "subtitle2": "Fördelarna med våra kontorsstolar",
+      "benefits": [
+        "Justerbar sitthöjd och ryggstöd",
+        "Ergonomisk design som stödjer rätt sittställning",
+        "Tillverkad av hållbara material och modern finish",
+        "Levereras inom 1-3 arbetsdagar"
+      ]
+    },
+    "faq": {
+      "title": "Vanliga frågor",
+      "subtitle": "Här hittar du svar på de vanligaste frågorna om våra produkter och tjänster. Står din fråga inte med? Kontakta oss gärna!",
+      "questions": [
+        {
+          "question": "Vilken ergonomisk kontorsstol är bäst för hemarbete?",
+          "answer": "För hemarbete rekommenderar vi SeatPro. Denna ergonomiska kontorsstol har justerbart nack- och ryggstöd, 4D-armstöd och ett utdragbart fotstöd. Perfekt för långa arbetsdagar och ger optimal stöd för rygg och nacke."
+        },
+        {
+          "question": "Hur ställer jag in min kontorsstol ergonomiskt korrekt?",
+          "answer": "Ställ först in sitthöjden så att dina fötter står platt på golvet. Justera ryggstödet för stöd av din ländrygg. Sätt armstöden i armbågshöjd och se till att din skärm är i ögonhöjd. Våra kontorsstolar har alla nödvändiga justeringsmöjligheter."
+        },
+        {
+          "question": "Vad är skillnaden mellan mesh och stoppade kontorsstolar?",
+          "answer": "Mesh kontorsstolar som vår SeatPro erbjuder bättre ventilation och håller sig svalare under långa arbetsdagar. Stoppade stolar ger mer mjukhet och värme. Båda typerna i vårt sortiment erbjuder utmärkt ergonomiskt stöd."
+        },
+        {
+          "question": "Hur mycket ska jag spendera på en bra kontorsstol?",
+          "answer": "En bra ergonomisk kontorsstol är en investering i din hälsa. Våra kontorsstolar börjar på 1999 SEK och erbjuder utmärkt kvalitet. För daglig användning 6+ timmar rekommenderar vi att investera minst 2000-4000 SEK för optimal stöd."
+        },
+        {
+          "question": "Hur länge håller en ergonomisk kontorsstol?",
+          "answer": "Våra kontorsstolar är tillverkade av hållbara material och håller vid normal användning 5-10 år. Vi ger omfattande garanti på alla delar. Den högkvalitativa konstruktionen säkerställer långvarig stöd och komfort."
+        },
+        {
+          "question": "Kan jag returnera min kontorsstol om den inte passar?",
+          "answer": "Ja, du har 30 dagars ångerrätt. Om kontorsstolen inte uppfyller dina förväntningar kan du returnera den gratis. Vi sörjer för snabb återbetalning så att du kan beställa utan oro."
+        }
+      ]
+    }
+  },
+  "verstelbarebreaus": {
+    "breadcrumb": {
+      "home": "Hem",
+      "products": "Produkter",
+      "desks": "Höj- och sänkbara skrivbord"
+    },
+    "loading": "Laddar höj- och sänkbara skrivbord...",
+    "error": "Fel vid laddning av höj- och sänkbara skrivbord",
+    "retry": "Försök igen",
+    "header": {
+      "title": "Elektriska höj- och sänkbara skrivbord för kontor & hem",
+      "description": "Letar du efter ett höj- och sänkbart skrivbord som revolutionerar din arbetsdag? Hos Deskna hittar du högkvalitativa höj- och sänkbara skrivbord som är elektriskt justerbara och passar perfekt på varje arbetsplats. Idealisk för en hälsosam arbetshållning, med snabb leverans och toppkvalitetsgaranti."
+    },
+    "benefits": {
+      "title": "Varför välja våra höj- och sänkbara skrivbord?",
+      "items": [
+        "Elektriskt justerbar från 65-130cm",
+        "Dubbla motorer för stabilitet",
+        "Minnesfunktion för favorithöjder",
+        "Levereras inom 1-3 arbetsdagar"
+      ]
+    },
+    "guide": {
+      "title": "Vad ska du tänka på vid val av höj- och sänkbart skrivbord?",
+      "content1": "Ett bra höj- och sänkbart skrivbord måste erbjuda mer än bara höjdjustering. Tänk på stabilitet, ljudnivå, justeringshastighet och maximal belastning. Även bordsskivans mått och tillgängliga anslutningar är viktiga för din arbetskomfort.",
+      "content2": "Titta framför allt på kvaliteten på motorsystemet och ramen. Ju starkare konstruktionen är, desto längre håller ditt skrivbord. På Deskna väljer vi endast höj- och sänkbara skrivbord med bevisad hållbarhet och utmärkta ergonomiska egenskaper för en hälsosam arbetshållning."
+    },
+    "seo": {
+      "title": "Höj- och sänkbara skrivbord för en hälsosam arbetshållning",
+      "content1": "Letar du efter ett skrivbord som rör sig med din arbetsdag? Hos Deskna hittar du elektriska höj- och sänkbara skrivbord som förvandlar din arbetsplats. Genom att växla mellan att sitta och stå förbättrar du din hållning, ökar din energi och minskar risken för ryggproblem.",
+      "subtitle1": "Varför välja ett elektriskt höj- och sänkbart skrivbord?",
+      "content2": "Ett elektriskt justerbart skrivbord stimulerar rörelse under din arbetsdag. Att växla mellan sitt- och ståpositioner aktiverar dina muskler, förbättrar din cirkulation och ökar din koncentration. Tack vare den elektriska kontrollen växlar du enkelt position med ett knapptryck.",
+      "subtitle2": "Fördelarna med våra höj- och sänkbara skrivbord",
+      "benefits": [
+        "Elektriskt justerbar från 65-130cm höjd",
+        "Dubbla motorer för maximal stabilitet",
+        "Minnesfunktion för dina favorithöjder",
+        "Tyst drift under 50dB ljudnivå",
+        "Robust stålram med 10 års garanti",
+        "Levereras inom 1-3 arbetsdagar"
+      ]
+    },
+    "faq": {
+      "title": "Vanliga frågor",
+      "subtitle": "Här hittar du svar på de vanligaste frågorna om våra höj- och sänkbara skrivbord. Står din fråga inte med? Kontakta oss gärna!",
+      "questions": [
+        {
+          "question": "Vilket höj- och sänkbart skrivbord är bäst för hemarbete?",
+          "answer": "För hemarbete rekommenderar vi DeskOne. Detta elektriska höj- och sänkbara skrivbord har dubbelt motorsystem, 3 minnespositioner och USB-portar. Perfekt för daglig användning och erbjuder utmärkt stabilitet under justering."
+        },
+        {
+          "question": "Hur ofta ska jag växla mellan att sitta och stå?",
+          "answer": "Experter rekommenderar att växla hållning var 30-60 minut. Börja med 15 minuter stående per timme och bygg gradvis upp. Våra skrivbord har minnespositioner som låter dig snabbt växla mellan dina favorithöjder."
+        },
+        {
+          "question": "Vad är skillnaden mellan enkla och dubbla motorer?",
+          "answer": "Dubbla motorer ger mer kraft, stabilitet och jämn rörelse. De kan bära tyngre vikt och har längre livslängd. Alla våra höj- och sänkbara skrivbord har dubbla motorer för optimal prestanda."
+        },
+        {
+          "question": "Hur mycket vikt kan ett höj- och sänkbart skrivbord bära?",
+          "answer": "Våra höj- och sänkbara skrivbord kan hantera upp till 80kg belastning, inklusive bordsskivan. Detta är mer än tillräckligt för flera skärmar, laptop, dokument och andra kontorsförnödenheter. Den robusta stålramen garanterar stabilitet."
+        },
+        {
+          "question": "Hur tysta är elektriska höj- och sänkbara skrivbord?",
+          "answer": "Våra skrivbord arbetar under 50dB, jämförbart med en mjuk konversation. Genom högkvalitativa motorer och precisionsteknik är de lämpliga för öppna kontor och hemarbete utan att störa kollegor eller familjemedlemmar."
+        },
+        {
+          "question": "Kan jag returnera mitt höj- och sänkbara skrivbord om det inte passar?",
+          "answer": "Ja, du har 30 dagars ångerrätt. Om skrivbordet inte uppfyller dina förväntningar kan du returnera det gratis. Vi organiserar hämtningstjänsten och sörjer för snabb återbetalning."
+        }
+      ]
+    }
+  },
+  "contact": {
+    "metadata": {
+      "title": "Kontakt | DESKNA - Ergonomiska Arbetsplatser",
+      "description": "Kontakta DESKNA för frågor om ergonomiska kontorsstolar och höj- och sänkbara skrivbord. Personlig rådgivning, produktinformation och kundservice. Nå oss via telefon 085 060 2482, e-post eller kontaktformulär."
+    },
+    "header": {
+      "title": "Kontakta oss",
+      "subtitle": "Har du en fråga om våra produkter eller service? Tväka inte att kontakta oss. Vi hjälper dig gärna!"
+    },
+    "info": {
+      "title": "Kontaktuppgifter",
+      "phone": {
+        "title": "Telefon",
+        "number": "085 060 2482",
+        "description": "För frågor och support"
+      },
+      "email": {
+        "title": "E-post",
+        "address": "info@deskna.se",
+        "description": "Vi svarar inom 24 timmar"
+      },
+      "hours": {
+        "title": "Öppettider",
+        "weekdays": "Måndag - Fredag: 07:00 - 16:00",
+        "weekend": "Helg: Stängt"
+      },
+      "address": {
+        "title": "Adress",
+        "company": "DESKNA",
+        "country": "Sverige"
+      },
+      "quickActions": {
+        "title": "Snabba åtgärder",
+        "call": "Ring oss nu",
+        "email": "Skicka e-post"
+      }
+    },
+    "form": {
+      "title": "Skicka oss ett meddelande",
+      "firstName": "Förnamn",
+      "lastName": "Efternamn",
+      "email": "E-postadress",
+      "phone": "Telefonnummer (valfritt)",
+      "subject": {
+        "label": "Ämne",
+        "placeholder": "Välj ett ämne",
+        "options": {
+          "productQuestion": "Produktfråga",
+          "order": "Beställning",
+          "return": "Retur/Byte",
+          "support": "Teknisk support",
+          "complaint": "Klagomål",
+          "other": "Annat"
+        }
+      },
+      "message": {
+        "label": "Meddelande",
+        "placeholder": "Beskriv din fråga eller kommentar..."
+      },
+      "submit": "Skicka meddelande"
+    },
+    "faq": {
+      "title": "Vanliga frågor",
+      "subtitle": "Kanske står din fråga redan här",
+      "questions": [
+        {
+          "question": "Hur kan jag kontakta er?",
+          "answer": "Du kan nå oss via telefon (085 060 2482), e-post (info@deskna.se) eller via kontaktformuläret på denna sida."
+        },
+        {
+          "question": "Vad är öppettiderna?",
+          "answer": "Vi är tillgängliga från måndag till fredag från 07:00 till 16:00."
+        },
+        {
+          "question": "Hur snabbt får jag svar?",
+          "answer": "Vi svarar inom 24 timmar på e-post och meddelanden via kontaktformuläret. För telefonfrågor är vi direkt tillgängliga under öppettider."
+        },
+        {
+          "question": "Kan jag besöka ett showroom?",
+          "answer": "Kontakta oss för att diskutera möjligheterna och boka ett möte."
+        }
+      ]
+    }
+  },
+  "about": {
+    "breadcrumb": {
+      "home": "Hem",
+      "about": "Om Oss"
+    },
+    "hero": {
+      "title": "Om",
+      "titleBrand": "DESKNA",
+      "subtitle": "Vi är passionerade om att skapa ergonomiska arbetsplatser som inte bara erbjuder komfort, utan också bidrar till en hälsosammare och mer produktiv arbetsdag.",
+      "stats": {
+        "customers": {
+          "number": "1500+",
+          "label": "Nöjda kunder"
+        },
+        "rating": {
+          "number": "4,8",
+          "label": "Stjärnbetyg"
+        },
+        "experience": {
+          "number": "5+",
+          "label": "Års erfarenhet"
+        }
+      }
+    },
+    "mission": {
+      "title": "Vår Mission & Värderingar",
+      "subtitle": "På DESKNA tror vi att alla har rätt till en hälsosam och bekväm arbetsplats. Därför utvecklar vi produkter som inte bara är funktionella, utan också bidrar till ditt välbefinnande.",
+      "values": [
+        {
+          "title": "Kvalitet",
+          "description": "Vi använder endast de bästa materialen och produktionsteknikerna för att skapa produkter som håller i år och behåller sin funktionalitet."
+        },
+        {
+          "title": "Ergonomi",
+          "description": "Varje produkt är designad med den mänskliga anatomin i åtanke, så att du kan arbeta bekvämt och hälsosamt, dag efter dag."
+        },
+        {
+          "title": "Service",
+          "description": "Från snabb leverans till utmärkt kundservice - vi säkerställer en bekymmersfri upplevelse från beställning till montering."
+        }
+      ]
+    },
+    "story": {
+      "title": "Vår Historia",
+      "content": [
+        "DESKNA föddes ur frustration över den dåliga kvaliteten och höga priserna på ergonomiska arbetsplatsprodukter. Vi såg för många människor kämpa med ryggproblem och obekväma arbetsplatser.",
+        "Därför bestämde vi oss för att själva utveckla de bästa ergonomiska skrivborden och stolarna. Produkter som inte bara är prisvärda, utan också uppfyller de högsta kvalitetskraven och ergonomiska standarderna.",
+        "Idag hjälper vi mer än 1500 nöjda kunder att skapa sin perfekta arbetsplats. Och det är bara början."
+      ],
+      "cta": "Se våra produkter",
+      "stats": [
+        {
+          "number": "25",
+          "label": "Minuters montering"
+        },
+        {
+          "number": "5",
+          "label": "Års garanti"
+        },
+        {
+          "number": "100%",
+          "label": "Hållbart"
+        },
+        {
+          "number": "24/7",
+          "label": "Support"
+        }
+      ]
+    },
+    "team": {
+      "title": "Vårt Team",
+      "subtitle": "Möt människorna bakom DESKNA - ett team av experter som är passionerade om ergonomi och kundnöjdhet.",
+      "members": [
+        {
+          "name": "Chris",
+          "role": "Produktchef",
+          "description": "Ansvarig för produktinnovation och kvalitetskontroll. Chris säkerställer att varje produkt uppfyller våra höga standarder."
+        },
+        {
+          "name": "Joep",
+          "role": "Kundframgång",
+          "description": "Joep säkerställer att varje kund får den bästa upplevelsen, från beställning till montering och eftervård."
+        },
+        {
+          "name": "Drs. Kristel Woltman",
+          "role": "Ergonomiexpert",
+          "description": "Som fysioterapeut rådger Kristel oss om de ergonomiska aspekterna av våra produkter för optimala hälsofördelar."
+        }
+      ]
+    },
+    "whyUs": {
+      "title": "Varför DESKNA?",
+      "subtitle": "Upptäck vad som skiljer oss från andra leverantörer av arbetsplatsprodukter.",
+      "features": [
+        {
+          "title": "Snabb Leverans",
+          "description": "Levereras inom 1-2 arbetsdagar"
+        },
+        {
+          "title": "Expertsupport",
+          "description": "Personlig rådgivning från specialister"
+        },
+        {
+          "title": "Kvalitetsgaranti",
+          "description": "5 års garanti på alla produkter"
+        },
+        {
+          "title": "Högt Betyg",
+          "description": "4,8/5 stjärnor från 1500+ kunder"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Redo för din perfekta arbetsplats?",
+      "subtitle": "Upptäck vår kollektion av ergonomiska skrivbord och stolar och upplev skillnaden som kvalitet och komfort gör.",
+      "shopNow": "Handla nu",
+      "takeQuiz": "Gör arbetsplatsquizzen"
+    }
+  },
+  "b2b": {
+    "metadata": {
+      "title": "B2B-lösningar | DESKNA - Ergonomiska arbetsplatser för företag",
+      "description": "Professionella ergonomiska arbetsplatslösningar för företag. Volymrabatter på höj- och sänkbara skrivbord och kontorsstolar, skräddarsydd service, utökad garanti och dedikerad kontohantering för företagskunder och stora organisationer."
+    },
+    "header": {
+      "title": "B2B-lösningar",
+      "subtitle": "Professionella arbetsplatslösningar för företag av alla storlekar"
+    },
+    "benefits": [
+      {
+        "title": "Volymrabatter",
+        "description": "Attraktiva priser vid större mängder för hela ditt kontor."
+      },
+      {
+        "title": "Personlig rådgivning",
+        "description": "Våra ergonomiexperter hjälper till med att inreda ditt kontor."
+      },
+      {
+        "title": "Helhetsservice",
+        "description": "Från rådgivning till leverans och montering - vi tar hand om allt åt dig."
+      }
+    ],
+    "services": {
+      "title": "Våra B2B-tjänster",
+      "items": [
+        {
+          "title": "Kontorsinredning",
+          "features": [
+            "Komplett kontorsergonomianalys",
+            "Skräddarsydda lösningar för ditt utrymme",
+            "3D-visualisering av ditt nya kontor",
+            "Projektledning från A till Ö"
+          ]
+        },
+        {
+          "title": "Leasing & Finansiering",
+          "features": [
+            "Flexibla leasingalternativ",
+            "Betalning mot faktura möjlig",
+            "Uppdelade betalningar",
+            "Företagsgarantivillkor"
+          ]
+        },
+        {
+          "title": "Underhåll & Service",
+          "features": [
+            "Förebyggande underhållsavtal",
+            "24/7 teknisk support",
+            "Snabb reparationsservice",
+            "Utbyte vid defekter"
+          ]
+        },
+        {
+          "title": "Utbildning & Träning",
+          "features": [
+            "Ergonomiworkshoppar för anställda",
+            "Instruktioner för optimal användning",
+            "Hälso- och välbefinnandeprogram",
+            "Online-utbildningsmoduler"
+          ]
+        }
+      ]
+    },
+    "cta": {
+      "title": "Redo för en professionell arbetsplats?",
+      "subtitle": "Låt oss göra en skräddarsydd offert för ditt företag.",
+      "requestQuote": "Begär offert",
+      "callForAdvice": "Ring för rådgivning",
+      "emailSubject": "B2B Offertförfrågan"
+    }
+  },
+  "privacy": {
+    "metadata": {
+      "title": "Integritetspolicy | DESKNA",
+      "description": "Läs vår integritetspolicy och upptäck hur DESKNA hanterar dina personuppgifter. Transparens och integritet står i fokus för oss."
+    },
+    "header": {
+      "title": "Integritetspolicy",
+      "subtitle": "Hur vi hanterar dina personuppgifter"
+    },
+    "sections": [
+      {
+        "title": "1. Inledning",
+        "content": [
+          "DESKNA värnar om skyddet av dina personuppgifter och våra besökares integritet. Vi hanterar personuppgifter varsamt och följer gällande lagar och regler, inklusive den allmänna dataskyddsförordningen (GDPR).",
+          "I denna integritetspolicy förklarar vi vilka personuppgifter vi samlar in, varför vi samlar in dem, hur vi använder dem och vilka rättigheter du har gällande dina personuppgifter.",
+          "Denna integritetspolicy gäller för alla tjänster som erbjuds av DESKNA via vår webbplats, webbutik och andra kanaler."
+        ]
+      },
+      {
+        "title": "2. Vilka uppgifter samlar vi in?",
+        "intro": "Vi samlar endast in de personuppgifter som är nödvändiga för att utföra våra tjänster. Detta kan vara följande uppgifter:",
+        "categories": [
+          {
+            "title": "Kontaktuppgifter:",
+            "items": [
+              "För- och efternamn",
+              "E-postadress",
+              "Telefonnummer",
+              "Företagsnamn (om tillämpligt)"
+            ]
+          },
+          {
+            "title": "Adressuppgifter:",
+            "items": [
+              "Gatunamn och husnummer",
+              "Postnummer och ort",
+              "Land",
+              "Avvikande leveransadress (om tillämpligt)"
+            ]
+          },
+          {
+            "title": "Beställningsuppgifter:",
+            "items": [
+              "Beställningshistorik",
+              "Produktpreferenser",
+              "Betalningsuppgifter (via säkra externa tjänster)",
+              "Kommunikation om din beställning"
+            ]
+          },
+          {
+            "title": "Webbanvändningsdata:",
+            "items": [
+              "IP-adress",
+              "Webbläsartyp och -version",
+              "Besökta sidor och klickbeteende",
+              "Cookies och liknande tekniker"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "3. Varför samlar vi in dessa uppgifter?",
+        "intro": "Vi använder dina personuppgifter för följande ändamål:",
+        "purposes": [
+          "Behandla och hantera dina beställningar",
+          "Leverera produkter till den adress du angett",
+          "Skicka orderbestäkelser och statusuppdateringar",
+          "Svara på frågor och erbjuda kundservice",
+          "Förbättra vår webbplats och tjänster",
+          "Följa lagliga skyldigheter",
+          "Skicka nyhetsbrev (endast med ditt samtycke)"
+        ]
+      },
+      {
+        "title": "4. Dina rättigheter",
+        "intro": "Enligt GDPR har du flera rättigheter gällande dina personuppgifter:",
+        "rights": [
+          {
+            "title": "Rätt till tillgång",
+            "description": "Du kan begära information om vilka uppgifter vi har om dig"
+          },
+          {
+            "title": "Rätt till rättelse",
+            "description": "Du kan få felaktiga uppgifter korrigerade"
+          },
+          {
+            "title": "Rätt till radering",
+            "description": "Du kan begära att dina uppgifter raderas"
+          },
+          {
+            "title": "Rätt till begränsning",
+            "description": "Du kan begränsa behandlingen av dina uppgifter"
+          },
+          {
+            "title": "Rätt till dataportabilitet",
+            "description": "Du kan begära dina uppgifter i ett läsbart format"
+          },
+          {
+            "title": "Rätt att göra invändningar",
+            "description": "Du kan invända mot behandlingen av dina uppgifter"
+          }
+        ]
+      }
+    ],
+    "contact": {
+      "title": "Kontakt",
+      "intro": "Har du frågor om denna integritetspolicy eller vill du utöva dina rättigheter? Kontakta oss:",
+      "company": "DESKNA",
+      "email": "E-post: privacy@deskna.se",
+      "phone": "Telefon: 085 060 2482",
+      "address": "Adress: Sverige"
+    },
+    "lastUpdated": "Senast uppdaterad: Januari 2024"
+  }
+}

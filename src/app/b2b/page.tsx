@@ -1,4 +1,6 @@
+import B2BClient from './B2BClient';
 import { Metadata } from 'next';
+<<<<<<< HEAD
 import MacOSCalculator from '@/components/MacOSCalculator';
 
 export const metadata: Metadata = {
@@ -166,9 +168,23 @@ export default function B2B() {
       </div>
     </div>
   );
+=======
+import { getTranslations, getLocale } from '@/lib/i18n-server';
+import { getTranslation } from '@/lib/i18n-shared';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const translations = await getTranslations();
+  
+  return {
+    title: getTranslation(translations, 'b2b.metadata.title'),
+    description: getTranslation(translations, 'b2b.metadata.description'),
+  };
+>>>>>>> bc2de36bea2326e7e2bb9a9413c983a360f3ff8c
 }
 
-
-
-
-
+export default async function B2BPage() {
+  const translations = await getTranslations();
+  const locale = await getLocale();
+  
+  return <B2BClient translations={translations} locale={locale} />;
+}

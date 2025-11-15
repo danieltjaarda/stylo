@@ -1,5 +1,7 @@
-'use client';
+import VerstelbareBureausClient from './VerstelbareBureausClient';
+import { getTranslations, getLocale } from '@/lib/i18n-server';
 
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -354,3 +356,11 @@ export default function VerstelbareBureausPage() {
     </div>
   );
 }
+=======
+export default async function VerstelbareBureausPage() {
+  const translations = await getTranslations();
+  const locale = await getLocale();
+  
+  return <VerstelbareBureausClient translations={translations} locale={locale} />;
+}
+>>>>>>> bc2de36bea2326e7e2bb9a9413c983a360f3ff8c

@@ -9,10 +9,17 @@ export async function GET(
 ) {
   try {
     const { handle } = await params;
-    console.log(`🔍 Fetching collection: ${handle}`);
+    
+    // Detect domain from request headers
+    const host = request.headers.get('host') || '';
+    const isSwedish = host.includes('deskna.se');
+    const language = isSwedish ? 'SV' : 'NL';
+    const country = isSwedish ? 'SE' : 'NL';
+    
+    console.log(`🔍 Fetching collection: ${handle}, domain: ${host}, language: ${language}, country: ${country}`);
 
     const query = `
-      query getCollection($handle: String!) {
+      query getCollection($handle: String!, $language: LanguageCode!, $country: CountryCode!) @inContext(language: $language, country: $country) {
         collection(handle: $handle) {
           id
           title
@@ -142,7 +149,11 @@ export async function GET(
       },
       body: JSON.stringify({
         query,
-        variables: { handle }
+        variables: { 
+          handle,
+          language,
+          country
+        }
       }),
     });
 

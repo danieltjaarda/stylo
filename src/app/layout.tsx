@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CookieConsentProvider } from "@/contexts/CookieConsentContext";
 import { StickyCartProvider } from "@/contexts/StickyCartContext";
+import { getLocale, getTranslations } from "@/lib/i18n-server";
 // import PerformanceOptimizer from "@/components/PerformanceOptimizer"; // Temporarily disabled
 // import PerformanceMonitor from "@/components/PerformanceMonitor"; // Temporarily disabled
 // Import dynamically loaded client components
@@ -27,59 +28,65 @@ const nunito = Nunito({
   variable: "--font-nunito",
 });
 
-export const metadata: Metadata = {
-  title: "DESKNA - Ergonomische Bureaustoelen & Zit-Sta Bureaus",
-  description: "Ontdek de perfecte ergonomische bureaustoelen en elektrische zit-sta bureaus bij DESKNA. In hoogte verstelbare bureaus, ergonomische stoelen en kantooraccessoires voor jouw ideale werkplek. Gratis verzending, 5 jaar garantie en 30 dagen retourneren.",
-  keywords: "ergonomische bureaustoelen, zit-sta bureaus, verstelbare bureaus, kantoormeubels, thuiswerken, ergonomie, werkplek, bureaustoelen",
-  authors: [{ name: "DESKNA" }],
-  creator: "DESKNA",
-  publisher: "DESKNA",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+export async function generateMetadata(): Promise<Metadata> {
+  const translations = await getTranslations();
+  const locale = await getLocale();
+  
+  return {
+    title: translations.seo.title,
+    description: translations.seo.description,
+    keywords: translations.seo.keywords,
+    authors: [{ name: "DESKNA" }],
+    creator: "DESKNA",
+    publisher: "DESKNA",
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  icons: {
-    icon: '/favicon logo.png',
-    shortcut: '/favicon logo.png',
-    apple: '/favicon logo.png',
-  },
-  metadataBase: new URL('https://deskna.nl'),
-  openGraph: {
-    type: 'website',
-    locale: 'nl_NL',
-    url: 'https://deskna.nl',
-    siteName: 'DESKNA',
-    title: 'DESKNA - Ergonomische Bureaustoelen & Zit-Sta Bureaus',
-    description: 'Ontdek de perfecte ergonomische bureaustoelen en elektrische zit-sta bureaus bij DESKNA.',
-    images: [
-      {
-        url: '/banner.webp',
-        width: 1200,
-        height: 630,
-        alt: 'DESKNA - Ergonomische Werkplekken',
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
       },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'DESKNA - Ergonomische Bureaustoelen & Zit-Sta Bureaus',
-    description: 'Ontdek de perfecte ergonomische bureaustoelen en elektrische zit-sta bureaus bij DESKNA.',
-    images: ['/banner.webp'],
-  },
-};
+    },
+    icons: {
+      icon: '/favicon logo.png',
+      shortcut: '/favicon logo.png',
+      apple: '/favicon logo.png',
+    },
+    metadataBase: new URL(locale === 'sv' ? 'https://deskna.se' : 'https://deskna.nl'),
+    openGraph: {
+      type: 'website',
+      locale: locale === 'sv' ? 'sv_SE' : 'nl_NL',
+      url: locale === 'sv' ? 'https://deskna.se' : 'https://deskna.nl',
+      siteName: 'DESKNA',
+      title: translations.seo.title,
+      description: translations.seo.description,
+      images: [
+        {
+          url: '/banner.webp',
+          width: 1200,
+          height: 630,
+          alt: 'DESKNA',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: translations.seo.title,
+      description: translations.seo.description,
+      images: ['/banner.webp'],
+    },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+<<<<<<< HEAD
   // Global Schema.org structured data
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -187,6 +194,14 @@ export default function RootLayout({
           }}
         />
         
+=======
+  const locale = await getLocale();
+  const translations = await getTranslations();
+  
+  return (
+    <html lang={locale === 'sv' ? 'sv' : 'nl'}>
+      <head>
+>>>>>>> bc2de36bea2326e7e2bb9a9413c983a360f3ff8c
         {/* Google Tag Manager Script */}
         {process.env.NEXT_PUBLIC_GTM_ID && (
           <>
@@ -227,15 +242,15 @@ export default function RootLayout({
           <StickyCartProvider>
             {/* <PerformanceOptimizer /> */}
             {/* <PerformanceMonitor /> */}
-            <Header />
+            <Header translations={translations} locale={locale} />
           <main className="flex-1">
             {children}
           </main>
-          <Footer />
-          <Cart />
+          <Footer translations={translations} locale={locale} />
+          <Cart translations={translations} locale={locale} />
           <FloatingWhatsApp />
-          <EmailPopup />
-          <CookieBanner />
+          <EmailPopup translations={translations} locale={locale} />
+          <CookieBanner translations={translations} locale={locale} />
           </StickyCartProvider>
           
           {/* Conditional Analytics Scripts */}

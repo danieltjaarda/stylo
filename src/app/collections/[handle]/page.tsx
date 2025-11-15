@@ -10,10 +10,15 @@ import WhatsAppWidget from '@/components/WhatsAppWidget';
 import WidgetsSection from '@/components/WidgetsSection';
 import FAQ from '@/components/FAQ';
 import { Product } from '@/types';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
+import { translations } from '@/lib/i18n-shared';
 
 export default function CollectionPage() {
   const params = useParams();
   const handle = params.handle as string;
+  const locale: Locale = 'nl'; // Default to nl
+  const currentTranslations = translations[locale];
+  const { t } = useTranslation(currentTranslations);
   
   const [products, setProducts] = useState<Product[]>([]);
   const [collectionTitle, setCollectionTitle] = useState<string>('');
@@ -32,27 +37,26 @@ export default function CollectionPage() {
         const collectionProducts = await getShopifyCollection(handle);
         
         if (collectionProducts.length > 0) {
-          console.log('✅ Collection products loaded:', collectionProducts);
+          console.log(`✅ Collection products loaded:`, collectionProducts);
           setProducts(collectionProducts);
           
           // Set collection title based on handle
-          const titleMap: Record<string, string> = {
+          const titles: { [key: string]: string } = {
+            'bureaustoelen': 'Bureaustoelen',
+            'verstelbare-bureaus': 'Verstelbare Bureaus',
             'shop-alles': 'Alle Producten',
-            'bureau-stoelen': 'Bureau Stoelen',
-            'featured': 'Uitgelichte Producten',
-            'frontpage': 'Homepage Collectie'
+            'accessoires': 'Accessoires'
           };
-          setCollectionTitle(titleMap[handle] || handle.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()));
+          setCollectionTitle(titles[handle] || 'Producten');
         } else {
-          console.log('⚠️ No collection products found');
+          console.log(`⚠️ No products found for collection: ${handle}`);
           setProducts([]);
-          setCollectionTitle('Alle Producten');
+          setError('Geen producten gevonden');
         }
       } catch (error) {
-        console.error('Error loading collection:', error);
-        setError('Failed to load collection products');
+        console.error(`Error loading collection ${handle}:`, error);
+        setError('Fout bij het laden van producten');
         setProducts([]);
-        setCollectionTitle('Alle Producten');
       } finally {
         setLoading(false);
       }
@@ -67,7 +71,7 @@ export default function CollectionPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Collectie laden...</p>
+            <p className="mt-4 text-gray-600">Producten laden...</p>
           </div>
         </div>
       </div>
@@ -92,29 +96,15 @@ export default function CollectionPage() {
     );
   }
 
-  // Get collection display name
-  const getCollectionDisplayName = (handle: string) => {
-    switch (handle) {
-      case 'shop-alles':
-        return 'Shop Alles';
-      case 'bureau-stoelen':
-        return 'Bureaustoelen';
-      case 'zit-sta-bureaus':
-        return 'Zit-Sta Bureaus';
-      default:
-        return handle.charAt(0).toUpperCase() + handle.slice(1).replace(/-/g, ' ');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumbs */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex" aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2">
+            <ol className="flex items-center space-x-2 text-sm">
               <li>
-                <Link href="/" className="text-gray-500 hover:text-gray-700 transition-colors">
+                <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
                   Home
                 </Link>
               </li>
@@ -122,7 +112,7 @@ export default function CollectionPage() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </li>
               <li>
-                <Link href="/products" className="text-gray-500 hover:text-gray-700 transition-colors">
+                <Link href="/products" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
                   Producten
                 </Link>
               </li>
@@ -130,8 +120,8 @@ export default function CollectionPage() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </li>
               <li>
-                <span className="text-gray-900 font-medium">
-                  {getCollectionDisplayName(handle)}
+                <span className="text-gray-900 font-semibold">
+                  {collectionTitle}
                 </span>
               </li>
             </ol>
@@ -139,15 +129,12 @@ export default function CollectionPage() {
         </div>
       </div>
 
-      <div className="py-12">
+      <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
+          <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {collectionTitle}
             </h1>
-            <p className="text-xl text-gray-600">
-              Ontdek onze {collectionTitle.toLowerCase()} collectie
-            </p>
           </div>
 
           <ProductCollection 
@@ -162,7 +149,7 @@ export default function CollectionPage() {
       <WidgetsSection />
 
       {/* WhatsApp Widget */}
-      <WhatsAppWidget />
+      <WhatsAppWidget translations={currentTranslations} locale={locale} />
 
       {/* FAQ Section */}
       <FAQ />

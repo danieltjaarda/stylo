@@ -11,8 +11,24 @@ import { getShopifyCollection } from '@/services/shopifyService';
 import { Product } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Translations, Locale, useTranslation, translations } from '@/lib/i18n-shared';
 
 function ProductsContent() {
+  // Get locale from URL or default to 'nl'
+  const [locale, setLocale] = useState<Locale>('nl');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const langParam = params.get('lang');
+      if (langParam === 'sv') {
+        setLocale('sv');
+      }
+    }
+  }, []);
+  
+  const currentTranslations = translations[locale];
+  const { t } = useTranslation(currentTranslations);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('name');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -318,7 +334,7 @@ function ProductsContent() {
               <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 text-gray-900 flex-shrink-0 w-[85vw] sm:w-[80vw] lg:w-auto snap-center">
                 <div className="absolute top-4 left-4">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white">
-                    16% korting
+                    {t('home.productsSection.discount', { percentage: 16 })}
                   </span>
                 </div>
                 <div className="relative p-8 h-[500px] flex flex-col">
@@ -434,12 +450,12 @@ function ProductsContent() {
                   />
                   <span className="text-sm font-medium text-gray-600">4.8</span>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                  Wat zeggen <span style={{ color: '#4a6b5a' }}>onze klanten?</span>
-                </h2>
-                <p className="text-gray-600 text-sm">
-                  Lees hier wat voor beoordeling andere klanten ons geven.
-                </p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                {t('home.reviewsSection.title')} <span style={{ color: '#4a6b5a' }}>{t('home.reviewsSection.titleHighlight')} {t('home.reviewsSection.titleEnd')}</span>
+              </h2>
+              <p className="text-gray-600 text-sm">
+                {t('home.reviewsSection.subtitle')}
+              </p>
               </div>
 
               {/* Mobile Reviews Carousel */}
@@ -448,7 +464,7 @@ function ProductsContent() {
                   <div key={index} className="bg-white rounded-xl p-6 flex-shrink-0 w-80 shadow-sm border border-gray-100">
                     <div className="mb-4">
                       <Quote className="w-8 h-8 mb-3" style={{ color: '#00B67A', fill: '#00B67A' }} />
-                      <h3 className="font-semibold text-gray-900 mb-1">{review.title || 'Tevreden klant'}</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1">{review.title || t('home.reviewsSection.defaultCustomer')}</h3>
                       <div className="flex items-center mb-3">
                         <Image 
                           src="/trustpilot-stars-new.png" 
@@ -494,7 +510,7 @@ function ProductsContent() {
                     height={20}
                     className="mr-3"
                   />
-                  <span className="text-sm font-medium">1500+ beoordelingen op</span>
+                  <span className="text-sm font-medium">1500+ {t('home.reviewsSection.trustpilot.reviewsOn')}</span>
                   <Image 
                     src="/Trustpilot-logo.png" 
                     alt="Trustpilot ster" 
@@ -504,11 +520,11 @@ function ProductsContent() {
                   />
                   <span className="text-sm font-medium">Trustpilot</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl text-gray-900 mb-4 italic">
-                  Wat zeggen<br />
-                  <span style={{ color: '#d6a99e' }}>onze</span><br />
-                  klanten?
-                </h2>
+              <h2 className="text-4xl md:text-5xl text-gray-900 mb-4 italic">
+                {t('home.reviewsSection.title')}<br />
+                <span style={{ color: '#d6a99e' }}>{t('home.reviewsSection.titleHighlight')}</span><br />
+                {t('home.reviewsSection.titleEnd')}
+              </h2>
                 <p className="text-lg text-gray-700">
                   Lees hier wat voor beoordeling andere klanten ons geven.
                 </p>

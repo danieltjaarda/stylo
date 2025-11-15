@@ -1,5 +1,7 @@
-'use client';
+import BureauStoelenClient from './BureauStoelenClient';
+import { getTranslations, getLocale } from '@/lib/i18n-server';
 
+<<<<<<< HEAD
 import { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -431,4 +433,11 @@ export default function BureauStoelenPage() {
       <WhatsAppWidget />
     </div>
   );
+=======
+export default async function BureauStoelenPage() {
+  const translations = await getTranslations();
+  const locale = await getLocale();
+  
+  return <BureauStoelenClient translations={translations} locale={locale} />;
+>>>>>>> bc2de36bea2326e7e2bb9a9413c983a360f3ff8c
 }

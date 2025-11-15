@@ -6,8 +6,15 @@ import { X } from 'lucide-react';
 import Image from 'next/image';
 import EmailPopupTrigger from './EmailPopupTrigger';
 import { subscribeToKlaviyo, trackKlaviyoEvent, sendDiscountEmail } from '@/services/klaviyoService';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
-export default function EmailPopup() {
+interface EmailPopupProps {
+  translations: Translations;
+  locale: Locale;
+}
+
+export default function EmailPopup({ translations, locale }: EmailPopupProps) {
+  const { t } = useTranslation(translations);
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -108,7 +115,7 @@ export default function EmailPopup() {
         }, 2000);
       } else {
         console.error('Newsletter signup failed:', result.error);
-        alert('Er ging iets mis bij het aanmelden. Probeer het opnieuw.');
+        alert(t('emailPopup.error'));
       }
       
     } catch (error) {
@@ -170,7 +177,7 @@ export default function EmailPopup() {
                     handleClose();
                   }}
                 >
-                  <span className="sr-only">Sluiten</span>
+                  <span className="sr-only">{t('emailPopup.closeButton')}</span>
                   <X className="h-5 w-5" aria-hidden="true" />
                 </button>
 
@@ -186,7 +193,7 @@ export default function EmailPopup() {
                       {/* Title */}
                       <div className="text-center mb-6 mt-4">
                         <h2 className="text-3xl font-black text-gray-900 mb-2">
-                          Ontgrendel <span style={{ color: '#fe8b51' }}>voor 5% korting!</span>
+                          {t('emailPopup.title')} <span style={{ color: '#fe8b51' }}>{t('emailPopup.titleHighlight')}</span>
                         </h2>
                       </div>
 
@@ -197,7 +204,7 @@ export default function EmailPopup() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Voer je e-mailadres in"
+                            placeholder={t('emailPopup.emailPlaceholder')}
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                             required
                           />
@@ -208,7 +215,7 @@ export default function EmailPopup() {
                           disabled={isLoading || !email}
                           className="w-full bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-800 disabled:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                          {isLoading ? 'BEZIG...' : 'ONTGRENDEL JE KORTING'}
+                          {isLoading ? t('emailPopup.submitButtonLoading') : t('emailPopup.submitButton')}
                         </button>
 
                         <button
@@ -216,7 +223,7 @@ export default function EmailPopup() {
                           onClick={handleSaveLater}
                           className="w-full bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-300 transition-colors"
                         >
-                          KORTING BEWAREN VOOR LATER
+                          {t('emailPopup.saveLaterButton')}
                         </button>
                       </form>
 
@@ -229,15 +236,15 @@ export default function EmailPopup() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">Bedankt!</h3>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('emailPopup.success.title')}</h3>
                       <p className="text-gray-600 mb-4">
-                        Je kortingscode is onderweg naar je inbox!
+                        {t('emailPopup.success.message')}
                       </p>
                       <div className="flex items-center gap-2 text-sm text-gray-600 font-medium p-3 border border-gray-200 rounded-lg">
                         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                         </svg>
-                        <span>Check ook je spam/ongewenste e-mail folder!</span>
+                        <span>{t('emailPopup.success.spamWarning')}</span>
                       </div>
                     </div>
                   )}

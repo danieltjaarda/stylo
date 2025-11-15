@@ -3,8 +3,15 @@
 import React, { useState } from 'react';
 import { useCookieConsent } from '@/contexts/CookieConsentContext';
 import { X, Settings, Shield, BarChart3, Target } from 'lucide-react';
+import { Translations, Locale, useTranslation } from '@/lib/i18n-shared';
 
-export default function CookieBanner() {
+interface CookieBannerProps {
+  translations: Translations;
+  locale: Locale;
+}
+
+export default function CookieBanner({ translations, locale }: CookieBannerProps) {
+  const { t } = useTranslation(translations);
   const { hasConsent, acceptAll, acceptNecessaryOnly, updateConsent, consent } = useCookieConsent();
   const [showSettings, setShowSettings] = useState(false);
   const [tempConsent, setTempConsent] = useState({
@@ -36,11 +43,11 @@ export default function CookieBanner() {
         <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Cookie Instellingen</h2>
+            <h2 className="text-xl font-semibold text-gray-900">{t('cookies.settings.title')}</h2>
             <button
               onClick={() => setShowSettings(false)}
               className="text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Sluit instellingen"
+              aria-label={t('cookies.settings.close')}
             >
               <X className="w-5 h-5" />
             </button>
@@ -49,8 +56,7 @@ export default function CookieBanner() {
           {/* Content */}
           <div className="p-6 space-y-6">
             <p className="text-gray-600">
-              We gebruiken cookies om je ervaring op onze website te verbeteren. 
-              Je kunt hieronder aangeven welke cookies je wilt accepteren.
+              {t('cookies.settings.description')}
             </p>
 
             {/* Necessary Cookies */}
@@ -58,15 +64,14 @@ export default function CookieBanner() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
                   <Shield className="w-5 h-5 text-green-600" />
-                  <h3 className="font-medium text-gray-900">Noodzakelijke Cookies</h3>
+                  <h3 className="font-medium text-gray-900">{t('cookies.settings.necessary.title')}</h3>
                 </div>
                 <div className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
-                  Altijd actief
+                  {t('cookies.settings.necessary.status')}
                 </div>
               </div>
               <p className="text-sm text-gray-600">
-                Deze cookies zijn essentieel voor het functioneren van de website. 
-                Ze kunnen niet worden uitgeschakeld.
+                {t('cookies.settings.necessary.description')}
               </p>
             </div>
 
@@ -75,7 +80,7 @@ export default function CookieBanner() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
                   <BarChart3 className="w-5 h-5 text-blue-600" />
-                  <h3 className="font-medium text-gray-900">Statistiek Cookies</h3>
+                  <h3 className="font-medium text-gray-900">{t('cookies.settings.statistics.title')}</h3>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -88,8 +93,7 @@ export default function CookieBanner() {
                 </label>
               </div>
               <p className="text-sm text-gray-600">
-                Deze cookies helpen ons begrijpen hoe bezoekers onze website gebruiken. 
-                Bijvoorbeeld Google Analytics.
+                {t('cookies.settings.statistics.description')}
               </p>
             </div>
 
@@ -98,7 +102,7 @@ export default function CookieBanner() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
                   <Target className="w-5 h-5 text-purple-600" />
-                  <h3 className="font-medium text-gray-900">Marketing Cookies</h3>
+                  <h3 className="font-medium text-gray-900">{t('cookies.settings.marketing.title')}</h3>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -111,8 +115,7 @@ export default function CookieBanner() {
                 </label>
               </div>
               <p className="text-sm text-gray-600">
-                Deze cookies worden gebruikt voor gepersonaliseerde advertenties. 
-                Bijvoorbeeld Meta Pixel (Facebook).
+                {t('cookies.settings.marketing.description')}
               </p>
             </div>
           </div>
@@ -123,13 +126,13 @@ export default function CookieBanner() {
               onClick={handleSaveSettings}
               className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
             >
-              Instellingen Opslaan
+              {t('cookies.settings.save')}
             </button>
             <button
               onClick={() => setShowSettings(false)}
               className="flex-1 bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
             >
-              Annuleren
+              {t('cookies.settings.cancel')}
             </button>
           </div>
         </div>
@@ -144,18 +147,17 @@ export default function CookieBanner() {
           {/* Content */}
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              🍪 We gebruiken cookies
+              {t('cookies.banner.title')}
             </h3>
             <p className="text-gray-600 text-sm lg:text-base">
-              We gebruiken cookies om je ervaring te verbeteren en onze website te analyseren. 
-              Door verder te gaan, ga je akkoord met ons cookiebeleid.{' '}
+              {t('cookies.banner.description')}{' '}
               <a 
                 href="/privacy" 
                 className="text-blue-600 hover:text-blue-800 underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Meer informatie
+                {t('cookies.banner.moreInfo')}
               </a>
             </p>
           </div>
@@ -167,19 +169,19 @@ export default function CookieBanner() {
               className="flex items-center justify-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               <Settings className="w-4 h-4" />
-              <span>Instellingen</span>
+              <span>{t('cookies.banner.settings')}</span>
             </button>
             <button
               onClick={acceptNecessaryOnly}
               className="px-6 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-colors font-medium"
             >
-              Alleen Noodzakelijk
+              {t('cookies.banner.acceptNecessary')}
             </button>
             <button
               onClick={acceptAll}
               className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
             >
-              Alles Accepteren
+              {t('cookies.banner.acceptAll')}
             </button>
           </div>
         </div>
