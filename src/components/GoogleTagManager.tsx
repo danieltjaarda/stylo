@@ -112,11 +112,37 @@ export function useGTMDataLayer() {
     }
   };
 
+  const pushViewItem = (currency: string, value: number, items: any[]) => {
+    if (hasStatisticsConsent && typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'view_item',
+        currency: currency,
+        value: value,
+        items: items,
+      });
+      console.log('GTM View item event pushed:', { currency, value, items });
+    }
+  };
+
+  const pushBeginCheckout = (currency: string, value: number, items: any[]) => {
+    if (hasStatisticsConsent && typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'begin_checkout',
+        currency: currency,
+        value: value,
+        items: items,
+      });
+      console.log('GTM Begin checkout event pushed:', { currency, value, items });
+    }
+  };
+
   return {
     pushEvent,
     pushPageView,
     pushPurchase,
     pushAddToCart,
+    pushViewItem,
+    pushBeginCheckout,
     hasConsent: hasStatisticsConsent,
   };
 }

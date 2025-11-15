@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, Fragment, use } from 'react';
 import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame, Sprout, ChevronDown, Info } from 'lucide-react';
+import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Check, Minus, Plus, X, Waves, Flame, Sprout, ChevronDown, Info, MessageCircle } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import ProductCard from '@/components/ProductCard';
 import ProductCollection from '@/components/ProductCollection';
@@ -12,10 +12,13 @@ import KlarnaWidget from '@/components/KlarnaWidget';
 import ProductInfoModal from '@/components/ProductInfoModal';
 import AddOnModal from '@/components/AddOnModal';
 import StickyAddToCart from '@/components/StickyAddToCart';
+import AnimatedAddToCart from '@/components/AnimatedAddToCart';
 import { getShopifyProducts } from '@/services/shopifyService';
 import { Product } from '@/types';
 import { useMarketingConsent } from '@/contexts/CookieConsentContext';
 import { useMetaPixelTracking } from '@/lib/metaPixel';
+import { useGTMDataLayer } from '@/components/GoogleTagManager';
+import GA4ViewItemTracker from '@/components/GA4ViewItemTracker';
 
 interface ProductPageProps {
   params: Promise<{
@@ -48,6 +51,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   // Meta Pixel tracking
   const hasMarketingConsent = useMarketingConsent();
   const { trackViewContent, trackAddToCart } = useMetaPixelTracking(hasMarketingConsent);
+  const { pushAddToCart, pushViewItem } = useGTMDataLayer();
   const [showTreeInfo, setShowTreeInfo] = useState(false);
   const [seatProErgonomicsOpen, setSeatProErgonomicsOpen] = useState(false);
   const [seatProMaterialsOpen, setSeatProMaterialsOpen] = useState(false);
@@ -57,9 +61,10 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedAddOnId, setSelectedAddOnId] = useState<string>('');
   const [selectedAddOnHandle, setSelectedAddOnHandle] = useState<string>('');
   const [addedAddOns, setAddedAddOns] = useState<Record<string, boolean>>({});
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
     const imageCache = useRef(new Map());
   const mainImageRef = useRef<HTMLDivElement>(null);
-  const addToCartButtonRef = useRef<HTMLButtonElement>(null);
+  const addToCartButtonRef = useRef<HTMLDivElement>(null);
 
   // No longer need to resolve params - use(params) handles it directly
 
@@ -143,6 +148,43 @@ export default function ProductPage({ params }: ProductPageProps) {
       }
     }
   }, [product, hasMarketingConsent, selectedOptions, trackViewContent]);
+
+  // Track GTM view_item event when product loads - ONLY ONCE per pageload
+  useEffect(() => {
+    if (product && typeof window !== "undefined") {
+      // URL-specifieke tracking key om dubbele events te voorkomen
+      const currentUrl = window.location.pathname;
+      const trackingKey = `gtm_view_item_tracked_${currentUrl}`;
+      
+      // Guard: controleer of dit event al is getrackt voor deze URL
+      if ((window as any)[trackingKey]) {
+        console.log('GTM view_item already tracked for this URL');
+        return;
+      }
+
+      const selectedVariant = product.variants?.find((v: any) => 
+        v.selectedOptions?.every((so: any) => selectedOptions[so.name] === so.value)
+      ) || product.variants?.[0];
+
+      const gtmItems = [{
+        item_id: product.id?.toString() || product.handle || '',
+        item_name: (product as any).title || product.handle || 'Product',
+        item_category: (product as any).productType || 'Product',
+        price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        quantity: 1,
+      }];
+
+      pushViewItem(
+        (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        gtmItems
+      );
+
+      // Markeer als getrackt voor deze URL
+      (window as any)[trackingKey] = true;
+      console.log('GTM view_item event tracked for', currentUrl);
+    }
+  }, []); // Lege dependency array = één keer per component mount
 
   // Initialize and preload all images, and initialize selectedOptions once per product
   useEffect(() => {
@@ -358,6 +400,21 @@ export default function ProductPage({ params }: ProductPageProps) {
       
       console.log('🛒 AddToCart - Tracking data:', trackingData);
       trackAddToCart(trackingData);
+      
+      // Push GTM add_to_cart event
+      const gtmItems = [{
+        item_id: product.id?.toString() || product.handle || '',
+        item_name: (product as any).title || product.handle || 'Product',
+        item_category: (product as any).productType || 'Product',
+        price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+        quantity: quantity,
+      }];
+      
+      pushAddToCart(
+        (selectedVariant?.price as any)?.currencyCode || 'EUR',
+        parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0') * quantity,
+        gtmItems
+      );
     } else {
       console.log('❌ AddToCart - Not tracking, no marketing consent');
     }
@@ -439,6 +496,19 @@ export default function ProductPage({ params }: ProductPageProps) {
 
     return (
       <div className="min-h-screen bg-white">
+        {/* GA4 View Item Tracker - Automatisch één event per pageload */}
+        {product && (
+          <GA4ViewItemTracker 
+            product={{
+              id: product.id || product.handle || '',
+              name: (product as any).title || product.handle || 'Product',
+              price: parseFloat((selectedVariant?.price as any)?.amount || (typeof product.price === 'string' ? product.price : product.price?.toString()) || '0'),
+              currency: (selectedVariant?.price as any)?.currencyCode || 'EUR',
+              category: (product as any).productType || 'Product'
+            }}
+            quantity={1}
+          />
+        )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
         <div className="mb-6 bg-white border border-gray-200 rounded-lg px-4 py-3">
@@ -690,6 +760,33 @@ export default function ProductPage({ params }: ProductPageProps) {
                       );
                     })}
               </div>
+                  
+                  {/* Link to DeskPro for larger sizes - only show for size options on DeskOne */}
+                  {isSizeOption && product.isDeskOne && product.handle === 'deskone-bureau' && (
+                    <div className="mt-3 text-center">
+                      <Link 
+                        href="/products/deskpro"
+                        className="group inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                      >
+                        <span className="relative">
+                          Groter nodig?
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-400 group-hover:w-full transition-all duration-300"></span>
+                        </span>
+                        <span className="font-medium relative">
+                          Bekijk DeskPro
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"></span>
+                        </span>
+                        <svg 
+                          className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -762,11 +859,12 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <button
                           onClick={() => handleOpenAddOnModal(addOn)}
                           disabled={addedAddOns[index]}
-                          className={`w-full py-2 px-3 rounded-lg text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
+                          className={`w-full py-2 px-3 rounded-2xl text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
                             addedAddOns[index] 
                               ? 'bg-green-50 text-green-700 border-2 border-green-200 cursor-default' 
-                              : 'bg-gray-900 text-white hover:bg-gray-800 border-2 border-gray-900'
+                              : 'text-white hover:opacity-90 border-2'
                           }`}
+                          style={!addedAddOns[index] ? { backgroundColor: '#292f3e', borderColor: '#292f3e' } : {}}
                         >
                           {addedAddOns[index] ? (
                             <>
@@ -856,11 +954,12 @@ export default function ProductPage({ params }: ProductPageProps) {
                         <button
                           onClick={() => handleOpenAddOnModal(addOn)}
                           disabled={addedAddOns[index]}
-                          className={`w-full py-2 px-3 rounded-lg text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
+                          className={`w-full py-2 px-3 rounded-2xl text-xs font-medium transition-colors flex items-center justify-center space-x-1 ${
                             addedAddOns[index] 
                               ? 'bg-green-50 text-green-700 border-2 border-green-200 cursor-default' 
-                              : 'bg-gray-900 text-white hover:bg-gray-800 border-2 border-gray-900'
+                              : 'text-white hover:opacity-90 border-2'
                           }`}
+                          style={!addedAddOns[index] ? { backgroundColor: '#292f3e', borderColor: '#292f3e' } : {}}
                         >
                           {addedAddOns[index] ? (
                             <>
@@ -919,36 +1018,34 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
 
             {/* Quantity & Add to Cart Layout */}
-            <div className="flex items-end gap-4 mt-6">
-              {/* Quantity */}
-              <div className="flex-shrink-0">
-                <span className="text-sm font-medium text-gray-900 mb-2 block">Aantal</span>
-                <div className="flex items-center space-x-3">
+            <div className="mt-6">
+              <span className="text-sm font-medium text-gray-900 mb-2 block">Aantal</span>
+              <div className="flex items-center gap-3">
+                {/* Quantity Controls */}
+                <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+                    className="w-10 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="w-12 text-center font-medium">{quantity}</span>
+                  <span className="w-10 text-center font-medium">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
+                    className="w-10 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:border-gray-400 transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
-      </div>
-              </div>
+                </div>
 
-              {/* Add to Cart */}
-              <button
-                ref={addToCartButtonRef}
-                onClick={handleAddToCart}
-                className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span>Toevoegen aan winkelwagen</span>
-              </button>
+                {/* Add to Cart */}
+                <div ref={addToCartButtonRef}>
+                  <AnimatedAddToCart 
+                    onAddToCart={handleAddToCart}
+                    buttonText="In Winkelwagen"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Delivery Message */}
@@ -970,9 +1067,72 @@ export default function ProductPage({ params }: ProductPageProps) {
         {product.isDeskOne && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
             
+            {/* Sticky Navigation Bar */}
+            <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-200 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-8">
+              <nav className="max-w-7xl mx-auto">
+                <ul className="flex items-center justify-start sm:justify-center gap-6 sm:gap-10 overflow-x-auto scrollbar-hide py-4">
+                  <li>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById('kenmerken');
+                        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="text-base sm:text-lg font-bold text-gray-900 hover:text-gray-600 whitespace-nowrap transition-colors pb-1 border-b-2 border-transparent hover:border-gray-900"
+                    >
+                      Kenmerken
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById('vergelijking');
+                        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="text-base sm:text-lg font-bold text-gray-900 hover:text-gray-600 whitespace-nowrap transition-colors pb-1 border-b-2 border-transparent hover:border-gray-900"
+                    >
+                      Productvergelijking
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById('specificaties');
+                        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="text-base sm:text-lg font-bold text-gray-900 hover:text-gray-600 whitespace-nowrap transition-colors pb-1 border-b-2 border-transparent hover:border-gray-900"
+                    >
+                      Specificaties
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById('beoordelingen');
+                        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="text-base sm:text-lg font-bold text-gray-900 hover:text-gray-600 whitespace-nowrap transition-colors pb-1 border-b-2 border-transparent hover:border-gray-900"
+                    >
+                      Beoordelingen
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => {
+                        const element = document.getElementById('faq');
+                        element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="text-base sm:text-lg font-bold text-gray-900 hover:text-gray-600 whitespace-nowrap transition-colors pb-1 border-b-2 border-transparent hover:border-gray-900"
+                    >
+                      FAQ
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
             {/* Eenvoudige bediening Section */}
-            <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
-              <div className="max-w-4xl mx-auto">
+            <section id="kenmerken" className="bg-gray-50 rounded-3xl p-8 lg:p-12 scroll-mt-24">
+              <div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                   Eenvoudige bediening
                 </h2>
@@ -1044,7 +1204,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
           {/* Betrouwbare prestaties Section */}
           <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="text-center">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                 Betrouwbare prestaties
               </h2>
@@ -1112,7 +1272,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </section>
 
           {/* Comparison Table Section */}
-          <section className="bg-white rounded-3xl p-4 md:p-8 lg:p-12 border">
+          <section id="vergelijking" className="bg-white rounded-3xl p-4 md:p-8 lg:p-12 border border-gray-200 scroll-mt-24">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 md:mb-8 text-center">
               Hoe vergelijken wij?
             </h2>
@@ -1229,12 +1389,12 @@ export default function ProductPage({ params }: ProductPageProps) {
           </section>
 
           {/* Technical Specifications */}
-            <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
+            <section id="specificaties" className="bg-gray-50 rounded-3xl p-8 lg:p-12 scroll-mt-24">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
                 Technische specificaties
               </h2>
               
-              <div className="max-w-4xl mx-auto">
+              <div>
                 {/* General Information */}
                 <div className="bg-white rounded-2xl p-6 mb-6">
                   <div className="flex items-center justify-between mb-4">
@@ -1313,10 +1473,37 @@ export default function ProductPage({ params }: ProductPageProps) {
                             
                             {/* Size Options */}
                             <div className="text-center">
-                              <div className="flex justify-center gap-2">
-                                <span className="bg-gray-900 text-white px-4 py-2 rounded-full text-sm">120x60 cm</span>
-                                <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm">140x70 cm</span>
-                                <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm">160x80 cm</span>
+                              <div className="flex flex-wrap justify-center gap-2">
+                                {(() => {
+                                  const sizeOption = product.options?.find(opt => 
+                                    opt.name === 'Tafelblad grootte' || opt.name === 'Tafelblad size' || opt.name.toLowerCase().includes('size') || opt.name.toLowerCase().includes('grootte')
+                                  );
+                                  const sizes = sizeOption?.values || ['120x60 cm', '140x70 cm', '160x80 cm'];
+                                  const currentSize = sizeOption ? selectedOptions[sizeOption.name] : '';
+                                  
+                                  return sizes.map((size) => {
+                                    const isSelected = currentSize === size;
+                                    
+                                    return (
+                                      <button
+                                        key={size}
+                                        onClick={() => {
+                                          if (sizeOption) {
+                                            setSelectedOptions(prev => ({ ...prev, [sizeOption.name]: size }));
+                                            setUserSelectedImage(false);
+                                          }
+                                        }}
+                                        className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                                          isSelected 
+                                            ? 'bg-gray-900 text-white' 
+                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        }`}
+                                      >
+                                        {size}
+                                      </button>
+                                    );
+                                  });
+                                })()}
               </div>
                             </div>
                           </div>
@@ -1326,11 +1513,75 @@ export default function ProductPage({ params }: ProductPageProps) {
                             <div className="space-y-3">
                               <div className="flex justify-between border-b border-gray-200 pb-2">
                                 <span className="text-gray-600">Afmetingen</span>
-                                <span className="font-medium text-gray-900">120 cm L x 60 cm W x 2.5 cm H, 11.5 kg</span>
+                                <span className="font-medium text-gray-900">
+                                  {(() => {
+                                    const sizeOption = product.options?.find(opt => 
+                                      opt.name === 'Tafelblad grootte' || opt.name === 'Tafelblad size' || opt.name.toLowerCase().includes('size') || opt.name.toLowerCase().includes('grootte')
+                                    );
+                                    const currentSize = sizeOption ? selectedOptions[sizeOption.name] : '120x60 cm';
+                                    
+                                    const specs: Record<string, { dimensions: string; shipping: string }> = {
+                                      '120x60 cm': { 
+                                        dimensions: '120 cm L x 60 cm W x 2.5 cm H, 11.5 kg',
+                                        shipping: '129.5 cm L x 69.8 cm W x 5 cm H, 15.5 kg'
+                                      },
+                                      '140x70 cm': { 
+                                        dimensions: '140 cm L x 70 cm W x 2.5 cm H, 13.5 kg',
+                                        shipping: '149.5 cm L x 79.8 cm W x 5 cm H, 17.5 kg'
+                                      },
+                                      '160x80 cm': { 
+                                        dimensions: '160 cm L x 80 cm W x 2.5 cm H, 15.5 kg',
+                                        shipping: '169.5 cm L x 89.8 cm W x 5 cm H, 19.5 kg'
+                                      },
+                                      '180x80 cm': { 
+                                        dimensions: '180 cm L x 80 cm W x 2.5 cm H, 17.5 kg',
+                                        shipping: '189.5 cm L x 89.8 cm W x 5 cm H, 21.5 kg'
+                                      },
+                                      '200x80 cm': { 
+                                        dimensions: '200 cm L x 80 cm W x 2.5 cm H, 19.5 kg',
+                                        shipping: '209.5 cm L x 89.8 cm W x 5 cm H, 23.5 kg'
+                                      }
+                                    };
+                                    
+                                    return specs[currentSize]?.dimensions || specs['120x60 cm'].dimensions;
+                                  })()}
+                                </span>
                               </div>
                               <div className="flex justify-between border-b border-gray-200 pb-2">
                                 <span className="text-gray-600">Afmetingen verzending</span>
-                                <span className="font-medium text-gray-900">129.5 cm L x 69.8 cm W x 5 cm H, 15.5 kg</span>
+                                <span className="font-medium text-gray-900">
+                                  {(() => {
+                                    const sizeOption = product.options?.find(opt => 
+                                      opt.name === 'Tafelblad grootte' || opt.name === 'Tafelblad size' || opt.name.toLowerCase().includes('size') || opt.name.toLowerCase().includes('grootte')
+                                    );
+                                    const currentSize = sizeOption ? selectedOptions[sizeOption.name] : '120x60 cm';
+                                    
+                                    const specs: Record<string, { dimensions: string; shipping: string }> = {
+                                      '120x60 cm': { 
+                                        dimensions: '120 cm L x 60 cm W x 2.5 cm H, 11.5 kg',
+                                        shipping: '129.5 cm L x 69.8 cm W x 5 cm H, 15.5 kg'
+                                      },
+                                      '140x70 cm': { 
+                                        dimensions: '140 cm L x 70 cm W x 2.5 cm H, 13.5 kg',
+                                        shipping: '149.5 cm L x 79.8 cm W x 5 cm H, 17.5 kg'
+                                      },
+                                      '160x80 cm': { 
+                                        dimensions: '160 cm L x 80 cm W x 2.5 cm H, 15.5 kg',
+                                        shipping: '169.5 cm L x 89.8 cm W x 5 cm H, 19.5 kg'
+                                      },
+                                      '180x80 cm': { 
+                                        dimensions: '180 cm L x 80 cm W x 2.5 cm H, 17.5 kg',
+                                        shipping: '189.5 cm L x 89.8 cm W x 5 cm H, 21.5 kg'
+                                      },
+                                      '200x80 cm': { 
+                                        dimensions: '200 cm L x 80 cm W x 2.5 cm H, 19.5 kg',
+                                        shipping: '209.5 cm L x 89.8 cm W x 5 cm H, 23.5 kg'
+                                      }
+                                    };
+                                    
+                                    return specs[currentSize]?.shipping || specs['120x60 cm'].shipping;
+                                  })()}
+                                </span>
                               </div>
                               <div className="flex justify-between border-b border-gray-200 pb-2">
                                 <span className="text-gray-600">Klassiek kleuren</span>
@@ -1442,16 +1693,15 @@ export default function ProductPage({ params }: ProductPageProps) {
               </div>
             </section>
           {/* Laat je inspireren Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Laat je inspireren
-              </h2>
-              <p className="text-lg text-gray-600">
-                Bekijk hoe onze bureaus eruit zien in de interieurs van onze klanten.
-              </p>
-            </div>
+        <section className="bg-gray-50 rounded-3xl border border-gray-200 p-8 lg:p-12">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                  Laat je inspireren
+                </h2>
+                <p className="text-lg text-gray-600">
+                  Bekijk hoe onze bureaus eruit zien in de interieurs van onze klanten.
+                </p>
+              </div>
 
             <div className="relative">
               {/* 4-Column Grid */}
@@ -1531,8 +1781,126 @@ export default function ProductPage({ params }: ProductPageProps) {
                 />
                 </div>
               </div>
-          </div>
         </section>
+
+            {/* FAQ Section */}
+            <section id="faq" className="bg-[#2d2d2d] rounded-3xl border border-gray-700 p-6 lg:p-8 scroll-mt-24 relative overflow-hidden">
+              {/* Background Logo - Right */}
+              <div 
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 opacity-5 pointer-events-none rotate-90"
+                style={{
+                  backgroundImage: "url('/Deskna favicon wit.png')",
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center right',
+                }}
+              ></div>
+              {/* Background Logo - Left */}
+              <div 
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 opacity-5 pointer-events-none -rotate-90"
+                style={{
+                  backgroundImage: "url('/Deskna favicon wit.png')",
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center left',
+                }}
+              ></div>
+              <div className="relative z-10">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl lg:text-3xl font-bold text-white mb-3">
+                    Veelgestelde vragen
+                  </h2>
+                  <p className="text-base text-gray-300">
+                    Alles wat je moet weten over het DeskOne Bureau
+                  </p>
+                </div>
+
+                <div className="space-y-3 max-w-2xl mx-auto">
+                {[
+                  {
+                    question: "Wat is de hoogte-range van het DeskOne Bureau?",
+                    answer: "Het DeskOne Bureau kan worden ingesteld tussen 71 cm en 121 cm hoogte, waardoor het geschikt is voor zowel zittend als staand werken voor de meeste lichaamslengtes."
+                  },
+                  {
+                    question: "Hoe snel beweegt het bureau omhoog en omlaag?",
+                    answer: "Het bureau beweegt met een snelheid van ongeveer 38mm per seconde, wat betekent dat je in ongeveer 13 seconden van de laagste naar de hoogste positie gaat."
+                  },
+                  {
+                    question: "Hoeveel gewicht kan het bureau dragen?",
+                    answer: "Het DeskOne Bureau heeft een maximaal draagvermogen van 80 kg, wat ruim voldoende is voor de meeste werkopstellingen met monitors, laptops en accessoires."
+                  },
+                  {
+                    question: "Is het bureau makkelijk te monteren?",
+                    answer: "Ja, het bureau is eenvoudig te monteren. De meeste mensen kunnen het in 30-45 minuten zelfstandig assembleren met de meegeleverde instructies en gereedschap."
+                  },
+                  {
+                    question: "Hoe werkt de geheugenfunctie?",
+                    answer: "Met de touchscreen-bediening kun je tot 3 voorkeurshoogtes opslaan. Druk gewoon op één van de geheugenknoppen om het bureau automatisch naar die hoogte te laten bewegen."
+                  },
+                  {
+                    question: "Maakt het bureau veel geluid tijdens het bewegen?",
+                    answer: "Nee, het DeskOne Bureau is fluisterstil tijdens gebruik. Het geluidsniveau ligt onder de 50 decibel, wat vergelijkbaar is met een rustig gesprek."
+                  },
+                  {
+                    question: "Welke garantie krijg ik op het bureau?",
+                    answer: "We bieden 5 jaar garantie op het DeskOne Bureau, wat onze vertrouwen in de kwaliteit en duurzaamheid van het product benadrukt."
+                  },
+                  {
+                    question: "Wat is het kinderslot en hoe gebruik ik het?",
+                    answer: "Het kinderslot is een veiligheidsfunctie waarmee je het touchscreen kunt vergrendelen om ongewenste aanpassingen te voorkomen. Je kunt het eenvoudig in- en uitschakelen via het touchscreen-menu."
+                  }
+                ].map((faq, index) => {
+                  const isOpen = openFaqIndex === index;
+                  return (
+                    <div key={index} className="bg-[#3d3d3d] rounded-lg border border-gray-600 transition-all duration-300 hover:border-gray-500 overflow-hidden">
+                      <div 
+                        className="flex items-center justify-between cursor-pointer p-4"
+                        onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                      >
+                        <h3 className="text-base font-semibold text-white pr-4">
+                          {faq.question}
+                        </h3>
+                        <span className={`transition-transform duration-500 ease-in-out flex-shrink-0 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
+                        </span>
+                      </div>
+                      <div 
+                        className={`transition-all duration-500 ease-in-out ${
+                          isOpen ? 'max-h-[500px] opacity-100 mb-0' : 'max-h-0 opacity-0 mb-0'
+                        }`}
+                        style={{
+                          transitionProperty: 'max-height, opacity, margin',
+                        }}
+                      >
+                        <div className="px-4 pb-4">
+                          <p className="text-sm text-gray-300 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                </div>
+
+                <div className="mt-8 text-center">
+                  <p className="text-sm text-gray-300 mb-3">
+                    Heb je nog andere vragen?
+                  </p>
+                  <a 
+                    href="https://wa.me/31850602482"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors border border-gray-300"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="#25D366"/>
+                    </svg>
+                    Neem contact op
+                  </a>
+                </div>
+              </div>
+          </section>
           </div>
         )}
 
@@ -1542,7 +1910,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             
             {/* SeatPro Sectie 1 - Ergonomische kenmerken */}
             <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
-              <div className="max-w-4xl mx-auto">
+              <div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                   Ergonomische kenmerken
                 </h2>
@@ -1615,8 +1983,8 @@ export default function ProductPage({ params }: ProductPageProps) {
             <WidgetsSection />
 
             {/* SeatPro Sectie 2 - Ligfunctie met Voetensteun */}
-            <section className="bg-white rounded-3xl p-8 lg:p-12 border">
-              <div className="max-w-4xl mx-auto">
+            <section className="bg-white rounded-3xl p-8 lg:p-12 border border-gray-200">
+              <div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                   Ligfunctie met voetensteun
                 </h2>
@@ -1720,7 +2088,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
             {/* SeatPro Sectie 3 - Technische Specificaties */}
             <section className="bg-gray-50 rounded-3xl p-8 lg:p-12">
-              <div className="max-w-6xl mx-auto">
+              <div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
                   Technische specificaties
                 </h2>
@@ -1915,8 +2283,8 @@ export default function ProductPage({ params }: ProductPageProps) {
         )}
 
         {/* Laat je inspireren Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="beoordelingen" className="py-16 bg-white scroll-mt-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-8">
                 Wat onze klanten zeggen
@@ -1953,19 +2321,19 @@ export default function ProductPage({ params }: ProductPageProps) {
                     { label: 'Slecht', percentage: 0, count: 0 },
                     { label: 'Zeer slecht', percentage: 1, count: 13 }
                   ].map((rating, index) => (
-                    <div key={index} className="flex items-center gap-4">
-                      <div className="flex items-center gap-2 w-20">
-                        <span className="w-3 h-3 bg-gray-300 rounded-sm"></span>
+                    <div key={index} className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 min-w-[140px]">
+                        <div className="w-4 h-4 bg-gray-300 rounded border border-gray-400 flex-shrink-0" style={{ minWidth: '16px', minHeight: '16px' }}></div>
                         <span className="text-sm text-gray-700">{rating.label}</span>
-                </div>
+                      </div>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div 
                           className="bg-gray-600 h-2 rounded-full transition-all duration-500"
                           style={{ width: `${rating.percentage}%` }}
                         ></div>
-              </div>
-                      <span className="text-sm font-medium text-gray-900 w-8">{rating.percentage}%</span>
-            </div>
+                      </div>
+                      <span className="text-sm font-medium text-gray-900 w-10 text-right">{rating.percentage}%</span>
+                    </div>
                   ))}
           </div>
         </div>

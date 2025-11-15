@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import MacOSCalculator from '@/components/MacOSCalculator';
 
 export const metadata: Metadata = {
   title: 'B2B Oplossingen | DESKNA - Zakelijke Ergonomische Werkplekken',
@@ -53,6 +54,44 @@ export default function B2B() {
               <p className="text-gray-600">
                 Van advies tot levering en montage - wij regelen alles voor u.
               </p>
+            </div>
+          </div>
+
+          {/* Staffel Calculator Section */}
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Bereken Uw Staffel Korting</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Direct Inzicht in Uw Voordeel</h3>
+                <p className="text-gray-600 mb-6">
+                  Met onze staffel calculator krijgt u direct inzicht in uw korting bij grotere aantallen. 
+                  Hoe meer producten u bestelt, hoe hoger uw korting. Perfect voor het inrichten van 
+                  complete kantoorruimtes of het voorzien van al uw medewerkers van ergonomische werkplekken.
+                </p>
+                <ul className="space-y-3 text-gray-600">
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Transparante staffel kortingen
+                  </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Direct zicht op uw besparing
+                  </li>
+                  <li className="flex items-center">
+                    <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Geldig op alle ergonomische producten
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <MacOSCalculator />
+              </div>
             </div>
           </div>
 

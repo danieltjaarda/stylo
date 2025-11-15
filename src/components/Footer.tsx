@@ -3,37 +3,45 @@ import { Facebook, Instagram, Youtube, Linkedin, ArrowRight } from 'lucide-react
 
 export default function Footer() {
   return (
-    <footer className="text-black" style={{ backgroundColor: '#f7f7f7' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto bg-[#2d2d2d] rounded-3xl border border-gray-700 px-4 sm:px-6 lg:px-8 py-12 relative">
+        {/* Logo op de bovenste rand */}
+        <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <img 
+            src="/favicon logo onder.png" 
+            alt="DESKNA Logo" 
+            className="h-16 w-auto"
+          />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Topproducten */}
           <div>
             <div className="mb-6">
               <img 
-                src="/DESKNA LOGO BLACK.png" 
+                src="/DESKNA LOGO WHITE.png" 
                 alt="DESKNA Logo" 
                 className="h-8 w-auto"
               />
             </div>
-            <h3 className="text-lg font-medium mb-6 text-black">Topproducten</h3>
+            <h3 className="text-lg font-medium mb-6 text-white">Topproducten</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/products/777-test-product" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/products/777-test-product" className="text-gray-300 hover:text-white transition-colors text-sm">
                   DeskOne Bureau
                 </Link>
               </li>
               <li>
-                <Link href="/products/deskpro" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/products/deskpro" className="text-gray-300 hover:text-white transition-colors text-sm">
                   DeskPro
                 </Link>
               </li>
               <li>
-                <Link href="/products/seatpro-ergonomische-bureau-stoel" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/products/seatpro-ergonomische-bureau-stoel" className="text-gray-300 hover:text-white transition-colors text-sm">
                   SeatPro ergonomische bureau stoel
                 </Link>
               </li>
               <li>
-                <Link href="/products/monitorarm-enkel" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/products/monitorarm-enkel" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Monitorarm - Enkel
                 </Link>
               </li>
@@ -42,20 +50,20 @@ export default function Footer() {
 
           {/* Shop */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Shop</h3>
+            <h3 className="text-lg font-medium mb-6 text-white">Shop</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/shop-alles" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/shop-alles" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Alle producten
                 </Link>
               </li>
               <li>
-                <Link href="/verstelbare-bureaus" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/verstelbare-bureaus" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Zit-Sta bureaus
                 </Link>
               </li>
               <li>
-                <Link href="/bureaustoelen" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/bureaustoelen" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Ergonomische bureaustoelen
                 </Link>
               </li>
@@ -64,30 +72,30 @@ export default function Footer() {
 
           {/* Hulp */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Hulp</h3>
+            <h3 className="text-lg font-medium mb-6 text-white">Hulp</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/b2b" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/b2b" className="text-gray-300 hover:text-white transition-colors text-sm">
                   B2B
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/returns" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Retourneren en Terugbetalingen
                 </Link>
               </li>
               <li>
-                <Link href="/over-ons" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/over-ons" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Over ons
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/shipping" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Verzending
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Contact met ons
                 </Link>
               </li>
@@ -96,25 +104,25 @@ export default function Footer() {
 
           {/* Bronnen */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Bronnen</h3>
+            <h3 className="text-lg font-medium mb-6 text-white">Bronnen</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/blog" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/quiz" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/quiz" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Quiz
                 </Link>
               </li>
               <li>
-                <Link href="/montagehandleidingen" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/montagehandleidingen" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Montagehandleidingen
                 </Link>
               </li>
               <li>
-                <Link href="/kortingen" className="text-gray-600 hover:text-black transition-colors text-sm">
+                <Link href="/kortingen" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Actieve kortingen
                 </Link>
               </li>
@@ -123,35 +131,39 @@ export default function Footer() {
 
           {/* Contact met ons */}
           <div>
-            <h3 className="text-lg font-medium mb-6 text-black">Contact met ons</h3>
+            <h3 className="text-lg font-medium mb-6 text-white">Contact met ons</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center">
-                <span className="text-gray-600">📞</span>
-                <span className="ml-2 text-gray-600">085 060 2482</span>
+                <span className="text-gray-300">📍</span>
+                <span className="ml-2 text-gray-300">Brandemeer 4a, 8501TV Joure</span>
               </div>
               <div className="flex items-center">
-                <span className="text-gray-600">✉️</span>
-                <span className="ml-2 text-gray-600">info@deskna.nl</span>
+                <span className="text-gray-300">📞</span>
+                <span className="ml-2 text-gray-300">085 060 2482</span>
               </div>
               <div className="flex items-center">
-                <span className="text-gray-600">🕒</span>
-                <span className="ml-2 text-gray-600">Ma - Vr | 07:00 - 16:00 uur</span>
+                <span className="text-gray-300">✉️</span>
+                <span className="ml-2 text-gray-300">info@deskna.nl</span>
+              </div>
+              <div className="flex items-center">
+                <span className="text-gray-300">🕒</span>
+                <span className="ml-2 text-gray-300">Ma - Vr | 07:00 - 16:00 uur</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom section */}
-        <div className="border-t border-gray-300 mt-12 pt-8">
+        <div className="border-t border-gray-600 mt-12 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             {/* Newsletter - aligned with first column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Blijf op de hoogte van ons laatste nieuws</h3>
+              <h3 className="text-lg font-medium mb-4 text-white">Blijf op de hoogte van ons laatste nieuws</h3>
               <div className="flex">
                 <input
                   type="email"
                   placeholder="Voer je e-mailadres in"
-                  className="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500"
+                  className="flex-1 px-4 py-3 bg-[#3d3d3d] border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400"
                 />
                 <button 
                   className="px-6 py-3 rounded-r-lg transition-colors hover:opacity-90"
@@ -166,18 +178,18 @@ export default function Footer() {
 
             {/* Social Media - aligned with Hulp column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Volg ons</h3>
+              <h3 className="text-lg font-medium mb-4 text-white">Volg ons</h3>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
                   <Facebook className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
                   <Instagram className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
                   <Youtube className="w-6 h-6" />
                 </a>
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a href="#" className="text-gray-300 hover:text-white transition-colors">
                   <Linkedin className="w-6 h-6" />
                 </a>
               </div>
@@ -187,7 +199,7 @@ export default function Footer() {
 
             {/* Certificates and Trustpilot - aligned with Contact column */}
             <div>
-              <h3 className="text-lg font-medium mb-4 text-black">Certificeringen:</h3>
+              <h3 className="text-lg font-medium mb-4 text-white">Certificeringen:</h3>
               <div className="flex items-center space-x-4 mb-6">
                 <img 
                   src="/svg icons/certificaat 1.svg.png" 
@@ -204,14 +216,14 @@ export default function Footer() {
               {/* Trustpilot in same column */}
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-black font-medium">Uitstekend</span>
+                  <span className="text-white font-medium">Uitstekend</span>
                   <img 
                     src="/trustpilot-stars-new.png" 
                     alt="5 sterren Trustpilot" 
                     className="h-4 w-auto"
                   />
                 </div>
-                <div className="text-sm text-black mt-1">
+                <div className="text-sm text-gray-300 mt-1">
                   1.500+ beoordelingen
                 </div>
               </div>
@@ -219,13 +231,16 @@ export default function Footer() {
           </div>
 
           {/* Bottom links and payment */}
-          <div className="mt-8 pt-8 border-t border-gray-300 flex flex-col lg:flex-row justify-between items-center">
-            <div className="flex flex-wrap gap-6 text-sm text-gray-600 mb-4 lg:mb-0">
-              <span>© 2025 DESKNA. Alle rechten voorbehouden.</span>
-              <Link href="/privacy" className="hover:text-black transition-colors">Privacy-beleid</Link>
-              <Link href="/terms" className="hover:text-black transition-colors">Algemene Voorwaarden</Link>
-              <Link href="/colofon" className="hover:text-black transition-colors">Colofon</Link>
-              <Link href="/herroepingsrecht" className="hover:text-black transition-colors">Herroepingsrecht</Link>
+          <div className="mt-8 pt-8 border-t border-gray-600 flex flex-col lg:flex-row justify-between items-center">
+            <div className="flex flex-wrap gap-6 text-sm text-gray-300 mb-4 lg:mb-0">
+              <div className="flex flex-col gap-1">
+                <span>© Deskna | Alle rechten voorbehouden | Maakt deel uit van Gofatbike.nl B.V</span>
+                <span>KvK nummer: 96813091 - BTW nummer: NL867772979B01</span>
+              </div>
+              <Link href="/privacy" className="hover:text-white transition-colors">Privacy-beleid</Link>
+              <Link href="/terms" className="hover:text-white transition-colors">Algemene Voorwaarden</Link>
+              <Link href="/colofon" className="hover:text-white transition-colors">Colofon</Link>
+              <Link href="/herroepingsrecht" className="hover:text-white transition-colors">Herroepingsrecht</Link>
             </div>
 
             {/* Payment Methods */}

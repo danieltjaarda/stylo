@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic, ChevronDown, Plus, Minus } from 'lucide-react';
+import { ArrowRight, Quote, Monitor, Armchair, Volume2, Package, FileText, Lightbulb, Mic, ChevronDown, Plus, Minus, Smartphone, Wifi } from 'lucide-react';
 import ProductCollection from '@/components/ProductCollection';
 import { getShopifyProducts, isShopifyConfigured } from '@/services/shopifyService';
 import Image from 'next/image';
@@ -16,11 +16,9 @@ import { Product } from '@/types';
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [scrollY, setScrollY] = useState(0);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [thumbsUpAnimation, setThumbsUpAnimation] = useState(null);
   const [thumbAnimationKey, setThumbAnimationKey] = useState(0);
@@ -35,6 +33,7 @@ export default function Home() {
   const [headsetAnimation, setHeadsetAnimation] = useState(null);
   const [headsetAnimationKey, setHeadsetAnimationKey] = useState(0);
   const [animationsLoaded, setAnimationsLoaded] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
   // Load Lottie animations lazily when they're needed
   const loadAnimations = useCallback(() => {
@@ -135,6 +134,16 @@ export default function Home() {
       }
     };
   }, []);
+
+  // Track scroll position for parallax effects
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   const words = ['mega', 'super', 'ultra'];
   
@@ -161,12 +170,6 @@ export default function Home() {
     };
 
     loadProducts();
-  }, []);
-  
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
   useEffect(() => {
@@ -212,6 +215,121 @@ export default function Home() {
       carouselContainer.addEventListener('scroll', handleCarouselScroll);
       return () => carouselContainer.removeEventListener('scroll', handleCarouselScroll);
     }
+  }, []);
+
+  // Drag to scroll functionality for carousel
+  useEffect(() => {
+    const carousels = document.querySelectorAll('.carousel-drag-scroll');
+    if (carousels.length === 0) return;
+
+    const setupCarousel = (carousel: Element) => {
+      let isDragging = false;
+      let startX = 0;
+      let scrollStart = 0;
+      let velocity = 0;
+      let lastX = 0;
+      let lastTime = Date.now();
+
+      const onMouseDown = (e: MouseEvent) => {
+        isDragging = true;
+        startX = e.pageX;
+        lastX = e.pageX;
+        lastTime = Date.now();
+        scrollStart = carousel.scrollLeft;
+        velocity = 0;
+        
+        carousel.classList.add('cursor-grabbing');
+        document.body.style.cursor = 'grabbing';
+        document.body.style.userSelect = 'none';
+      };
+
+      const onMouseMove = (e: MouseEvent) => {
+        if (!isDragging) return;
+        
+        e.preventDefault();
+        
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - lastTime;
+        const distance = e.pageX - startX;
+        
+        if (timeElapsed > 0) {
+          velocity = (e.pageX - lastX) / timeElapsed;
+        }
+        
+        carousel.scrollLeft = scrollStart - distance;
+        
+        lastX = e.pageX;
+        lastTime = currentTime;
+      };
+
+      const onMouseUp = () => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        carousel.classList.remove('cursor-grabbing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        
+        // Add momentum
+        if (Math.abs(velocity) > 0.5) {
+          let momentum = velocity * 50;
+          const decelerate = () => {
+            if (Math.abs(momentum) > 0.1) {
+              carousel.scrollLeft -= momentum;
+              momentum *= 0.95;
+              requestAnimationFrame(decelerate);
+            }
+          };
+          decelerate();
+        }
+      };
+
+      const onMouseLeave = () => {
+        if (isDragging) {
+          onMouseUp();
+        }
+      };
+
+      carousel.addEventListener('mousedown', onMouseDown as EventListener);
+      window.addEventListener('mousemove', onMouseMove as EventListener);
+      window.addEventListener('mouseup', onMouseUp);
+      carousel.addEventListener('mouseleave', onMouseLeave);
+
+      // Prevent default drag behavior on links and images
+      const preventDrag = (e: Event) => {
+        if (isDragging) {
+          e.preventDefault();
+        }
+      };
+      
+      const links = carousel.querySelectorAll('a');
+      links.forEach(link => {
+        link.addEventListener('dragstart', preventDrag);
+        link.addEventListener('click', (e) => {
+          if (Math.abs(carousel.scrollLeft - scrollStart) > 5) {
+            e.preventDefault();
+          }
+        });
+      });
+
+      return () => {
+        carousel.removeEventListener('mousedown', onMouseDown as EventListener);
+        window.removeEventListener('mousemove', onMouseMove as EventListener);
+        window.removeEventListener('mouseup', onMouseUp);
+        carousel.removeEventListener('mouseleave', onMouseLeave);
+        links.forEach(link => link.removeEventListener('dragstart', preventDrag));
+      };
+    };
+
+    const cleanupFunctions: (() => void)[] = [];
+    carousels.forEach(carousel => {
+      const cleanup = setupCarousel(carousel);
+      cleanupFunctions.push(cleanup);
+    });
+
+    return () => {
+      cleanupFunctions.forEach(cleanup => cleanup());
+    };
   }, []);
   
   const reviews = [
@@ -303,16 +421,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative text-white -mt-16 mx-0 md:mx-4 lg:mx-8 md:rounded-3xl overflow-hidden" style={{ 
-        height: 'calc(60vh + 4rem)',
-        paddingTop: '4rem'
+      <section className="relative text-white pt-[108px] md:pt-0 md:-mt-16 mx-0 md:mx-4 lg:mx-8 md:rounded-3xl overflow-hidden min-h-[500px] md:min-h-[520px] lg:min-h-[580px]" style={{ 
+        height: 'auto',
+        paddingBottom: '2rem'
       }}>
         <div className="absolute inset-0 z-0">
           <Image 
             src="/banner mobile 3.0.png" 
             alt="Hero banner" 
             fill 
-            className="object-cover md:hidden" 
+            className="object-cover object-center md:hidden" 
             priority 
             quality={85}
             sizes="100vw"
@@ -331,7 +449,7 @@ export default function Home() {
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
           />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex justify-start pt-[35%] md:pt-[8%]" style={{ alignItems: 'flex-start' }}>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-[8%]">
           <div className="text-left">
             {/* Review Stars */}
             <div className="inline-flex items-center gap-3 text-sm font-semibold mb-3">
@@ -437,10 +555,10 @@ export default function Home() {
 
       {/* Trust Indicators Section */}
       <section className="py-8 bg-gray-50" data-trust-indicators>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Mobile Layout - 3 columns grid */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Mobile Layout - grid */}
           <div className="md:hidden">
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid grid-cols-3 gap-3 text-center">
               {/* Meer dan 500.000 klanten */}
               <div 
                 className="flex flex-col items-center text-center cursor-pointer"
@@ -613,9 +731,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Desktop Layout - Centered Grid */}
-          <div className="hidden md:flex justify-center">
-            <div className="grid grid-cols-3 lg:grid-cols-6 gap-6 text-center">
+          {/* Desktop Layout - Left Aligned Grid */}
+          <div className="hidden md:flex">
+            <div className="grid grid-cols-3 lg:grid-cols-7 gap-4 lg:gap-6 text-center">
             {/* Meer dan 500.000 klanten */}
             <div 
               className="flex flex-col items-center cursor-pointer"
@@ -785,6 +903,28 @@ export default function Home() {
               <div className="text-sm font-bold text-gray-900 mb-1">Bekroonde</div>
               <div className="text-xs text-gray-600">klantenservice</div>
             </div>
+
+            {/* Deskna App Download Widget */}
+            <div className="flex flex-col items-center cursor-pointer group">
+              {/* App Icon with background */}
+              <div className="w-12 h-12 mb-2 flex items-center justify-center bg-gray-100 rounded-xl border border-gray-200 p-1.5 group-hover:shadow-md transition-all duration-200">
+                <div className="w-full h-full rounded-lg overflow-hidden">
+                  <img 
+                    src="/ios app logo.png" 
+                    alt="Deskna App" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="text-sm font-bold text-gray-900 mb-1">Deskna App</div>
+              <a 
+                href="#" 
+                className="inline-flex items-center px-3 py-1 text-white text-xs font-bold rounded-full hover:opacity-90 transition-all duration-200 active:scale-95 shadow-sm whitespace-nowrap"
+                style={{ backgroundColor: '#019de7' }}
+              >
+                Download
+              </a>
+            </div>
             </div>
           </div>
         </div>
@@ -854,61 +994,60 @@ export default function Home() {
         />
       )}
 
-
-      {/* Carousel Section - Limited Edition & Massief Houten */}
-      <section className="pt-8 pb-16 md:py-16 bg-white">
+      {/* Carousel Section - Limited edition, Stabiele frames, Deskna App */}
+      <section className="pt-8 pb-16 md:py-16 bg-white overflow-x-auto carousel-drag-scroll">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative">
+          <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
             {/* Carousel Container */}
-            <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-              {/* Slide 1 - Limited Edition Kleuren */}
-              <div className="min-w-[85%] md:min-w-full lg:min-w-[calc(50%-12px)] snap-center">
+            <div className="flex gap-6" id="carousel-container">
+              {/* Slide 1 - Limited edition kleuren */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
                 <div className="relative rounded-3xl overflow-hidden">
                   {/* Background Image */}
                   <div className="absolute inset-0">
                     <Image
                       src="/svg icons/houten bladen.jpg"
-                      alt="Houten bladen achtergrond"
+                      alt="Limited edition kleuren"
                       fill
                       className="object-cover"
+                      draggable="false"
                     />
                   </div>
                   
-                  <div className="relative p-8 lg:p-12 h-[400px] lg:h-[500px] flex flex-col">
+                  <Link href="/verstelbare-bureaus" className="relative px-4 lg:px-5 pt-4 lg:pt-5 pb-4 h-[400px] lg:h-[500px] flex flex-col cursor-pointer group" draggable="false">
                     {/* Top Content */}
-                    <div className="flex flex-col space-y-4 max-w-sm">
+                    <div className="flex flex-col max-w-sm space-y-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-gray-800 w-fit">
                         Nieuw
                       </span>
                       <h3 className="text-3xl lg:text-4xl font-bold text-gray-900">
                         Limited edition kleuren
                       </h3>
-                      <Link
-                        href="/verstelbare-bureaus"
-                        className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-4"
+                      <div className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-4"
                         style={{ backgroundColor: '#9CAFAA' }}
                       >
                         Meer info
-                      </Link>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
 
-              {/* Slide 2 - Massief Houten Bureaus */}
-              <div className="min-w-[85%] md:min-w-full lg:min-w-[calc(50%-12px)] snap-center">
+              {/* Slide 2 - Stabiele bureau frames */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
                 <div className="relative rounded-3xl overflow-hidden">
                   {/* Background Image */}
                   <div className="absolute inset-0">
                     <Image
                       src="/svg icons/bureau poten.jpg"
-                      alt="Bureau poten achtergrond"
+                      alt="Stabiele bureau frames"
                       fill
                       className="object-cover"
+                      draggable="false"
                     />
                   </div>
                   
-                  <div className="relative h-[400px] lg:h-[500px] flex flex-col justify-end">
+                  <Link href="/verstelbare-bureaus" className="relative h-[400px] lg:h-[500px] flex flex-col justify-end cursor-pointer group" draggable="false">
                     {/* Bottom Content on dark area */}
                     <div className="bg-gradient-to-t from-black/90 via-black/70 to-transparent p-8 lg:p-12">
                       <div className="flex flex-col space-y-4 max-w-md">
@@ -918,77 +1057,125 @@ export default function Home() {
                         <h3 className="text-3xl lg:text-4xl font-bold text-white">
                           Stabiele bureau frames
                         </h3>
-                        <Link
-                          href="/verstelbare-bureaus"
-                          className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-2"
+                        <div className="inline-flex items-center px-6 py-3 rounded-full text-white font-medium w-fit transition-all hover:opacity-90 mt-2"
                           style={{ backgroundColor: '#9CAFAA' }}
                         >
                           Meer info
-                        </Link>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
+
+              {/* Slide 3 - Deskna App */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/IOS iphone ipad 2.png"
+                      alt="Deskna App op iPhone en iPad"
+                      fill
+                      className="object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  
+                  <Link href="#" className="relative px-4 lg:px-5 pt-4 lg:pt-5 pb-4 h-[400px] lg:h-[500px] flex flex-col justify-start cursor-pointer group" draggable="false">
+                    {/* Top Content */}
+                    <div className="flex flex-col max-w-sm space-y-2">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur text-gray-900 w-fit">
+                        Nieuw
+                      </span>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                        Deskna App
+                      </h3>
+                      <p className="text-gray-800 text-sm lg:text-base">
+                        Bedien je bureau vanaf je telefoon en krijg gezondheidsherinneringen
+                      </p>
+                      <a
+                        href="#"
+                        className="inline-flex items-center px-4 py-0.5 rounded-full text-white font-semibold w-fit transition-all hover:opacity-90"
+                        style={{ backgroundColor: '#0771e3' }}
+                        draggable="false"
+                      >
+                        Download
+                      </a>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right spacer - allows scrolling the last card to the left */}
+              <div className="w-[calc(100vw-650px)] lg:w-[calc(100vw-700px)] flex-shrink-0"></div>
             </div>
 
-            {/* Navigation Dots */}
-            <div className="flex justify-center mt-6 space-x-2">
-              <button 
-                onClick={() => {
-                  const container = document.querySelector('.snap-x');
-                  if (container) {
-                    container.scrollTo({ left: 0, behavior: 'smooth' });
-                    setCurrentSlide(0);
-                  }
-                }}
-                className={`${currentSlide === 0 ? 'w-8' : 'w-2'} h-2 rounded-full ${currentSlide === 0 ? 'bg-gray-900' : 'bg-gray-300 hover:bg-gray-400'} transition-all`}
-              ></button>
-              <button 
-                onClick={() => {
-                  const container = document.querySelector('.snap-x');
-                  if (container) {
-                    container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
-                    setCurrentSlide(1);
-                  }
-                }}
-                className={`${currentSlide === 1 ? 'w-8' : 'w-2'} h-2 rounded-full ${currentSlide === 1 ? 'bg-gray-900' : 'bg-gray-300 hover:bg-gray-400'} transition-all`}
-              ></button>
-            </div>
 
-            {/* Navigation Arrows */}
-            <button 
-              onClick={() => {
-                const container = document.querySelector('.snap-x');
-                if (container) {
-                  if (currentSlide === 1) {
-                    container.scrollTo({ left: 0, behavior: 'smooth' });
-                    setCurrentSlide(0);
-                  }
-                }
-              }}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-            >
-              <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button 
-              onClick={() => {
-                const container = document.querySelector('.snap-x');
-                if (container) {
-                  if (currentSlide === 0) {
-                    container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
-                    setCurrentSlide(1);
-                  }
-                }
-              }}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-            >
-              <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            {/* Enhanced scroll behavior - hide scrollbar completely */}
+            <style jsx>{`
+              .carousel-drag-scroll {
+                cursor: grab;
+                user-select: none;
+                scroll-snap-type: x mandatory;
+              }
+              .carousel-drag-scroll.cursor-grabbing {
+                cursor: grabbing;
+                scroll-snap-type: none;
+              }
+              .carousel-drag-scroll a,
+              .carousel-drag-scroll button {
+                pointer-events: auto;
+                -webkit-user-drag: none;
+                user-drag: none;
+              }
+              .carousel-drag-scroll img {
+                pointer-events: none;
+                -webkit-user-drag: none;
+                user-drag: none;
+              }
+              .carousel-drag-scroll * {
+                -webkit-user-drag: none;
+                user-drag: none;
+              }
+              section[class*="overflow-x-auto"] {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+                scroll-behavior: smooth;
+                scroll-padding-right: 4rem;
+                padding-right: 2rem;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar {
+                display: none !important;
+                width: 0px !important;
+                height: 0px !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-track {
+                display: none !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-thumb {
+                display: none !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-corner {
+                display: none !important;
+              }
+              section[class*="overflow-x-auto"] * {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+              }
+              section[class*="overflow-x-auto"] *::-webkit-scrollbar {
+                display: none !important;
+                width: 0px !important;
+                height: 0px !important;
+              }
+              .overflow-x-auto > div:first-child {
+                scroll-snap-type: x mandatory;
+                scroll-padding-left: 1rem;
+              }
+            `}</style>
           </div>
         </div>
       </section>
@@ -1167,7 +1354,7 @@ export default function Home() {
       {/* Bureaus Video Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left Side - Video */}
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-lg">
@@ -1182,9 +1369,9 @@ export default function Home() {
                 >
                   <source src="/svg icons/company-video-2-se.mp4" type="video/mp4" />
                   {/* Fallback image */}
-                  <img 
-                    src="/svg icons/videoframe_21189.png" 
-                    alt="Bureau video thumbnail" 
+                  <img
+                    src="/svg icons/videoframe_21189.png"
+                    alt="Bureau video thumbnail"
                     className="w-full h-full object-cover"
                   />
                 </video>
@@ -1192,55 +1379,231 @@ export default function Home() {
             </div>
 
             {/* Right Side - Content */}
-            <div className="space-y-6">
+            <div className="space-y-3 lg:flex lg:flex-col lg:justify-center">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 mb-1">
                   Onze bureaus
                 </h2>
-                <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                  Verken ons uitgebreide assortiment elektrische zit-sta bureaus en in hoogte verstelbare bureau oplossingen. Van compacte thuiskantoor bureaus tot professionele werkstations - onze verstelbare bureaus bieden de juiste hoogte voor staand werken en zittend werken. Kies uit verschillende tafelblad afmetingen, kleuren en premium materialen.
+                <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                  Ontdek onze uitgebreide collectie elektrische zit-sta bureaus voor optimaal werkcomfort en een gezonde werkhouding. Met eenvoudig verstelbare hoogte via elektrische bediening, ultrastabiel frame en duurzaam design dat jarenlang meegaat. Perfect voor afwisselend zitten en staan tijdens je werkdag, wat zorgt voor betere productiviteit en minder rugklachten. Geschikt voor thuiskantoor, professionele werkplekken en kantooromgevingen. Verkrijgbaar in verschillende formaten, kleuren en materialen.
                 </p>
               </div>
 
-              {/* Features List */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#d6a99e' }}>
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              {/* Features List - Horizontal */}
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full flex items-center justify-center border border-gray-700 flex-shrink-0">
+                    <svg className="w-2.5 h-2.5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <span className="text-gray-700 font-medium">Altijd ruime voorraad</span>
+                  <span className="text-xs text-gray-700 font-medium">Ruime voorraad</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#d6a99e' }}>
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full flex items-center justify-center border border-gray-700 flex-shrink-0">
+                    <svg className="w-2.5 h-2.5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <span className="text-gray-700 font-medium">Tot 12 jaar garantie!</span>
+                  <span className="text-xs text-gray-700 font-medium">5 jaar garantie</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#d6a99e' }}>
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full flex items-center justify-center border border-gray-700 flex-shrink-0">
+                    <svg className="w-2.5 h-2.5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <span className="text-gray-700 font-medium">Varianten in alle prijsklassen</span>
+                  <span className="text-xs text-gray-700 font-medium">Gratis verzending</span>
                 </div>
               </div>
 
               {/* CTA Button */}
-              <div className="pt-4">
-                <Link 
+              <div className="pt-1">
+                <Link
                   href="/verstelbare-bureaus"
-                  className="inline-block px-8 py-3 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full text-white font-semibold hover:opacity-90 transition-opacity text-xs"
                   style={{ backgroundColor: '#d6a99e' }}
                 >
-                  Ontdek alle bureaus
+                  <span>Ontdek bureaus</span>
+                  <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Carousel Section - Limited Edition & Bureau Frames (Duplicaat) */}
+      <section className="pt-8 pb-16 md:py-16 bg-white overflow-x-auto carousel-drag-scroll">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
+            {/* Carousel Container */}
+            <div className="flex gap-6" id="carousel-container-2">
+              {/* Slide 1 - DeskPro Bureau */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/Deskpro section homepage.jpg"
+                      alt="DeskPro Bureau frame"
+                      fill
+                      className="object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  
+                  <Link href="/products/deskpro" className="relative px-4 lg:px-5 pt-4 lg:pt-5 pb-4 h-[400px] lg:h-[500px] flex flex-col cursor-pointer group" draggable="false">
+                    {/* Top Right Icons */}
+                    <div className="absolute top-4 right-4 lg:top-5 lg:right-5 flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full">
+                        <Smartphone className="w-4 h-4 text-gray-700" />
+                        <span className="text-xs font-medium text-gray-700">App</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full">
+                        <Wifi className="w-4 h-4 text-gray-700" />
+                        <span className="text-xs font-medium text-gray-700">WiFi</span>
+                      </div>
+                    </div>
+
+                    {/* Top Content */}
+                    <div className="flex flex-col max-w-sm">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur text-gray-800 w-fit mb-2">
+                        Nieuw
+                      </span>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1 group-hover:opacity-80 transition-opacity">
+                        DeskPro Bureau
+                      </h3>
+                      <div className="text-gray-700">
+                        <p className="text-lg">
+                          Vanaf <span className="font-bold">€599</span> of <span className="font-bold">€24,96/mnd.</span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          voor 24 maanden*
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Slide 2 - SeatPro Stoel */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/Seatpro background image.jpg"
+                      alt="SeatPro ergonomische stoel"
+                      fill
+                      className="object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  
+                  <Link href="/products/seatpro-ergonomische-bureau-stoel" className="relative px-4 lg:px-5 pt-4 lg:pt-5 pb-4 h-[400px] lg:h-[500px] flex flex-col cursor-pointer group" draggable="false">
+                    {/* Top Content */}
+                    <div className="flex flex-col max-w-sm">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur text-gray-800 w-fit mb-2">
+                        Nieuw
+                      </span>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1 group-hover:opacity-80 transition-opacity">
+                        SeatPro Stoel
+                      </h3>
+                      <div className="text-gray-700">
+                        <p className="text-lg">
+                          Vanaf <span className="font-bold">€449</span> of <span className="font-bold">€18,71/mnd.</span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          voor 24 maanden*
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Slide 3 - Monitorarm */}
+              <div className="w-full lg:w-[600px] flex-shrink-0">
+                <div className="relative rounded-3xl overflow-hidden">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src="/Monitor arm background.jpg"
+                      alt="Monitorarm accessoire"
+                      fill
+                      className="object-cover"
+                      draggable="false"
+                    />
+                  </div>
+                  
+                  <Link href="/products/monitorarm-enkel" className="relative px-4 lg:px-5 pt-4 lg:pt-5 pb-4 h-[400px] lg:h-[500px] flex flex-col cursor-pointer group" draggable="false">
+                    {/* Top Content */}
+                    <div className="flex flex-col max-w-sm">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur text-gray-800 w-fit mb-2">
+                        Populair
+                      </span>
+                      <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1 group-hover:opacity-80 transition-opacity">
+                        Monitorarm
+                      </h3>
+                      <div className="text-gray-700">
+                        <p className="text-lg">
+                          Vanaf <span className="font-bold">€79</span> of <span className="font-bold">€3,29/mnd.</span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          voor 24 maanden*
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right spacer - allows scrolling the last card to the left */}
+              <div className="w-[calc(100vw-650px)] lg:w-[calc(100vw-700px)] flex-shrink-0"></div>
+            </div>
+
+
+            {/* Enhanced scroll behavior - hide scrollbar completely */}
+            <style jsx>{`
+              section[class*="overflow-x-auto"] {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+                scroll-behavior: smooth;
+                scroll-padding-right: 4rem;
+                padding-right: 2rem;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar {
+                display: none !important;
+                width: 0px !important;
+                height: 0px !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-track {
+                display: none !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-thumb {
+                display: none !important;
+                background: transparent !important;
+              }
+              section[class*="overflow-x-auto"]::-webkit-scrollbar-corner {
+                display: none !important;
+              }
+              section[class*="overflow-x-auto"] * {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+              }
+              section[class*="overflow-x-auto"] *::-webkit-scrollbar {
+                display: none !important;
+                width: 0px !important;
+                height: 0px !important;
+              }
+              .overflow-x-auto > div:first-child {
+                scroll-snap-type: x mandatory;
+                scroll-padding-left: 1rem;
+              }
+            `}</style>
           </div>
         </div>
       </section>
@@ -1718,17 +2081,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Logo Divider - overlapping the border */}
-      <div className="relative">
-        <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-          <img 
-            src="/favicon logo.png" 
-            alt="DESKNA Logo" 
-            className="h-16 w-auto"
-          />
-        </div>
-      </div>
     </div>
   );
 }

@@ -12,11 +12,34 @@ export default function Header() {
   const items = useCartStore(s => s.items);
   const totalItems = items.reduce((sum, it) => sum + it.quantity, 0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuClosing, setIsMenuClosing] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [cartAnimation, setCartAnimation] = useState('');
   const [previousTotalItems, setPreviousTotalItems] = useState(totalItems);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
+
+  const handleMenuClose = () => {
+    setIsMenuClosing(true);
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      setIsMenuClosing(false);
+    }, 300); // Match animation duration
+  };
+
+  // Detect if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   useEffect(() => { setMounted(true); }, []);
   
@@ -46,12 +69,66 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomepage]);
 
+  // Keep header always visible - disabled hide/show on scroll
+  useEffect(() => {
+    setIsVisible(true); // Always keep header visible
+  }, []);
+
   return (
-    <header suppressHydrationWarning className={`sticky top-0 z-40 transition-all duration-300 relative ${
-      isHomepage 
-        ? (isScrolled ? 'bg-[#f9fafb]/80 backdrop-blur-lg md:bg-transparent' : 'bg-transparent')
-        : 'bg-[#f9fafb]/80 backdrop-blur-lg md:bg-transparent'
-    }`}>
+    <>
+      {/* App Download Announcement Bar - Mobile Only */}
+      <div 
+        className="md:hidden bg-gray-100 px-4 fixed top-0 left-0 right-0 z-50 h-11 border-b border-t border-gray-200"
+        style={isMobile && !isMenuOpen ? {
+          transform: isVisible ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+        } : (isMobile && isMenuOpen ? {
+          transform: 'translateY(0)'
+        } : undefined)}
+      >
+        <div className="flex items-center justify-between max-w-md mx-auto h-full">
+          {/* App Icon + Info */}
+          <div className="flex items-center gap-3">
+            <div className="relative w-8 h-8 flex-shrink-0">
+              <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md">
+                <img 
+                  src="/ios app logo.png" 
+                  alt="Deskna App" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div className="text-xs font-bold text-gray-900">Deskna App</div>
+              <div className="text-[10px] text-gray-600">Nu downloaden</div>
+            </div>
+          </div>
+          
+          {/* Download Button */}
+          <a 
+            href="#" 
+            className="inline-flex items-center gap-1.5 px-4 py-1 text-white text-sm font-bold rounded-full hover:opacity-90 transition-all duration-200 active:scale-95 shadow-sm"
+            style={{ backgroundColor: '#019de7' }}
+          >
+            Download
+          </a>
+        </div>
+      </div>
+
+      <header 
+        suppressHydrationWarning 
+        className={`fixed top-11 left-0 right-0 md:sticky md:top-0 z-40 md:transition-all md:duration-300 ${
+          isHomepage 
+            ? (isScrolled ? 'bg-white md:bg-transparent' : 'bg-white md:bg-transparent')
+            : 'bg-white md:bg-[#f9fafb]/80 md:backdrop-blur-lg md:bg-transparent'
+        }`}
+        style={isMobile && !isMenuOpen ? {
+          transform: isVisible ? 'translateY(0)' : 'translateY(calc(-100% - 44px))',
+          transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+        } : (isMobile && isMenuOpen ? {
+          transform: 'translateY(0)'
+        } : undefined)}
+      >
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
         (isHomepage && isScrolled) || !isHomepage ? 'md:bg-white/70 md:shadow-xl md:rounded-full md:border md:border-gray-200/30 md:mt-2 md:mb-2' : ''
       }`}>
@@ -202,7 +279,7 @@ export default function Header() {
 
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => isMenuOpen ? handleMenuClose() : setIsMenuOpen(true)}
               className={`md:hidden p-2 transition-colors ${
                 isHomepage && !isScrolled
                   ? 'text-white hover:text-gray-200'
@@ -218,41 +295,62 @@ export default function Header() {
         <div className="md:hidden flex items-center justify-between h-16">
           {/* Left - Hamburger Menu */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`p-2 transition-colors ${
-              isMenuOpen 
-                ? 'text-gray-700 hover:text-gray-900'
-                : (isHomepage && !isScrolled
-                  ? 'text-white hover:text-gray-200'
-                  : 'text-gray-700 hover-brown')
-            }`}
+            onClick={() => isMenuOpen ? handleMenuClose() : setIsMenuOpen(true)}
+            className="p-2 w-11 h-11 flex items-center justify-center"
+            style={{
+              transform: isMenuOpen ? 'rotate(135deg)' : 'rotate(0deg)',
+              transition: 'transform 0.4s cubic-bezier(0.5, 0.02, 0.13, 1.2)'
+            }}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <div className="relative w-6 h-5">
+              {/* Top bar */}
+              <span 
+                className="absolute left-0 w-full h-0.5 bg-gray-700 rounded-full"
+                style={{
+                  top: isMenuOpen ? '50%' : '0%',
+                  transform: 'translateY(-50%)',
+                  transition: 'top 0.2s ease-in-out'
+                }}
+              />
+              {/* Middle bar */}
+              <span 
+                className="absolute left-0 w-full h-0.5 bg-gray-700 rounded-full"
+                style={{
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  opacity: isMenuOpen ? 0 : 1,
+                  transition: 'opacity 0.2s ease-in-out'
+                }}
+              />
+              {/* Bottom bar */}
+              <span 
+                className="absolute left-0 w-full h-0.5 bg-gray-700 rounded-full"
+                style={{
+                  top: isMenuOpen ? '50%' : '100%',
+                  transform: isMenuOpen ? 'translateY(-50%) rotate(90deg)' : 'translateY(-50%) rotate(0deg)',
+                  transition: 'top 0.2s ease-in-out, transform 0.4s cubic-bezier(0.5, 0.02, 0.13, 1.2) 0.2s'
+                }}
+              />
+            </div>
           </button>
 
           {/* Center - Logo */}
           <Link href="/" className="flex items-center">
             <Image 
-              src={isMenuOpen ? "/DESKNA LOGO BLACK.png" : (isHomepage && !isScrolled ? "/DESKNA LOGO WHITE.png" : "/DESKNA LOGO BLACK.png")}
+              src="/DESKNA LOGO BLACK.png"
               alt="Logo" 
               width={120}
               height={32}
-              className="h-8 w-auto transition-all duration-300"
+              className="h-8 w-auto"
             />
           </Link>
 
           {/* Right - Cart */}
           <button
             onClick={toggleCart}
-            className={`relative p-2 transition-all duration-200 hover:scale-110 active:scale-95 active:rotate-12 ${cartAnimation} ${
-              isMenuOpen 
-                ? 'text-gray-700 hover:text-gray-900'
-                : (isHomepage && !isScrolled
-                  ? 'text-white hover:text-gray-200'
-                  : 'text-gray-700 hover-brown')
-            }`}
+            className={`relative p-2 active:scale-95 ${cartAnimation} text-gray-700 hover:text-gray-900`}
           >
-            <ShoppingCart className="h-6 w-6 transition-transform duration-200" />
+            <ShoppingCart className="h-6 w-6" />
             {mounted && totalItems > 0 && (
               <span suppressHydrationWarning className="absolute -top-1 -right-1 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#d6a99e' }}>
                 {totalItems}
@@ -260,28 +358,22 @@ export default function Header() {
             )}
           </button>
         </div>
+      </div>
+    </header>
 
-        {/* Mobile Menu Overlay */}
-        {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 z-50 bg-white">
+    {/* Mobile Menu Overlay - Slides under header */}
+    {isMenuOpen && (
+      <div 
+        className="md:hidden fixed left-0 right-0 z-[45] bg-white shadow-lg overflow-y-auto"
+        style={{
+          top: '108px', // 44px announcement bar + 64px header
+          bottom: '0',
+          animation: isMenuClosing 
+            ? 'slideOutRight 0.3s ease-in forwards' 
+            : 'slideInRight 0.3s ease-out forwards'
+        }}
+      >
             <div className="flex flex-col h-full">
-              {/* Header with close button */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                <Image 
-                  src="/DESKNA LOGO BLACK.png"
-                  alt="DESKNA Logo" 
-                  width={120}
-                  height={32}
-                  className="h-8 w-auto"
-                />
-                <button
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2 text-gray-700 hover:text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-              
               {/* Menu Content */}
               <div className="flex-1 p-6 bg-white">
                 {/* Navigation Links */}
@@ -289,28 +381,28 @@ export default function Header() {
                   <Link 
                     href="/shop-alles" 
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleMenuClose}
                   >
                     Shop alles
                   </Link>
                   <Link 
                     href="/shop-alles" 
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleMenuClose}
                   >
                     Producten
                   </Link>
                   <Link 
                     href="/shop-alles" 
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleMenuClose}
                   >
                     Accessoires
                   </Link>
                   <Link 
                     href="/over-ons" 
                     className="flex items-center text-gray-900 hover:text-[#d6a99e] hover:bg-gray-50 transition-colors py-4 px-4 rounded-lg text-lg font-semibold border-b border-gray-100 last:border-b-0"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleMenuClose}
                   >
                     Over Ons
                   </Link>
@@ -332,10 +424,9 @@ export default function Header() {
                 </div>
               </div>
             </div>
-          </div>
-        )}
       </div>
-    </header>
+    )}
+    </>
   );
 }
 

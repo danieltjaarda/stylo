@@ -1,14 +1,15 @@
 'use client';
 
-import { Fragment, useState } from 'react';
+import { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { X, Plus, Minus, ShoppingBag, Truck } from 'lucide-react';
+import { X, Plus, Minus, ShoppingBag, Truck, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { createCheckout, addToCheckout, cartItemsToLineItems, getCheckoutUrl } from '@/services/checkoutService';
 import { useMarketingConsent } from '@/contexts/CookieConsentContext';
 import { useMetaPixelTracking, cartItemsToMetaPixel } from '@/lib/metaPixel';
+import { useGTMDataLayer } from '@/components/GoogleTagManager';
 
 export default function Cart() {
   const { 
@@ -26,6 +27,7 @@ export default function Cart() {
   // Meta Pixel tracking
   const hasMarketingConsent = useMarketingConsent();
   const { trackInitiateCheckout } = useMetaPixelTracking(hasMarketingConsent);
+  const { pushBeginCheckout } = useGTMDataLayer();
 
   const total = getTotalPrice();
   const shipping = total > 50 ? 0 : 5.99;
@@ -76,6 +78,21 @@ export default function Cart() {
     } else {
       console.log('❌ InitiateCheckout - Not tracking:', { hasMarketingConsent, itemsLength: items.length });
     }
+
+    // Push GTM begin_checkout event
+    const gtmItems = items.map(item => ({
+      item_id: item.product.id?.toString() || item.product.handle || '',
+      item_name: item.product.name || item.product.handle || 'Product',
+      item_category: item.product.category || 'Product',
+      price: parseFloat(item.product.price?.toString() || '0'),
+      quantity: item.quantity || 1,
+    }));
+
+    pushBeginCheckout(
+      'EUR',
+      finalTotal,
+      gtmItems
+    );
     
     setIsRedirecting(true);
     try {
@@ -116,32 +133,32 @@ export default function Cart() {
       <Dialog as="div" className="relative z-60" onClose={toggleCart}>
         <Transition.Child
           as={Fragment}
-          enter="ease-in-out duration-500"
+          enter="ease-out duration-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in-out duration-500"
+          leave="ease-in duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm transition-opacity" />
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+            <div className="pointer-events-none fixed inset-0 flex items-center justify-center md:inset-y-0 md:right-0 md:left-auto md:justify-end md:items-stretch md:pl-10">
               <Transition.Child
                 as={Fragment}
-                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enter="transform transition ease-in-out duration-500"
                 enterFrom="translate-x-full"
                 enterTo="translate-x-0"
-                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leave="transform transition ease-in-out duration-400"
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col bg-white shadow-xl">
+                <Dialog.Panel className="pointer-events-auto w-full max-w-md m-4 md:mx-0 md:mr-4 md:my-4">
+                  <div className="flex flex-col bg-white shadow-xl rounded-3xl md:h-full h-[600px]">
                     {/* Header */}
-                    <div className="flex items-start justify-between p-4 border-b">
+                    <div className="flex items-start justify-between p-4 rounded-t-3xl">
                       <Dialog.Title className="text-lg font-medium text-gray-900">
                         Winkelwagen
                       </Dialog.Title>
@@ -221,69 +238,38 @@ export default function Cart() {
 
                     {/* Footer */}
                     {items.length > 0 && (
-                      <div className="border-t bg-gray-50 p-4">
+                      <div className="bg-gray-50 p-4 rounded-b-3xl border-t border-gray-200">
                         <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <span>Subtotaal:</span>
-                            <span>€{total.toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Verzending:</span>
-                            <div className="text-right">
-                              {shipping === 0 ? (
-                                <div className="flex items-center gap-1 text-xs" style={{ color: '#265125' }}>
-                                  <Truck className="w-3 h-3 flex-shrink-0" />
-                                  <div>
-                                    <strong>Gratis verzending!</strong> Morgen {tomorrowDate} in huis!
-                                  </div>
-                                </div>
-                              ) : (
-                                <div>
-                                  <span>€{shipping.toFixed(2)}</span>
-                                  <div className="flex items-center gap-1 text-xs text-gray-600 mt-1">
-                                    <Truck className="w-3 h-3 flex-shrink-0" />
-                                    <span>Morgen {tomorrowDate} in huis!</span>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex justify-between font-semibold text-base border-t pt-2">
+                          <div className="flex justify-between font-semibold text-base">
                             <span>Totaal:</span>
                             <span>€{finalTotal.toFixed(2)}</span>
                           </div>
                         </div>
 
-                        <div className="mt-4 space-y-2">
+                        <div className="mt-4">
                           <button
                             onClick={handleShopifyCheckout}
                             disabled={isRedirecting}
                             type="button"
                             data-testid="checkout-button"
                             aria-label="Ga naar afrekenen"
-                            className="w-full text-white px-4 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-center block"
-                            style={{ backgroundColor: '#9dafaa' }}
+                            className="w-full text-white px-4 py-3 rounded-2xl font-semibold hover:opacity-90 transition-opacity text-center flex items-center justify-center gap-2"
+                            style={{ backgroundColor: '#292f3e' }}
                           >
+                            {isRedirecting && <Loader2 className="w-5 h-5 animate-spin" />}
                             {isRedirecting ? 'Bezig met doorsturen...' : 'Afrekenen'}
-                          </button>
-                          <button
-                            onClick={clearCart}
-                            className="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-                          >
-                            Winkelwagen Legen
                           </button>
                         </div>
 
                         {/* Trustpilot Section */}
-                        <div className="mt-4 flex items-center justify-center">
+                        <div className="mt-4 flex items-center justify-center gap-2">
                           <Image
                             src="/Trustpilot-logo.png"
                             alt="Trustpilot logo"
                             width={20}
                             height={20}
-                            className="mr-1"
                           />
-                          <span className="text-sm font-medium text-gray-700 mr-2">Trustpilot</span>
+                          <span className="text-sm font-medium text-gray-700">Trustpilot</span>
                           <Image
                             src="/trustpilot-stars-new.png"
                             alt="Trustpilot 5 sterren"
@@ -291,6 +277,7 @@ export default function Cart() {
                             height={20}
                             className="-mt-0.5"
                           />
+                          <span className="text-sm font-semibold text-gray-900">Uitstekend</span>
                         </div>
 
                         {shipping > 0 && (

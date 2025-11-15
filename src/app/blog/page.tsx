@@ -5,6 +5,20 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Blog | DESKNA - Ergonomie Tips & Productadvies',
   description: 'Lees onze blog voor tips over ergonomische werkplekken, productadvies en het optimaliseren van je thuiskantoor voor betere gezondheid en productiviteit.',
+  keywords: 'blog, ergonomie tips, productadvies, werkplek tips, gezondheid, thuiswerken',
+  openGraph: {
+    title: 'DESKNA Blog - Tips & Advies',
+    description: 'Praktische tips voor een gezonde en productieve werkplek',
+    type: 'website',
+    images: [
+      {
+        url: '/banner.webp',
+        width: 1200,
+        height: 630,
+        alt: 'DESKNA Blog',
+      },
+    ],
+  },
 };
 
 export default function Blog() {

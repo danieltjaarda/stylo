@@ -8,6 +8,7 @@ import ProductCollection from '@/components/ProductCollection';
 import WhatsAppWidget from '@/components/WhatsAppWidget';
 import AssemblyTimer from '@/components/AssemblyTimer';
 import VideoWidget from '@/components/VideoWidget';
+import Breadcrumb from '@/components/Breadcrumb';
 import { Product } from '@/types';
 
 export default function BureauStoelenPage() {
@@ -76,36 +77,13 @@ export default function BureauStoelenPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumbs */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex" aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2 text-sm">
-              <li>
-                <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </li>
-              <li>
-                <Link href="/products" className="text-gray-500 hover:text-gray-900 transition-colors font-medium">
-                  Producten
-                </Link>
-              </li>
-              <li>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </li>
-              <li>
-                <span className="text-gray-900 font-semibold">
-                  Bureaustoelen
-                </span>
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
+      {/* Breadcrumbs with Schema.org */}
+      <Breadcrumb 
+        items={[
+          { name: 'Producten', href: '/products' }
+        ]}
+        currentPage="Bureaustoelen"
+      />
 
       {/* Main Content */}
       <div className="bg-gray-50 py-6">
